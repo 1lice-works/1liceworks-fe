@@ -5,6 +5,9 @@ export const ROUTES = {
     SIGN_UP: '/signup',
     CALLBACK: '/auth/callback',
   },
+  CALENDAR: {
+    root: '/calendar',
+  },
   TEAM: {
     root: '/team',
     // 하위에 추가
