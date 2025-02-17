@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import { ROUTES } from '../../shared/constants/routes';
 
@@ -7,7 +7,7 @@ interface AuthRouteProps extends PropsWithChildren {
   isPublic?: boolean;
 }
 
-export const AuthRoute = ({ isPublic }: AuthRouteProps) => {
+export const AuthRoute = ({ isPublic, children }: AuthRouteProps) => {
   // todos : 스토어에서 엑세스 키 가져오기
   const isAuthenticated = true;
 
@@ -19,5 +19,5 @@ export const AuthRoute = ({ isPublic }: AuthRouteProps) => {
     return <Navigate to={ROUTES.ROOT} replace />;
   }
 
-  return <Outlet />;
+  return <>{children}</>;
 };
