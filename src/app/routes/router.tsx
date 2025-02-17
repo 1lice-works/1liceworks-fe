@@ -10,7 +10,7 @@ import { AuthRoute } from './AuthRoutes';
 export const router = createBrowserRouter([
   {
     path: ROUTES.ROOT,
-    element: <CalendarPage />, // 이제 여기에 layout이 들어가야 한다는거 맞지?
+    element: <SignInPage />, // 이제 여기에 layout이 들어가야 한다는거 맞지?
     children: [
       // Public Routes
       {
