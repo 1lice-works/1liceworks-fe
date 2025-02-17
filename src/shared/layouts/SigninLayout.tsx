@@ -16,7 +16,7 @@ export const SigninLayout = ({ children }: SigninLayoutProps) => {
         </div>
       </section>
 
-      <section className='flex w-1/2 items-center justify-center'>
+      <section className='flex w-1/2 items-center justify-center p-4'>
         {children}
       </section>
     </div>
