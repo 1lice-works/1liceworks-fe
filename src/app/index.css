@@ -118,3 +118,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+@theme {
+  /* 로그인 페이지, 팀 GNB에 사용 */
+  --color-background-dark: #0f172a;
+
+  /* 팀 페이지 배경, 검색바 배경, hover 이벤트 발생시 배경 등에 사용 */
+  --color-background-light: #f9fbfd;
+
+  /* 성공 메세지 (파랑) */
+  --color-success: #0f8dff;
+
+  /* 에러 메세지 (빨강) */
+  --color-error: #ef4444;
+}

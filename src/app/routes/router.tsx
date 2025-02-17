@@ -1,50 +1,55 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { CalendarPage } from '../../pages/calendar';
-import { SignInPage } from '../../pages/signin';
-import { SignUpPage } from '../../pages/signup';
-import { TeamPage } from '../../pages/team';
-import { ROUTES } from '../../shared/constants/routes';
+import { CalendarPage } from '@/pages/calendar';
+import { SignInPage } from '@/pages/signin';
+import { SignUpPage } from '@/pages/signup';
+import { TeamPage } from '@/pages/team';
+import { ROUTES } from '@/shared/constants/routes';
+import { AuthLayout } from '@/shared/layouts/AuthLayout';
+import { MainLayout } from '@/shared/layouts/MainLayout';
+import { SigninLayout } from '@/shared/layouts/SigninLayout';
+
 import { AuthRoute } from './AuthRoutes';
 
 export const router = createBrowserRouter([
+  // Public Routes
   {
-    path: ROUTES.ROOT,
-    element: <SignUpPage />, // 이제 여기에 layout이 들어가야 한다는거 맞지?
+    element: (
+      <AuthRoute isPublic>
+        <AuthLayout />
+      </AuthRoute>
+    ),
     children: [
-      // Public Routes
       {
         path: ROUTES.AUTH.SIGN_IN,
         element: (
-          <AuthRoute isPublic>
+          <SigninLayout>
             <SignInPage />
-          </AuthRoute>
+          </SigninLayout>
         ),
       },
       {
         path: ROUTES.AUTH.SIGN_UP,
-        element: (
-          <AuthRoute isPublic>
-            <SignUpPage />
-          </AuthRoute>
-        ),
+        element: <SignUpPage />,
       },
-      // Private Routes
+    ],
+  },
+  // Private Routes
+  {
+    path: ROUTES.ROOT,
+    element: (
+      <AuthRoute>
+        <MainLayout />
+      </AuthRoute>
+    ),
+    children: [
       {
         path: ROUTES.TEAM.root,
-        element: (
-          <AuthRoute>
-            <TeamPage />
-          </AuthRoute>
-        ),
+        element: <TeamPage />,
       },
       {
         path: ROUTES.CALENDAR.root,
-        element: (
-          <AuthRoute>
-            <CalendarPage />
-          </AuthRoute>
-        ),
+        element: <CalendarPage />,
       },
     ],
   },
