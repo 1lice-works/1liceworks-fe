@@ -3,7 +3,11 @@ import { Input } from '@/shared/ui/input';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 
-export const StepTeamInfo = () => {
+interface StepTeamInfoProps {
+  nextStep: () => void;
+}
+
+export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
   return (
     <form className={AUTH_FORM_STYLES.form}>
       <div className={AUTH_FORM_STYLES.title}>
@@ -36,7 +40,7 @@ export const StepTeamInfo = () => {
         </label>
       </div>
       <div className={AUTH_FORM_STYLES.submit}>
-        <Button type='submit' className='w-full'>
+        <Button type='submit' className='w-full' onClick={nextStep}>
           다음
         </Button>
         <div className={AUTH_FORM_STYLES.already}>

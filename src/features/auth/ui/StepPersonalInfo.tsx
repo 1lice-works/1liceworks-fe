@@ -4,7 +4,15 @@ import { Input } from '@/shared/ui/input';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 
-export const StepPersonalInfo = () => {
+interface StepPersonalInfoProps {
+  nextStep: () => void;
+  prevStep: () => void;
+}
+
+export const StepPersonalInfo = ({
+  nextStep,
+  prevStep,
+}: StepPersonalInfoProps) => {
   return (
     <form className={AUTH_FORM_STYLES.form}>
       <div className={AUTH_FORM_STYLES.title}>
@@ -44,10 +52,12 @@ export const StepPersonalInfo = () => {
             </label>
           </div>
           <div className='flex w-full gap-2'>
-            <Button className='w-[50%]' variant='outline'>
+            <Button className='w-[50%]' variant='outline' onClick={prevStep}>
               이전
             </Button>
-            <Button className='w-full'>다음</Button>
+            <Button className='w-full' onClick={nextStep}>
+              다음
+            </Button>
           </div>
         </div>
       </div>

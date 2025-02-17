@@ -3,7 +3,18 @@ import { Input } from '@/shared/ui/input';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 
-export const StepSignInfo = () => {
+interface StepSignInfoProps {
+  nextStep: () => void;
+  prevStep: () => void;
+}
+
+export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
+  const handleCheckMail = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+  };
+
   return (
     <form className={AUTH_FORM_STYLES.form}>
       <div className={AUTH_FORM_STYLES.title}>
@@ -14,9 +25,9 @@ export const StepSignInfo = () => {
           <p className={AUTH_FORM_STYLES.label}>아이디</p>
           <div className={AUTH_FORM_STYLES.inputAndButton}>
             <Input type='text' placeholder='ID  @mydomain.1lice-work.com' />
-            <Button>중복 확인</Button>
+            <Button onClick={(e) => handleCheckMail(e)}>중복 확인</Button>
           </div>
-          <p className='text-muted-foreground text-xs'>
+          <p className='text-muted-foreground pt-1 text-xs'>
             ID는 'ID@mydomain.ilice-works.com' 형식으로, 로그인 시 사용됩니다.
           </p>
         </label>
@@ -28,7 +39,7 @@ export const StepSignInfo = () => {
             placeholder='비밀번호를 다시한번 입력해주세요.'
             className='mt-1'
           />
-          <div className='mt-1 px-2'>
+          <div className='mt-2 px-2'>
             <ul className='text-muted-foreground list-disc text-xs'>
               <li className='ml-[12px]'>
                 비밀번호는 8~20자의 영문, 숫자, 특수문자를 조합해 만들어주세요.
@@ -42,10 +53,12 @@ export const StepSignInfo = () => {
         </label>
 
         <div className='flex w-full gap-2'>
-          <Button className='w-[50%]' variant='outline'>
+          <Button className='w-[50%]' variant='outline' onClick={prevStep}>
             이전
           </Button>
-          <Button className='w-full'>다음</Button>
+          <Button className='w-full' onClick={nextStep}>
+            다음
+          </Button>
         </div>
       </div>
     </form>
