@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-export const useFunnel = (steps) => {
+interface useFunnel {
+  steps: string[];
+}
+
+export const useFunnel = ({ steps }: useFunnel) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const nextStep = () => {
@@ -13,6 +17,7 @@ export const useFunnel = (steps) => {
 
   return {
     step: steps[currentStepIndex],
+    currentStepIndex,
     nextStep,
     prevStep,
   };
