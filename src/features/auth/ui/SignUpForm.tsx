@@ -1,16 +1,18 @@
 // import { useFunnel } from '@use-funnel/react-router-dom';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Form } from '@/shared/ui/form';
 
-import { AUTH_FORM_STYLES, FUNNEL_STEP } from '../model/constants';
+import { FUNNEL_STEP } from '../model/constants';
 import { SignUpFormTypes } from '../model/formTypes';
 import { signUpSchema } from '../model/schema';
 import { useFunnel } from '../model/useFunnel';
 import { ProgressBar } from './ProgressBar';
 import { StepPersonalInfo } from './StepPersonalInfo';
+import { StepSignInfo } from './StepSignInfo';
 import { StepTeamInfo } from './StepTeamInfo';
 
 const steps = [
@@ -25,25 +27,30 @@ export const SignUpForm = () => {
     mode: 'onChange',
     resolver: zodResolver(signUpSchema),
   });
-  // const [formData, setFormData] = useState({
-  //   teamName: '',
-  //   userName: '',
-  //   email: '',
-  //   password: '',
-  // });
+  const [formData, setFormData] = useState({
+    companyName: '',
+    teamName: '',
+    industry: '',
+    size: 0,
+    name: '',
+    email: '',
+    verificatedNumber: 0,
+    useId: '',
+    password: '',
+  });
 
-  // const handleChange = (e) => {
-  //   e.preventDefault();
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  // };
+  const handleChange = (e) => {
+    e.preventDefault();
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   const onSubmit = () => {};
 
   return (
-    <div className='text-foreground flex w-full flex-col items-center'>
+    <div className='text-foreground flex w-full flex-col items-center justify-center'>
       <ProgressBar steps={steps} currentStep={currentStepIndex} />
       <Form {...form}>
         <form
-          className={AUTH_FORM_STYLES.form}
+          className='flex flex-col items-center'
           onSubmit={form.handleSubmit(onSubmit)}
         >
           {step === FUNNEL_STEP.TEAM_INFO && (
@@ -52,13 +59,13 @@ export const SignUpForm = () => {
           {step === FUNNEL_STEP.PERSONAL_INFO && (
             <StepPersonalInfo nextStep={nextStep} prevStep={prevStep} />
           )}
+          {step === FUNNEL_STEP.SIGN_INFO && (
+            <StepSignInfo nextStep={nextStep} prevStep={prevStep} />
+          )}
         </form>
       </Form>
 
-      {/* {step === FUNNEL_STEP.SIGN_INFO && (
-        <StepSignInfo nextStep={nextStep} prevStep={prevStep} />
-      )}
-      {step === FUNNEL_STEP.CHECK_INFO && <StepCheckInfo prevStep={prevStep} />} */}
+      {/* {step === FUNNEL_STEP.CHECK_INFO && <StepCheckInfo prevStep={prevStep} />} */}
     </div>
   );
 };

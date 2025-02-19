@@ -38,12 +38,12 @@ export function RHFInput({
         <FormItem className='w-full'>
           {label && (
             <div className='flex w-full items-center'>
-              <Label>{label}</Label>
+              <Label className='font-semibold'>{label}</Label>
             </div>
           )}
           <FormControl>
             <Input
-              className='w-full'
+              className={`mb-0 w-full`}
               placeholder={placeholder}
               {...field}
               type={type}
