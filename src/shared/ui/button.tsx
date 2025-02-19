@@ -5,7 +5,7 @@ import * as React from 'react';
 import { cn } from '@/shared/lib/utils';
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 focus-visible:ring-4 focus-visible:outline-1 aria-invalid:focus-visible:ring-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 focus-visible:ring-4 focus-visible:outline-1 aria-invalid:focus-visible:ring-0 cursor-pointer",
   {
     variants: {
       variant: {
@@ -18,13 +18,16 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        link: 'text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:text-foreground focus:underline',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
         sm: 'h-8 rounded-md px-3 has-[>svg]:px-2.5',
         lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
         icon: 'size-9',
+        linkDefault: 'h-9',
+        linkSm: 'h-8 rounded-md',
+        linkLg: 'h-10 rounded-md4',
       },
     },
     defaultVariants: {
@@ -55,4 +58,5 @@ function Button({
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { Button, buttonVariants };
