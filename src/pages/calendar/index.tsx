@@ -1,6 +1,7 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import moment from 'moment';
+import { useCallback, useMemo, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 
 const localizer = momentLocalizer(moment);
@@ -87,12 +88,47 @@ const mockCalendars = [
 ];
 
 export const CalendarPage = () => {
+  const [displays, setDisplays] = useState(() =>
+    Object.fromEntries(
+      mockCalendars.map((calendar) => [calendar.calendarId, true])
+    )
+  );
+
+  const toggleCalendarDisplay = useCallback((calendarId: number) => {
+    setDisplays((prevDisplays) => ({
+      ...prevDisplays,
+      [calendarId]: !prevDisplays[calendarId], // 선택된 캘린더의 display 상태를 토글
+    }));
+  }, []);
+
+  const filteredCalendars = useMemo(
+    () => mockCalendars.filter((calendar) => displays[calendar.calendarId]),
+    [displays]
+  );
+
+  const eventsToDisplay = useMemo(
+    () => filteredCalendars.flatMap((calendar) => calendar.events),
+    [filteredCalendars]
+  );
+
   return (
     <div className='h-full'>
-      <Calendar
-        localizer={localizer}
-        events={mockCalendars.flatMap((calendar) => calendar.events)}
-      />
+      <div className='flex gap-4 pb-4'>
+        {mockCalendars.map((calendar) => (
+          <div key={calendar.calendarId}>
+            <label>
+              <input
+                type='checkbox'
+                checked={displays[calendar.calendarId]}
+                onChange={() => toggleCalendarDisplay(calendar.calendarId)}
+              />
+              {calendar.calendarName}
+            </label>
+          </div>
+        ))}
+      </div>
+
+      <Calendar localizer={localizer} events={eventsToDisplay} />
     </div>
   );
 };
