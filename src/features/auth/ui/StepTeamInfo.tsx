@@ -45,7 +45,7 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
           <RHFInput
             label='규모'
             name='size'
-            type='number'
+            type='text'
             placeholder='규모를 선택해주세요.'
           />
           <label>

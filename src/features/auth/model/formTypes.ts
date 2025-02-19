@@ -12,7 +12,7 @@ export interface SignUpFormTypes {
   companyName: string;
   teamName: string;
   industry: string;
-  size: number;
+  size: string;
   // 개인정보 입력단계
   name: string;
   email: string;

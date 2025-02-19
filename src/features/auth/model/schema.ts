@@ -19,7 +19,7 @@ export const signUpSchema = z.object({
     .min(1, { message: '팀 이름을 입력해주세요.' })
     .regex(/^\S/, { message: '팀 이름의 첫 글자는 공백일 수 없습니다.' }),
   industry: z.string(),
-  size: z.number(),
+  size: z.string(),
   name: z
     .string()
     .min(1, { message: '이름을 입력해주세요.' })
