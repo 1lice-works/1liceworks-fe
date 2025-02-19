@@ -14,7 +14,6 @@ import { AuthRoute } from './AuthRoutes';
 export const router = createBrowserRouter([
   // Public Routes
   {
-    path: ROUTES.ROOT,
     element: (
       <AuthRoute isPublic>
         <AuthLayout />

@@ -1,3 +1,5 @@
+import { SignInForm } from '@/features/auth/ui/SignInForm';
+
 export const SignInPage = () => {
-  return <div>SignInPage</div>;
+  return <SignInForm />;
 };
