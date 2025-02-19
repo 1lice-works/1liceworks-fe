@@ -37,7 +37,7 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
             </p>
           </div>
 
-          <div className='flex flex-col gap-1'>
+          <div className='flex flex-col gap-2'>
             <RHFInput
               label='비밀번호'
               name='password'
@@ -49,7 +49,7 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
               type='password'
               placeholder='비밀번호를 다시한번 입력해주세요.'
             />
-            <div className='mt-2 px-2'>
+            <div className='px-2'>
               <ul className='text-muted-foreground list-disc text-xs'>
                 <li className='ml-[12px]'>
                   비밀번호는 8~20자의 영문, 숫자, 특수문자를 조합해
@@ -62,15 +62,14 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
               </ul>
             </div>
           </div>
-
-          <div className='flex w-full gap-2'>
-            <Button className='w-[50%]' variant='outline' onClick={prevStep}>
-              이전
-            </Button>
-            <Button className='w-full' onClick={nextStep}>
-              다음
-            </Button>
-          </div>
+        </div>
+        <div className='flex w-full gap-2'>
+          <Button className='w-[50%]' variant='outline' onClick={prevStep}>
+            이전
+          </Button>
+          <Button className='w-full' onClick={nextStep}>
+            다음
+          </Button>
         </div>
       </div>
     </>

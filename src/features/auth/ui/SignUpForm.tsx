@@ -11,6 +11,7 @@ import { SignUpFormTypes } from '../model/formTypes';
 import { signUpSchema } from '../model/schema';
 import { useFunnel } from '../model/useFunnel';
 import { ProgressBar } from './ProgressBar';
+import { StepCheckInfo } from './StepCheckInfo';
 import { StepPersonalInfo } from './StepPersonalInfo';
 import { StepSignInfo } from './StepSignInfo';
 import { StepTeamInfo } from './StepTeamInfo';
@@ -42,6 +43,7 @@ export const SignUpForm = () => {
   const handleChange = (e) => {
     e.preventDefault();
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData);
   };
   const onSubmit = () => {};
 
@@ -62,10 +64,11 @@ export const SignUpForm = () => {
           {step === FUNNEL_STEP.SIGN_INFO && (
             <StepSignInfo nextStep={nextStep} prevStep={prevStep} />
           )}
+          {step === FUNNEL_STEP.CHECK_INFO && (
+            <StepCheckInfo prevStep={prevStep} handleChange={handleChange} />
+          )}
         </form>
       </Form>
-
-      {/* {step === FUNNEL_STEP.CHECK_INFO && <StepCheckInfo prevStep={prevStep} />} */}
     </div>
   );
 };

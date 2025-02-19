@@ -41,7 +41,7 @@ export const StepPersonalInfo = ({
             type='text'
             placeholder='이름을 입력해주세요.'
           />
-          <div className='flex w-full flex-col gap-1'>
+          <div className='flex w-full flex-col gap-2'>
             <div className={AUTH_FORM_STYLES.inputAndButton}>
               <RHFInput
                 label='개인 이메일 주소'
@@ -59,7 +59,7 @@ export const StepPersonalInfo = ({
             </div>
           </div>
 
-          <div className={AUTH_FORM_STYLES.inputLayer}>
+          <div>
             <label className='flex items-center gap-4 rounded-md border-1 border-[#F1F5F9] bg-[#F8FAFC] p-2'>
               <Checkbox />
               모든 항목에 동의 합니다.
@@ -74,15 +74,15 @@ export const StepPersonalInfo = ({
                 [필수] 개인정보 보호법 개인정보 처리자의 의무 확인
               </label>
             </div>
-            <div className='flex w-full gap-2'>
-              <Button className='w-[50%]' variant='outline' onClick={prevStep}>
-                이전
-              </Button>
-              <Button className='w-full' onClick={nextStep}>
-                다음
-              </Button>
-            </div>
           </div>
+        </div>
+        <div className='flex w-full gap-2'>
+          <Button className='w-[50%]' variant='outline' onClick={prevStep}>
+            이전
+          </Button>
+          <Button className='w-full' onClick={nextStep}>
+            다음
+          </Button>
         </div>
       </div>
     </>

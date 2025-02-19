@@ -1,5 +1,5 @@
 export const AUTH_FORM_STYLES = {
-  title: 'text-foreground text-xl font-bold text-center my-8', // form의 title
+  title: 'text-foreground text-xl font-bold text-center my-6', // form의 title
   form: 'flex flex-col items-center gap-6 w-[338px]', // form 전체 레이아웃
   inputLayer: 'flex flex-col gap-3 w-full', // 2개 이상의 input
   label: ' text-sm font-semibold mb-1', // input의 label
@@ -9,6 +9,8 @@ export const AUTH_FORM_STYLES = {
   already: 'text-muted-foreground flex justify-between', // submit 하위 text스타일
 
   checkBox: 'flex items-center gap-2',
+
+  infoItem: 'flex w-full justify-between border-b-2 border-[#E2E8F0] p-4',
 
   errorMessage: 'mt-1 text-xs text-red-500',
 } as const;
