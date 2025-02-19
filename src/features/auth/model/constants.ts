@@ -24,3 +24,8 @@ export const FUNNEL_STEP = {
   SIGN_INFO: '로그인 정보 입력',
   CHECK_INFO: '정보 확인',
 } as const;
+
+// progress bar 단계별 상태
+export const PROGRESS_STEP = {
+  noneStep: '',
+};

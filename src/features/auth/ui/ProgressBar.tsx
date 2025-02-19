@@ -5,7 +5,7 @@ interface ProgressBarProps {
 
 export const ProgressBar = ({ steps, currentStep }: ProgressBarProps) => {
   return (
-    <div className='flex'>
+    <div className='mb-10 flex'>
       {steps.map((step, index) => {
         const isActive = index <= currentStep;
         return (
