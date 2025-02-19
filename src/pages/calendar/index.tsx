@@ -6,6 +6,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 
 const localizer = momentLocalizer(moment);
 
+// TODO) calendarId, events.id type 수정 (string으로 변경)
 const mockCalendars = [
   {
     calendarId: 1,
@@ -87,6 +88,14 @@ const mockCalendars = [
   },
 ];
 
+// TODO) constants에 색상 배열 파일 만들기
+// key 수정 (calendarId는 string)
+const calendarColors: { [key: string]: string } = {
+  1: '#f87171', // 내 캘린더
+  2: '#38bdf8', // 팀 캘린더
+  3: '#a78bfa', // '정경준 / 직급' 캘린더
+};
+
 export const CalendarPage = () => {
   const [displays, setDisplays] = useState(() =>
     Object.fromEntries(
@@ -107,9 +116,22 @@ export const CalendarPage = () => {
   );
 
   const eventsToDisplay = useMemo(
-    () => filteredCalendars.flatMap((calendar) => calendar.events),
+    () =>
+      filteredCalendars.flatMap((calendar) =>
+        calendar.events.map((event) => {
+          return { ...event, calendarId: calendar.calendarId };
+        })
+      ),
     [filteredCalendars]
   );
+
+  const eventPropGetter = useCallback((event: { calendarId: number }) => {
+    const backgroundColor = calendarColors[event.calendarId];
+
+    return {
+      style: { backgroundColor },
+    };
+  }, []);
 
   return (
     <div className='h-full'>
@@ -128,7 +150,11 @@ export const CalendarPage = () => {
         ))}
       </div>
 
-      <Calendar localizer={localizer} events={eventsToDisplay} />
+      <Calendar
+        localizer={localizer}
+        events={eventsToDisplay}
+        eventPropGetter={eventPropGetter}
+      />
     </div>
   );
 };
