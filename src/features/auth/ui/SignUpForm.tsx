@@ -10,6 +10,7 @@ import { SignUpFormTypes } from '../model/formTypes';
 import { signUpSchema } from '../model/schema';
 import { useFunnel } from '../model/useFunnel';
 import { ProgressBar } from './ProgressBar';
+import { StepPersonalInfo } from './StepPersonalInfo';
 import { StepTeamInfo } from './StepTeamInfo';
 
 const steps = [
@@ -48,13 +49,13 @@ export const SignUpForm = () => {
           {step === FUNNEL_STEP.TEAM_INFO && (
             <StepTeamInfo nextStep={nextStep} />
           )}
+          {step === FUNNEL_STEP.PERSONAL_INFO && (
+            <StepPersonalInfo nextStep={nextStep} prevStep={prevStep} />
+          )}
         </form>
       </Form>
 
-      {/* {step === FUNNEL_STEP.PERSONAL_INFO && (
-        <StepPersonalInfo nextStep={nextStep} prevStep={prevStep} />
-      )}
-      {step === FUNNEL_STEP.SIGN_INFO && (
+      {/* {step === FUNNEL_STEP.SIGN_INFO && (
         <StepSignInfo nextStep={nextStep} prevStep={prevStep} />
       )}
       {step === FUNNEL_STEP.CHECK_INFO && <StepCheckInfo prevStep={prevStep} />} */}

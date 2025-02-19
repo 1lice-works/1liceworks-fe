@@ -3,7 +3,7 @@ export const AUTH_FORM_STYLES = {
   title: 'text-foreground text-xl font-bold text-center', // form의 title
   inputLayer: 'flex flex-col gap-3 w-full', // 2개 이상의 input
   label: ' text-sm font-semibold mb-1', // input의 label
-  inputAndButton: 'mb-1 flex gap-2', // input과 button이 동시에 있을때
+  inputAndButton: 'flex gap-2 w-full items-end', // input과 button이 동시에 있을때
 
   submit: 'w-full flex flex-col gap-2', // submit 영역
   already: 'text-muted-foreground flex justify-between', // submit 하위 text스타일

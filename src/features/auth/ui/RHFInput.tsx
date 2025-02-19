@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute } from 'react';
+import { HTMLInputTypeAttribute, ReactNode } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import {
@@ -13,10 +13,11 @@ import { Label } from '@/shared/ui/label';
 
 interface RHFInputProps {
   name: string;
-  label: string;
+  label?: string;
   placeholder: string;
   description?: string;
   type?: HTMLInputTypeAttribute;
+  rightElement?: ReactNode | null;
 }
 
 export function RHFInput({
@@ -34,12 +35,19 @@ export function RHFInput({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <div className='flex items-center'>
-            <Label>{label}</Label>
-          </div>
+        <FormItem className='w-full'>
+          {label && (
+            <div className='flex w-full items-center'>
+              <Label>{label}</Label>
+            </div>
+          )}
           <FormControl>
-            <Input placeholder={placeholder} {...field} type={type} />
+            <Input
+              className='w-full'
+              placeholder={placeholder}
+              {...field}
+              type={type}
+            />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

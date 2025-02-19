@@ -1,8 +1,10 @@
+import { useFormContext } from 'react-hook-form';
+
 import { Button } from '@/shared/ui/button';
 import { Checkbox } from '@/shared/ui/checkbox';
-import { Input } from '@/shared/ui/input';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
+import { RHFInput } from './RHFInput';
 
 interface StepPersonalInfoProps {
   nextStep: () => void;
@@ -13,29 +15,49 @@ export const StepPersonalInfo = ({
   nextStep,
   prevStep,
 }: StepPersonalInfoProps) => {
+  const { getValues } = useFormContext(); // 폼 데이터 가져오기
+
+  const handleSendMail = () => {
+    const email = getValues('email'); // email 필드 값 가져오기
+    console.log('인증 요청 이메일:', email);
+  };
+  const handleVerifyNum = () => {
+    const verificatedNumber = getValues('verificatedNumber'); // email 필드 값 가져오기
+    console.log('인증번호:', verificatedNumber);
+  };
+
   return (
-    <form className={AUTH_FORM_STYLES.form}>
+    <>
       <div className={AUTH_FORM_STYLES.title}>
         가입에 필요한 개인 정보를 입력해 주세요.
         <br />
         개설을 완료하면 이 팀 계정의 최고 관리자가 됩니다.
       </div>
       <div className={AUTH_FORM_STYLES.inputLayer}>
-        <label>
-          <p className={AUTH_FORM_STYLES.label}>이름</p>
-          <Input type='text' placeholder='이름을 입력해주세요.' />
-        </label>
-        <label>
-          <p className={AUTH_FORM_STYLES.label}>개인 이메일 주소</p>
-          <div className='mb-1 flex gap-1'>
-            <Input type='text' placeholder='이메일을 입력해주세요.' />
-            <Button>인증</Button>
+        <RHFInput
+          label='이름'
+          name='name'
+          type='text'
+          placeholder='이름을 입력해주세요.'
+        />
+        <div className='flex w-full flex-col gap-1'>
+          <div className={AUTH_FORM_STYLES.inputAndButton}>
+            <RHFInput
+              label='개인 이메일 주소'
+              name='email'
+              placeholder='이메일을 입력해주세요.'
+            />
+            <Button onClick={handleSendMail}>인증</Button>
           </div>
-          <div className='flex gap-1'>
-            <Input type='text' placeholder='인증번호를 입력해주세요.' />
-            <Button>확인</Button>
+          <div className={AUTH_FORM_STYLES.inputAndButton}>
+            <RHFInput
+              name='verificatedNumber'
+              placeholder='인증번호를 입력해주세요.'
+            />
+            <Button onClick={handleVerifyNum}>확인</Button>
           </div>
-        </label>
+        </div>
+
         <div className={AUTH_FORM_STYLES.inputLayer}>
           <label className='flex items-center gap-4 rounded-md border-1 border-[#F1F5F9] bg-[#F8FAFC] p-2'>
             <Checkbox />
@@ -61,6 +83,6 @@ export const StepPersonalInfo = ({
           </div>
         </div>
       </div>
-    </form>
+    </>
   );
 };

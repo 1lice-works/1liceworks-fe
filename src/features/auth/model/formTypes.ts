@@ -12,4 +12,6 @@ export interface SignUpFormTypes {
   teamName: string;
   industry: string;
   size: number;
+  email: string;
+  verificatedNumber: number;
 }
