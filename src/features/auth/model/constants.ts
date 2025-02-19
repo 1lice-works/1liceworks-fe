@@ -10,7 +10,7 @@ export const AUTH_FORM_STYLES = {
 
   checkBox: 'flex items-center gap-2',
 
-  errorMessage: 'mt-1 text-xs text-red',
+  errorMessage: 'mt-1 text-xs text-red-500',
 } as const;
 
 export interface StepInterface {

@@ -5,6 +5,8 @@ import { ROUTES } from '@/shared/constants/routes';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 
+import { AUTH_FORM_STYLES } from '../model/constants';
+
 interface SignInFormData {
   email: string;
   password: string;
@@ -25,12 +27,12 @@ export const SignInForm = () => {
   };
 
   return (
-    <form className='flex flex-col gap-10' onSubmit={handleSubmit(onSubmit)}>
-      <h2 className='text-2xl font-bold'>팀 계정으로 로그인하세요.</h2>
+    <form className={AUTH_FORM_STYLES.form} onSubmit={handleSubmit(onSubmit)}>
+      <h2 className={AUTH_FORM_STYLES.title}>팀 계정으로 로그인하세요.</h2>
 
-      <div className='flex flex-col gap-4'>
+      <div className={AUTH_FORM_STYLES.inputLayer}>
         <label className='flex flex-col gap-2'>
-          <p className='text-sm font-semibold'>아이디</p>
+          <p className={AUTH_FORM_STYLES.label}>아이디</p>
           <Input
             type='email'
             placeholder='@id/mydomain.by-works.com'
@@ -43,11 +45,13 @@ export const SignInForm = () => {
             })}
           />
           {errors.email && (
-            <p className='text-sm text-red-500'>{errors.email.message}</p>
+            <p className={AUTH_FORM_STYLES.errorMessage}>
+              {errors.email.message}
+            </p>
           )}
         </label>
 
-        <label className='flex flex-col gap-2'>
+        <label className={AUTH_FORM_STYLES.submit}>
           <p className='text-sm font-semibold'>비밀번호</p>
           <Input
             type='password'
@@ -60,7 +64,9 @@ export const SignInForm = () => {
             })}
           />
           {errors.password && (
-            <p className='text-sm text-red-500'>{errors.password.message}</p>
+            <p className={AUTH_FORM_STYLES.errorMessage}>
+              {errors.password.message}
+            </p>
           )}
           <Link
             to={ROUTES.AUTH.FIND_PW}
@@ -71,8 +77,8 @@ export const SignInForm = () => {
         </label>
       </div>
 
-      <div className='flex flex-col gap-4'>
-        <Button className='text-md cursor-pointer' type='submit'>
+      <div className={AUTH_FORM_STYLES.submit}>
+        <Button className='w-full' type='submit'>
           로그인
         </Button>
         <div className='text-muted-foreground flex justify-between text-sm'>
