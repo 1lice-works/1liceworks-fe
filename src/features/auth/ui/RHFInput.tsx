@@ -7,9 +7,9 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from '@/shared/ui/form';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
+} from '@/shared/ui/Form';
+import { Input } from '@/shared/ui/Input';
+import { Label } from '@/shared/ui/Label';
 
 interface RHFInputProps {
   name: string;
