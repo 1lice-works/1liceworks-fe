@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 
-import { Button } from '@/shared/ui/button';
-import { Checkbox } from '@/shared/ui/checkbox';
+import { Button } from '@/shared/ui/shadcn/Button';
+import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';

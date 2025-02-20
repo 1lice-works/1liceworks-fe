@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Form } from '@/shared/ui/form';
+import { Form } from '@/shared/ui/shadcn/Form';
 
 import { FUNNEL_STEP } from '../model/constants';
 import { SignUpFormTypes } from '../model/formTypes';
