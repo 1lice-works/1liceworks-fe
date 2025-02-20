@@ -1,4 +1,4 @@
-import { Button } from '@/shared/ui/Button';
+import { Button } from '@/shared/ui/shadcn/Button';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';

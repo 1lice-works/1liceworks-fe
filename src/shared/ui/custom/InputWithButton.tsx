@@ -1,7 +1,6 @@
 import { cn } from '@/shared/lib/utils';
-
-import { Button } from './Button';
-import { Input } from './Input';
+import { Button } from '@/shared/ui/shadcn/Button';
+import { Input } from '@/shared/ui/shadcn/Input';
 
 interface InputWithButtonProps {
   inputProps: React.ComponentProps<typeof Input>;

@@ -1,7 +1,6 @@
 import { cn } from '@/shared/lib/utils';
-
-import { Checkbox } from './Checkbox';
-import { Label } from './Label';
+import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
+import { Label } from '@/shared/ui/shadcn/Label';
 
 interface CheckboxWithLabelProps {
   checkboxProps: React.ComponentProps<typeof Checkbox>;

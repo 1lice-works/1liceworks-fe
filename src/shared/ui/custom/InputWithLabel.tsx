@@ -1,7 +1,6 @@
 import { cn } from '@/shared/lib/utils';
-
-import { Input } from './Input';
-import { Label } from './Label';
+import { Input } from '@/shared/ui/shadcn/Input';
+import { Label } from '@/shared/ui/shadcn/Label';
 
 interface InputWithLabelProps {
   inputProps: React.ComponentProps<typeof Input>;

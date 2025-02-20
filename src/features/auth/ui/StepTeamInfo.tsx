@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/constants/routes';
-import { Button } from '@/shared/ui/Button';
-import { Input } from '@/shared/ui/Input';
+import { Button } from '@/shared/ui/shadcn/Button';
+import { Input } from '@/shared/ui/shadcn/Input';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';

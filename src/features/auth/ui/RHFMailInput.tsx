@@ -1,15 +1,15 @@
 import { HTMLInputTypeAttribute } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Button } from '@/shared/ui/Button';
+import { Button } from '@/shared/ui/shadcn/Button';
 import {
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '@/shared/ui/Form';
-import { Input } from '@/shared/ui/Input';
-import { Label } from '@/shared/ui/Label';
+} from '@/shared/ui/shadcn/Form';
+import { Input } from '@/shared/ui/shadcn/Input';
+import { Label } from '@/shared/ui/shadcn/Label';
 
 interface RHFMailInputProps {
   name: string;
