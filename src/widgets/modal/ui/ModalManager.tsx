@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 import { useModalStore } from '../model/useModalStore';
 import { ModalContainer } from './ModalContainer';
@@ -16,13 +17,14 @@ export const ModalManager = () => {
     }
   };
 
-  return (
+  return createPortal(
     <div
       className='fixed inset-0 flex items-center justify-center bg-black/30'
       onClick={handleOverlayClick}
       onTouchStart={handleOverlayClick}
     >
       <ModalContainer {...modalProps} />
-    </div>
+    </div>,
+    document.body
   );
 };
