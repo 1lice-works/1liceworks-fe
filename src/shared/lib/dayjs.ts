@@ -8,8 +8,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.locale('ko');
 dayjs.extend(relativeTime);
 
-export function fromNow(time: string | Date) {
-  return dayjs(time).fromNow();
+export function formYMD(time: string | Date, format = 'YYYY년MM월DD일') {
+  return dayjs(time).format(format);
 }
 
 export function formatAll(time: string | Date, format = 'YYYY-MM-DD A h:mm') {
