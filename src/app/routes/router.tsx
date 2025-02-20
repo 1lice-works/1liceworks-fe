@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import { CalendarDetail } from '@/features/calendar/ui/CalendarDetail';
 import { CalendarPage } from '@/pages/calendar';
 import { SignInPage } from '@/pages/signin';
 import { SignUpPage } from '@/pages/signup';
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.CALENDAR.root,
         element: <CalendarPage />,
+      },
+      {
+        path: ROUTES.CALENDAR.DETAIL.ROOT,
+        element: <CalendarDetail />,
       },
     ],
   },
