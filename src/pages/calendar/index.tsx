@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 
-import { calendarColors } from '@/features/calendar/model/constants';
 import { CustomEvents } from '@/features/calendar/ui/CustomEvents';
 
 const localizer = dayjsLocalizer(dayjs);
@@ -121,8 +120,9 @@ export const CalendarPage = () => {
   );
 
   const eventPropGetter = useCallback((event: { calendarId: number }) => {
-    const backgroundColor = calendarColors[event.calendarId];
-
+    // const backgroundColor = calendarColors[event.calendarId];
+    const backgroundColor = 'transparent';
+    console.log(backgroundColor);
     return {
       style: { backgroundColor },
     };
