@@ -1,10 +1,10 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useCallback, useMemo, useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 
-const localizer = momentLocalizer(moment);
+const localizer = dayjsLocalizer(dayjs);
 
 // TODO) calendarId, events.id type 수정 (string으로 변경)
 const mockCalendars = [
