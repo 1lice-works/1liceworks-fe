@@ -4,6 +4,9 @@ import moment from 'moment';
 import { useCallback, useMemo, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 
+import { calendarColors } from '@/features/calendar/model/constants';
+import { CustomEvents } from '@/features/calendar/ui/CustomEvents';
+
 const localizer = momentLocalizer(moment);
 
 // TODO) calendarId, events.id type 수정 (string으로 변경)
@@ -88,14 +91,6 @@ const mockCalendars = [
   },
 ];
 
-// TODO) constants에 색상 배열 파일 만들기
-// key 수정 (calendarId는 string)
-const calendarColors: { [key: string]: string } = {
-  1: '#f87171', // 내 캘린더
-  2: '#38bdf8', // 팀 캘린더
-  3: '#a78bfa', // '정경준 / 직급' 캘린더
-};
-
 export const CalendarPage = () => {
   const [displays, setDisplays] = useState(() =>
     Object.fromEntries(
@@ -154,6 +149,10 @@ export const CalendarPage = () => {
         localizer={localizer}
         events={eventsToDisplay}
         eventPropGetter={eventPropGetter}
+        onSelectEvent={(e) => console.log(e)}
+        components={{
+          event: (props) => <CustomEvents {...props} />,
+        }}
       />
     </div>
   );
