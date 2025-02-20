@@ -1,4 +1,4 @@
-import { InputWithButton } from '@/shared/ui/InputWithButton';
+import { InputWithButton } from '@/shared/ui/custom/InputWithButton';
 
 export const CalendarDetailHeader = () => {
   return (
