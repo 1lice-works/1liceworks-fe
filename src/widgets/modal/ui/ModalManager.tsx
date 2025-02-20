@@ -6,8 +6,9 @@ import { ModalContainer } from './ModalContainer';
 export const ModalManager = () => {
   const isOpen = useModalStore((state) => state.isOpen);
   const closeModal = useModalStore((state) => state.closeModal);
+  const modalProps = useModalStore((state) => state.modalProps);
 
-  if (!isOpen) return null;
+  if (!isOpen || !modalProps) return null;
 
   const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
@@ -21,7 +22,7 @@ export const ModalManager = () => {
       onClick={handleOverlayClick}
       onTouchStart={handleOverlayClick}
     >
-      <ModalContainer />
+      <ModalContainer {...modalProps} />
     </div>
   );
 };
