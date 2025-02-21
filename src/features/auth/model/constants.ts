@@ -19,13 +19,19 @@ export interface StepInterface {
   step: '팀 정보 입력' | '개인 정보 입력' | '로그인 정보 입력' | '정보 확인';
 }
 
-// 전체 스텝을 담은 배열
+// 회원가입 전체 스텝을 담은 배열
 export const FUNNEL_STEP = {
   TEAM_INFO: '팀 정보 입력',
   PERSONAL_INFO: '개인 정보 입력',
   SIGN_INFO: '로그인 정보 입력',
   CHECK_INFO: '정보 확인',
 } as const;
+
+// 비밀번호 스텝 배열
+export const FIND_PW = {
+  PERSONAL_INFO: '개인 정보 입력',
+  RESET_PW: '비밀번호 설정',
+};
 
 // progress bar 단계별 상태
 export const PROGRESS_STEP = {

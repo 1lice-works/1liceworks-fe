@@ -21,3 +21,19 @@ export interface SignUpFormTypes {
   userId: string;
   password: string;
 }
+
+export interface FPWStep1Form {
+  accountId: string;
+  private_email: string;
+  verificate: string;
+}
+export interface FPWStep2Form {
+  newPassword: string;
+}
+
+export interface FindPWFormTypes {
+  accountId: string;
+  private_email: string;
+  verificate: string;
+  // newPassword: string;
+}

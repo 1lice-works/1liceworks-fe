@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute, ReactNode } from 'react';
+import { HTMLInputTypeAttribute, PropsWithChildren, ReactNode } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import {
@@ -11,13 +11,14 @@ import {
 import { Input } from '@/shared/ui/shadcn/Input';
 import { Label } from '@/shared/ui/shadcn/Label';
 
-interface RHFInputProps {
+interface RHFInputProps extends PropsWithChildren {
   name: string;
   label?: string;
   placeholder: string;
   description?: string;
   type?: HTMLInputTypeAttribute;
   rightElement?: ReactNode | null;
+  error?: boolean;
 }
 
 export function RHFInput({
@@ -25,8 +26,10 @@ export function RHFInput({
   label,
   placeholder,
   description,
-  rightElement,
+  // rightElement,
+  children,
   type,
+  error = true,
 }: RHFInputProps) {
   const { control } = useFormContext();
 
@@ -43,14 +46,15 @@ export function RHFInput({
           )}
           <FormControl>
             <Input
-              className={`mb-0 w-full`}
+              className={`mb-0 flex`}
               placeholder={placeholder}
               {...field}
               type={type}
             />
+            {/* {children && children} */}
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
+          {error && <FormMessage />}
         </FormItem>
       )}
     />

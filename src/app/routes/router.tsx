@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { CalendarDetail } from '@/features/calendar/ui/CalendarDetail';
 import { CalendarPage } from '@/pages/calendar';
+import { FindPassword } from '@/pages/findPW';
 import { SignInPage } from '@/pages/signin';
 import { SignUpPage } from '@/pages/signup';
 import { TeamPage } from '@/pages/team';
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.AUTH.SIGN_UP,
         element: <SignUpPage />,
+      },
+      {
+        path: ROUTES.AUTH.FIND_PW,
+        element: <FindPassword />,
       },
     ],
   },
