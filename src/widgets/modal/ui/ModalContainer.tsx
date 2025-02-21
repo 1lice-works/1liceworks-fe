@@ -27,7 +27,7 @@ export const ModalContainer = ({
   onRightButtonClick,
 }: ModalContainerWithHandlersProps) => {
   return (
-    <Card className='w-1/3 min-w-fit'>
+    <Card className='w-1/3 max-w-fit overflow-x-hidden'>
       <CardHeader>
         <CardTitle className='text-xl'>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
