@@ -10,9 +10,10 @@ import { EventTypes } from '../model/eventTypes';
 
 interface DetailsProps {
   event: EventTypes;
+  setIsEdit: (value: boolean) => void;
 }
 
-export const Details = ({ event }: DetailsProps) => {
+export const Details = ({ event, setIsEdit }: DetailsProps) => {
   // calendarID === 1 내 캘린더
   // calendarID === 2 내 캘린더
   // calendarID === 3 팀원/직급 캘린더
@@ -32,7 +33,7 @@ export const Details = ({ event }: DetailsProps) => {
     <div className='flex w-full flex-col gap-4'>
       <div className='mb-4 flex items-center gap-2'>
         <div className='w-full text-xl font-semibold'>{event.title}</div>
-        <Button>수정</Button>
+        <Button onClick={() => setIsEdit(true)}>수정</Button>
         <Button variant='destructive'>삭제</Button>
       </div>
       <div className='flex items-center gap-2'>

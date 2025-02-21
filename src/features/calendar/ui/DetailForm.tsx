@@ -19,8 +19,11 @@ interface EventFormData {
   endTime: Date;
   description: string;
 }
+interface DetailFormProps {
+  DetailForm: (props: boolean) => void;
+}
 
-export const DetailForm = () => {
+export const DetailForm = ({ setIsEdit }: DetailFormProps) => {
   const form = useForm<EventFormData>({
     mode: 'onChange',
     resolver: zodResolver(eventsSchema),
@@ -38,7 +41,11 @@ export const DetailForm = () => {
         <div className='flex gap-2'>
           <RHFInput name='title' placeholder='제목' type='text' />
           <Button type='submit'>저장</Button>
-          <Button type='button' variant='outline'>
+          <Button
+            type='button'
+            onClick={() => setIsEdit(false)}
+            variant='outline'
+          >
             취소
           </Button>
         </div>
