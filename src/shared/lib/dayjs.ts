@@ -11,6 +11,12 @@ dayjs.extend(relativeTime);
 export function formYMD(time: string | Date, format = 'YYYY년MM월DD일') {
   return dayjs(time).format(format);
 }
+export function formYMDT(
+  time: string | Date,
+  format = 'YYYY년MM월DD일 A h시mm분'
+) {
+  return dayjs(time).format(format);
+}
 
 export function formatAll(time: string | Date, format = 'YYYY-MM-DD A h:mm') {
   return dayjs(time).format(format);
