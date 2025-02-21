@@ -13,6 +13,21 @@ interface DetailsProps {
 }
 
 export const Details = ({ event }: DetailsProps) => {
+  // calendarID === 1 내 캘린더
+  // calendarID === 2 내 캘린더
+  // calendarID === 3 팀원/직급 캘린더
+
+  // calendarId에 따른 캘린더 이름 매핑
+  const getCalendarName = (calendarId: number) => {
+    const calendarMap: Record<number, string> = {
+      1: '내 캘린더',
+      2: '팀 캘린더',
+      3: '정경준 / 직급 캘린더',
+    };
+
+    return calendarMap[calendarId] || '알 수 없는 캘린더'; // 기본값 처리
+  };
+
   return (
     <div className='flex w-full flex-col gap-4'>
       <div className='mb-4 flex items-center gap-2'>
@@ -32,7 +47,7 @@ export const Details = ({ event }: DetailsProps) => {
       </div>
       <div className='flex items-center gap-2'>
         <SimpleCalendarIcon />
-        <p>내 캘린더</p>
+        <p>{getCalendarName(event.calendarId)}</p>
       </div>
       <div className='flex items-center gap-2'>
         <EyeIcon />

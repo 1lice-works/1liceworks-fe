@@ -8,19 +8,25 @@ import { FindEmptyTime } from './FindEmptyTime';
 export const CalendarDetail = () => {
   const { eventId } = useParams();
 
-  // eventId를 string에서 number로 변환
-  const event = mockCalendars
-    .flatMap((calendar) => calendar.events) // 모든 이벤트를 하나의 배열로 합치기
-    .find((event) => event.id.toString() === eventId); // eventId와 일치하는 객체 찾기
+  // eventId와 일치하는 이벤트를 찾고, 해당 이벤트의 calendarId도 함께 저장
+  const foundEvent = mockCalendars
+    .map((calendar) =>
+      calendar.events.map((event) => ({
+        ...event,
+        calendarId: calendar.calendarId, // calendarId 추가
+      }))
+    )
+    .flat()
+    .find((event) => event.id.toString() === eventId);
 
-  if (!event) {
+  if (!foundEvent) {
     return <div>이벤트를 찾을 수 없습니다.</div>;
   }
 
   return (
     <div className='flex h-full w-full flex-col gap-4 lg:flex-row'>
       {/* <DetailForm /> */}
-      <Details event={event} />
+      <Details event={foundEvent} />
       <FindEmptyTime />
     </div>
   );
