@@ -12,13 +12,20 @@ import { Separator } from '@/shared/ui/shadcn/Separator';
 
 import { ModalContainerProps } from '../model/ModalContainerProps';
 
+interface ModalContainerWithHandlersProps extends ModalContainerProps {
+  onLeftButtonClick: React.ComponentProps<typeof Button>['onClick'];
+  onRightButtonClick: React.ComponentProps<typeof Button>['onClick'];
+}
+
 export const ModalContainer = ({
   title,
   description,
   content,
   leftButtonProps,
+  onLeftButtonClick,
   rightButtonProps,
-}: ModalContainerProps) => {
+  onRightButtonClick,
+}: ModalContainerWithHandlersProps) => {
   return (
     <Card className='w-1/3 min-w-fit'>
       <CardHeader>
@@ -36,10 +43,12 @@ export const ModalContainer = ({
           variant='outline'
           {...leftButtonProps}
           className={cn(leftButtonProps?.className)}
+          onClick={onLeftButtonClick}
         />
         <Button
           {...rightButtonProps}
           className={cn(rightButtonProps?.className)}
+          onClick={onRightButtonClick}
         />
       </CardFooter>
     </Card>
