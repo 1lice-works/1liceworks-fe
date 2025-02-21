@@ -1,5 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
+import { ModalManager } from '@/widgets/modal/ui/ModalManager';
+
 export const MainLayout = () => {
   return (
     <div className='flex h-screen w-full flex-col'>
@@ -14,6 +16,8 @@ export const MainLayout = () => {
           <Outlet />
         </main>
       </div>
+
+      <ModalManager />
     </div>
   );
 };
