@@ -47,7 +47,7 @@ export const SignInForm = () => {
           />
           <div className='flex justify-end'>
             <Link
-              to={ROUTES.AUTH.SIGN_UP}
+              to={ROUTES.AUTH.FIND_PW}
               className={`underline ${AUTH_FORM_STYLES.already}`}
             >
               비밀번호 찾기

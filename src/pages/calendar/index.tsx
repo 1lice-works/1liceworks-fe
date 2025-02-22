@@ -42,6 +42,7 @@ export const CalendarPage = () => {
     // const backgroundColor = calendarColors[event.calendarId];
     const backgroundColor = 'transparent';
     console.log(backgroundColor);
+    console.log(event);
     return {
       style: { backgroundColor },
     };

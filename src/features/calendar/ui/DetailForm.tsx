@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { RHFInput } from '@/shared/ui/custom/RHFInput';
@@ -9,28 +8,30 @@ import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 import { Form } from '@/shared/ui/shadcn/Form';
 import { Label } from '@/shared/ui/shadcn/Label';
 
-import { eventsSchema } from '../model/schema';
+import { EventTypes } from '../model/eventTypes';
 
 interface EventFormData {
-  title: string;
-  start: Date;
-  startTime: Date;
-  end: Date;
-  endTime: Date;
-  description: string;
+  // title: string;
+  // start: Date;
+  // startTime: Date;
+  // end: Date;
+  // endTime: Date;
+  // description: string;
 }
 interface DetailFormProps {
-  DetailForm: (props: boolean) => void;
+  setIsEdit: (props: boolean) => void;
+  event: EventTypes;
 }
 
-export const DetailForm = ({ setIsEdit }: DetailFormProps) => {
+export const DetailForm = ({ event, setIsEdit }: DetailFormProps) => {
   const form = useForm<EventFormData>({
     mode: 'onChange',
-    resolver: zodResolver(eventsSchema),
+    // resolver: zodResolver(eventsSchema),
   });
   const onSubmit = (data: EventFormData) => {
     console.log('일정 요청 데이터:', data);
   };
+  console.log(event);
 
   return (
     <Form {...form}>
@@ -39,7 +40,7 @@ export const DetailForm = ({ setIsEdit }: DetailFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className='flex gap-2'>
-          <RHFInput name='title' placeholder='제목' type='text' />
+          <RHFInput name='title' placeholder={event.title} type='text' />
           <Button type='submit'>저장</Button>
           <Button
             type='button'
