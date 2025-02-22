@@ -27,6 +27,7 @@ export const FindPasswordForm = () => {
     // newPassword: '',
   });
   console.log(formData);
+  console.log(currentStepIndex);
 
   return (
     <div>
@@ -35,9 +36,7 @@ export const FindPasswordForm = () => {
           {step === FIND_PW.PERSONAL_INFO && (
             <StepFPWInfo nextStep={nextStep} setFormData={setFormData} />
           )}
-          {step === FIND_PW.RESET_PW && (
-            <StepNewPW setFormData={setFormData} prevStep={prevStep} />
-          )}
+          {step === FIND_PW.RESET_PW && <StepNewPW prevStep={prevStep} />}
         </form>
       </Form>
     </div>

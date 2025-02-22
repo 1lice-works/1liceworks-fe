@@ -3,16 +3,17 @@ import { useFormContext } from 'react-hook-form';
 import { Button } from '@/shared/ui/shadcn/Button';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
+import { FindPWFormTypes } from '../model/formTypes';
 import { RHFInput } from './RHFInput';
 
 interface StepFPWInfoProps {
   nextStep: () => void;
-  setFormData: (data: any) => void; // formData 업데이트 함수 추가
+  setFormData: (data: FindPWFormTypes) => void; // formData 업데이트 함수 추가
 }
 export const StepFPWInfo = ({ nextStep, setFormData }: StepFPWInfoProps) => {
   const {
     handleSubmit,
-    watch,
+    // watch,
     formState: { isValid },
   } = useFormContext();
 

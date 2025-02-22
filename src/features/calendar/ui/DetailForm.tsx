@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { RHFInput } from '@/shared/ui/custom/RHFInput';
@@ -9,8 +8,6 @@ import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 import { Form } from '@/shared/ui/shadcn/Form';
 import { Label } from '@/shared/ui/shadcn/Label';
 
-import { eventsSchema } from '../model/schema';
-
 interface EventFormData {
   title: string;
   start: Date;
@@ -20,13 +17,13 @@ interface EventFormData {
   description: string;
 }
 interface DetailFormProps {
-  DetailForm: (props: boolean) => void;
+  setIsEdit: (props: boolean) => void;
 }
 
 export const DetailForm = ({ setIsEdit }: DetailFormProps) => {
   const form = useForm<EventFormData>({
     mode: 'onChange',
-    resolver: zodResolver(eventsSchema),
+    // resolver: zodResolver(eventsSchema),
   });
   const onSubmit = (data: EventFormData) => {
     console.log('일정 요청 데이터:', data);
