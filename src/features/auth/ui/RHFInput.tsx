@@ -27,7 +27,6 @@ export function RHFInput({
   placeholder,
   description,
   // rightElement,
-  children,
   type,
   error = true,
 }: RHFInputProps) {

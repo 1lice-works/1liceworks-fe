@@ -30,7 +30,7 @@ export class TokenExpiredHandler {
     originalRequest._retry = true;
 
     try {
-      const { accessToken } = '';
+      const accessToken = '';
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/login/refresh`,
         null,

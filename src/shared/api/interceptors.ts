@@ -8,7 +8,7 @@ import { ApiErrorResponse } from '../types/apiResponse';
 import { NetworkOfflineError, TokenExpiredHandler } from './errorHandler';
 
 export const requestInterceptor = (config: InternalAxiosRequestConfig) => {
-  const { accessToken } = '';
+  const accessToken = '';
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;

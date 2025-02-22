@@ -4,12 +4,12 @@ import { AUTH_FORM_STYLES } from '../model/constants';
 
 interface StepCheckInfoProps {
   prevStep: () => void;
-  handleChange: () => void;
+  // handleChange: () => void;
 }
 
 export const StepCheckInfo = ({
   prevStep,
-  handleChange,
+  // handleChange,
 }: StepCheckInfoProps) => {
   return (
     <>
@@ -39,7 +39,7 @@ export const StepCheckInfo = ({
           </div>
         </div>
         <div className={AUTH_FORM_STYLES.submit}>
-          <Button onClick={handleChange}>확인</Button>
+          <Button>확인</Button>
           <Button variant='outline' onClick={prevStep}>
             이전
           </Button>

@@ -40,12 +40,25 @@ export const SignUpForm = () => {
     password: '',
   });
 
-  const handleChange = (e) => {
-    e.preventDefault();
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // const handleChange = (e) => {
+  //   e.preventDefault();
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  //   console.log(formData);
+  // };
+  const onSubmit = () => {
+    setFormData({
+      companyName: '',
+      teamName: '',
+      industry: '',
+      size: 0,
+      name: '',
+      email: '',
+      verificatedNumber: 0,
+      useId: '',
+      password: '',
+    });
     console.log(formData);
   };
-  const onSubmit = () => {};
 
   return (
     <div className='text-foreground flex w-full flex-col items-center justify-center'>
@@ -65,7 +78,7 @@ export const SignUpForm = () => {
             <StepSignInfo nextStep={nextStep} prevStep={prevStep} />
           )}
           {step === FUNNEL_STEP.CHECK_INFO && (
-            <StepCheckInfo prevStep={prevStep} handleChange={handleChange} />
+            <StepCheckInfo prevStep={prevStep} />
           )}
         </form>
       </Form>
