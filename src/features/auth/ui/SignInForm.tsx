@@ -1,11 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/constants/routes';
 import { Button } from '@/shared/ui/shadcn/Button';
 import { Form } from '@/shared/ui/shadcn/Form';
 
+import { authQueries } from '../api/queries';
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { signInSchema } from '../model/schema';
 import { RHFInput } from './RHFInput';
@@ -16,13 +18,22 @@ interface SignInFormData {
 }
 
 export const SignInForm = () => {
+  const navigate = useNavigate();
   const form = useForm<SignInFormData>({
     mode: 'onChange',
     resolver: zodResolver(signInSchema),
   });
 
+  const { mutate } = useMutation({
+    ...authQueries.signIn,
+    onSuccess: () => {
+      navigate(ROUTES.ROOT);
+    },
+  });
+
   const onSubmit = (data: SignInFormData) => {
     console.log('로그인 요청 데이터:', data);
+    mutate({ accountId: data.email, password: data.password });
   };
 
   return (

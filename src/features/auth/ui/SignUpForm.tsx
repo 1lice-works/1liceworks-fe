@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Form } from '@/shared/ui/shadcn/Form';
@@ -30,7 +30,7 @@ export const SignUpForm = () => {
     mode: 'onChange',
     resolver: zodResolver(signUpSchema),
   });
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignUpFormTypes>({
     companyName: '',
     teamName: '',
     industry: '',
@@ -39,14 +39,13 @@ export const SignUpForm = () => {
     domainName: '',
     username: '',
     privateEmail: '',
-    // verificatedNumber: 0,
+    verificatedNumber: '',
     accountId: '',
     password: '',
   });
 
   const handleNextStep = (data: Partial<typeof formData>) => {
     setFormData((prev) => ({ ...prev, ...data })); // 기존 데이터 유지하면서 업데이트
-    console.log('Updated FormData:', formData);
     nextStep(); // 다음 스텝 이동
   };
   const { mutate, isPending } = useMutation({
@@ -54,8 +53,31 @@ export const SignUpForm = () => {
     onSuccess: () => {},
   });
 
+  useEffect(() => {
+    console.log('Updated FormData:', formData);
+  }, [formData]);
+
   const onSubmit = () => {
-    mutate(formData);
+    const requestData = {
+      data: {
+        teamInfo: {
+          companyName: formData.companyName,
+          teamName: formData.teamName,
+          industry: formData.industry,
+          scale: formData.scale,
+          hasPrivateDomain: formData.hasPrivateDomain,
+          domainName: formData.hasPrivateDomain ? formData.domainName : '', // 미보유 시 빈 문자열
+        },
+        userInfo: {
+          username: formData.username,
+          privateEmail: formData.privateEmail,
+          accountId: formData.accountId,
+          password: formData.password,
+        },
+      },
+    };
+
+    mutate(requestData);
   };
 
   return (
@@ -76,7 +98,11 @@ export const SignUpForm = () => {
             <StepSignInfo nextStep={handleNextStep} prevStep={prevStep} />
           )}
           {step === FUNNEL_STEP.CHECK_INFO && (
-            <StepCheckInfo prevStep={prevStep} formData={formData} />
+            <StepCheckInfo
+              prevStep={prevStep}
+              formData={formData}
+              isPending={isPending}
+            />
           )}
         </form>
       </Form>

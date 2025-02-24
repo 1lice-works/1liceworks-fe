@@ -1,7 +1,10 @@
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/shadcn/Button';
 
+import { authQueries } from '../api/queries';
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';
 
@@ -11,12 +14,8 @@ interface StepSignInfoProps {
 }
 
 export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
-  const handleCheckMail = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-  };
   const { getValues, formState } = useFormContext();
+  const { isValid, setIsValid } = useState<boolean>(false);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = ['accountId', 'password'];
@@ -25,6 +24,18 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
   const isCurrentStepValid = stepFields.every(
     (field) => !formState.errors[field]
   );
+  const { mutate } = useMutation({
+    ...authQueries.validEmail,
+    onSuccess: () => {
+      setIsValid(true);
+      console.log('중복 검사 확인!');
+    },
+  });
+
+  const handleCheckMail = () => {
+    const accountId = getValues('accountId');
+    mutate({ accountId });
+  };
 
   const handleNext = () => {
     if (!isCurrentStepValid) {
@@ -51,7 +62,9 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
                 label='아이디'
                 placeholder='ID@mydomain.1lice-work.com'
               />
-              <Button onClick={(e) => handleCheckMail(e)}>중복 확인</Button>
+              <Button type='button' onClick={handleCheckMail}>
+                {isValid ? '사용가능' : '중복 확인'}
+              </Button>
             </div>
             <p className='text-muted-foreground pt-1 text-xs'>
               ID는 'ID@mydomain.ilice-works.com' 형식으로, 로그인 시 사용됩니다.
@@ -85,10 +98,16 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
           </div>
         </div>
         <div className='flex w-full gap-2'>
-          <Button className='w-[50%]' variant='outline' onClick={prevStep}>
+          <Button
+            type='button'
+            className='w-[50%]'
+            variant='outline'
+            onClick={prevStep}
+          >
             이전
           </Button>
           <Button
+            type='button'
             className='w-full'
             onClick={handleNext}
             disabled={!isCurrentStepValid}

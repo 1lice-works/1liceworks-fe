@@ -84,6 +84,7 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
             <p className={AUTH_FORM_STYLES.label}>도메인</p>
             <div className='mb-2 flex w-full justify-between gap-2'>
               <Button
+                type='button'
                 name='hasPrivateDomain'
                 className='w-full'
                 disabled={hasPrivateDomain}
@@ -92,6 +93,7 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
                 보유
               </Button>
               <Button
+                type='button'
                 name='hasPrivateDomain'
                 className='w-full'
                 disabled={!hasPrivateDomain}
@@ -111,6 +113,7 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
         </div>
         <div className={AUTH_FORM_STYLES.submit}>
           <Button
+            type='button'
             className='w-full'
             onClick={handleNext}
             disabled={!isCurrentStepValid}

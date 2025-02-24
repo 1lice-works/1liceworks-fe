@@ -5,14 +5,14 @@ import { SignUpFormTypes } from '../model/formTypes';
 
 interface StepCheckInfoProps {
   prevStep: () => void;
-  // handleChange: () => void;
   formData: SignUpFormTypes;
+  isPending: boolean;
 }
 
 export const StepCheckInfo = ({
   prevStep,
   formData,
-  // handleChange,
+  isPending,
 }: StepCheckInfoProps) => {
   return (
     <>
@@ -42,8 +42,8 @@ export const StepCheckInfo = ({
           </div>
         </div>
         <div className={AUTH_FORM_STYLES.submit}>
-          <Button type='submit'>확인</Button>
-          <Button variant='outline' onClick={prevStep}>
+          <Button type='submit'>{isPending ? '처리중' : '확인'}</Button>
+          <Button variant='outline' type='button' onClick={prevStep}>
             이전
           </Button>
         </div>

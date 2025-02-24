@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/constants/routes';
+import { useAuthStore } from '@/shared/model/authStore';
 
 interface AuthRouteProps extends PropsWithChildren {
   isPublic?: boolean;
@@ -9,7 +10,7 @@ interface AuthRouteProps extends PropsWithChildren {
 
 export const AuthRoute = ({ isPublic, children }: AuthRouteProps) => {
   // todos : 스토어에서 엑세스 키 가져오기
-  const isAuthenticated = false;
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   if (!isPublic && !isAuthenticated) {
     return <Navigate to={ROUTES.AUTH.SIGN_IN} replace />;

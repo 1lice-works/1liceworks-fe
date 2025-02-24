@@ -14,11 +14,11 @@ export interface SignUpFormTypes {
   industry: string;
   scale: string;
   hasPrivateDomain: boolean;
-  // 개인정보 입력단계
   domainName: string;
+  // 개인정보 입력단계
   username: string;
   privateEmail: string;
-  // verificatedNumber: number;
+  verificatedNumber: string;
   // 로그인 정보 입력단계
   accountId: string;
   password: string;
