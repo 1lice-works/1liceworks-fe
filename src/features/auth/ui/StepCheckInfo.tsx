@@ -1,14 +1,17 @@
 import { Button } from '@/shared/ui/shadcn/Button';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
+import { SignUpFormTypes } from '../model/formTypes';
 
 interface StepCheckInfoProps {
   prevStep: () => void;
   // handleChange: () => void;
+  formData: SignUpFormTypes;
 }
 
 export const StepCheckInfo = ({
   prevStep,
+  formData,
   // handleChange,
 }: StepCheckInfoProps) => {
   return (
@@ -23,23 +26,23 @@ export const StepCheckInfo = ({
           {/* <div className='flex w-full justify-between border-b-2 border-[#E2E8F0] p-4'> */}
           <div className={AUTH_FORM_STYLES.infoItem}>
             <div>회사</div>
-            <div>{'ㅁㄴㅇㄻㄴ'}</div>
+            <div>{formData.companyName}</div>
           </div>
           <div className={AUTH_FORM_STYLES.infoItem}>
             <div>팀</div>
-            <div>{'ㅁㄴㅇㄻㄴ'}</div>
+            <div>{formData.teamName}</div>
           </div>
           <div className={AUTH_FORM_STYLES.infoItem}>
             <div>이름</div>
-            <div>{'ㅁㄴㅇㄻㄴ'}</div>
+            <div>{formData.username}</div>
           </div>
           <div className={AUTH_FORM_STYLES.infoItem}>
             <div>ID</div>
-            <div>{'ㅁㄴㅇㄻㄴ'}</div>
+            <div>{formData.accountId}</div>
           </div>
         </div>
         <div className={AUTH_FORM_STYLES.submit}>
-          <Button>확인</Button>
+          <Button type='submit'>확인</Button>
           <Button variant='outline' onClick={prevStep}>
             이전
           </Button>

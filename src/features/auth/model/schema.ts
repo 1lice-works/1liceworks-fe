@@ -21,15 +21,17 @@ export const signUpSchema = z.object({
     .min(1, { message: '팀 이름을 입력해주세요.' })
     .regex(/^\S/, { message: '팀 이름의 첫 글자는 공백일 수 없습니다.' }),
   industry: z.string(),
-  size: z.string(),
-  name: z
+  scale: z.string(),
+  username: z
     .string()
     .min(1, { message: '이름을 입력해주세요.' })
     .regex(/^\S/, { message: '이름의 첫 글자는 공백일 수 없습니다.' }),
-  email: z.string().email({ message: '이메일을 올바르게 입력해 주세요.' }),
-  verificatedNumber: z.number().min(1, { message: '인증번호를 입력해주세요.' }),
+  privateEmail: z
+    .string()
+    .email({ message: '이메일을 올바르게 입력해 주세요.' }),
+  // verificatedNumber: z.number().min(1, { message: '인증번호를 입력해주세요.' }),
 
-  userId: z.string().email({ message: '이메일을 올바르게 입력해 주세요.' }),
+  accountId: z.string().email({ message: '이메일을 올바르게 입력해 주세요.' }),
   password: z
     .string()
     .min(8, {

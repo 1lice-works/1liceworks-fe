@@ -1,20 +1,46 @@
+import { useFormContext } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/constants/routes';
+import { RHFSelect } from '@/shared/ui/custom/RHFSelect';
 import { Button } from '@/shared/ui/shadcn/Button';
-import { Input } from '@/shared/ui/shadcn/Input';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';
 
 interface StepTeamInfoProps {
-  nextStep: () => void;
+  nextStep: (data: any) => void; // 수정: 데이터를 받을 수 있도록 함
 }
 // {/* <RHFInput label='' name='' type='' placeholder='' /> */}
 
 export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
+  const { getValues, formState, setValue, watch } = useFormContext();
+
+  // 현재 'hasPrivateDomain' 값 가져오기
+  const hasPrivateDomain = watch('hasPrivateDomain', false);
+  // 해당 스텝에서 유효성을 검사할 필드 목록
+  const stepFields = [
+    'companyName',
+    'teamName',
+    'industry',
+    'scale',
+    'hasPrivateDomain',
+    'domainName',
+  ];
+
+  // 해당 스텝의 필드만 검사
+  const isCurrentStepValid = stepFields.every(
+    (field) => !formState.errors[field]
+  );
+
   const handleNext = () => {
-    nextStep();
+    if (!isCurrentStepValid) {
+      console.log('현재 단계의 필수 입력값이 누락되었습니다.');
+      return;
+    }
+
+    const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
+    nextStep(formData); // 다음 스텝으로 이동할 때 데이터 전달
   };
 
   return (
@@ -36,29 +62,59 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
             type='text'
             placeholder='팀 이름을 입력해주세요.'
           />
-          <RHFInput
-            label='업종'
+          <RHFSelect
             name='industry'
-            type='text'
-            placeholder='업종을 선택해주세요.'
+            label='업종'
+            placeholder='업종'
+            items={[
+              { value: 'IT', item: 'IT' },
+              { value: 'CONSTRUCTION', item: '건설' },
+            ]}
           />
-          <RHFInput
+          <RHFSelect
             label='규모'
-            name='size'
-            type='text'
-            placeholder='규모를 선택해주세요.'
+            name='scale'
+            placeholder='규모'
+            items={[
+              { value: 'ONE', item: '스타트업' },
+              { value: 'TWO', item: '중소기업' },
+            ]}
           />
           <label>
             <p className={AUTH_FORM_STYLES.label}>도메인</p>
             <div className='mb-2 flex w-full justify-between gap-2'>
-              <Button className='w-full'>보유</Button>
-              <Button className='w-full'>미보유</Button>
+              <Button
+                name='hasPrivateDomain'
+                className='w-full'
+                disabled={hasPrivateDomain}
+                onClick={() => setValue('hasPrivateDomain', true)}
+              >
+                보유
+              </Button>
+              <Button
+                name='hasPrivateDomain'
+                className='w-full'
+                disabled={!hasPrivateDomain}
+                onClick={() => setValue('hasPrivateDomain', false)}
+              >
+                미보유
+              </Button>
             </div>
-            <Input type='text' placeholder='ex.mydomain' />
+            {hasPrivateDomain && (
+              <RHFInput
+                type='text'
+                name='domainName'
+                placeholder='ex.mydomain'
+              />
+            )}
           </label>
         </div>
         <div className={AUTH_FORM_STYLES.submit}>
-          <Button className='w-full' onClick={handleNext}>
+          <Button
+            className='w-full'
+            onClick={handleNext}
+            disabled={!isCurrentStepValid}
+          >
             다음
           </Button>
           <div className={AUTH_FORM_STYLES.already}>

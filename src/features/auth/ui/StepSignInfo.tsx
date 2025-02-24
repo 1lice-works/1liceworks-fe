@@ -1,10 +1,12 @@
+import { useFormContext } from 'react-hook-form';
+
 import { Button } from '@/shared/ui/shadcn/Button';
 
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';
 
 interface StepSignInfoProps {
-  nextStep: () => void;
+  nextStep: (data: any) => void; // 수정: 데이터를 받을 수 있도록 함
   prevStep: () => void;
 }
 
@@ -13,6 +15,25 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+  };
+  const { getValues, formState } = useFormContext();
+
+  // 해당 스텝에서 유효성을 검사할 필드 목록
+  const stepFields = ['accountId', 'password'];
+
+  // 해당 스텝의 필드만 검사
+  const isCurrentStepValid = stepFields.every(
+    (field) => !formState.errors[field]
+  );
+
+  const handleNext = () => {
+    if (!isCurrentStepValid) {
+      console.log('현재 단계의 필수 입력값이 누락되었습니다.');
+      return;
+    }
+
+    const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
+    nextStep(formData); // 다음 스텝으로 이동할 때 데이터 전달
   };
 
   return (
@@ -25,7 +46,7 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
           <div>
             <div className={AUTH_FORM_STYLES.inputAndButton}>
               <RHFInput
-                name='userId'
+                name='accountId'
                 type='email'
                 label='아이디'
                 placeholder='ID@mydomain.1lice-work.com'
@@ -67,7 +88,11 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
           <Button className='w-[50%]' variant='outline' onClick={prevStep}>
             이전
           </Button>
-          <Button className='w-full' onClick={nextStep}>
+          <Button
+            className='w-full'
+            onClick={handleNext}
+            disabled={!isCurrentStepValid}
+          >
             다음
           </Button>
         </div>

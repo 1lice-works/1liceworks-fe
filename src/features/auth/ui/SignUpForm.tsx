@@ -1,11 +1,13 @@
 // import { useFunnel } from '@use-funnel/react-router-dom';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Form } from '@/shared/ui/shadcn/Form';
 
+import { authQueries } from '../api/queries';
 import { FUNNEL_STEP } from '../model/constants';
 import { SignUpFormTypes } from '../model/formTypes';
 import { signUpSchema } from '../model/schema';
@@ -32,32 +34,28 @@ export const SignUpForm = () => {
     companyName: '',
     teamName: '',
     industry: '',
-    size: 0,
-    name: '',
-    email: '',
-    verificatedNumber: 0,
-    useId: '',
+    scale: '',
+    hasPrivateDomain: false,
+    domainName: '',
+    username: '',
+    privateEmail: '',
+    // verificatedNumber: 0,
+    accountId: '',
     password: '',
   });
 
-  // const handleChange = (e) => {
-  //   e.preventDefault();
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  //   console.log(formData);
-  // };
+  const handleNextStep = (data: Partial<typeof formData>) => {
+    setFormData((prev) => ({ ...prev, ...data })); // 기존 데이터 유지하면서 업데이트
+    console.log('Updated FormData:', formData);
+    nextStep(); // 다음 스텝 이동
+  };
+  const { mutate, isPending } = useMutation({
+    ...authQueries.signUp,
+    onSuccess: () => {},
+  });
+
   const onSubmit = () => {
-    setFormData({
-      companyName: '',
-      teamName: '',
-      industry: '',
-      size: 0,
-      name: '',
-      email: '',
-      verificatedNumber: 0,
-      useId: '',
-      password: '',
-    });
-    console.log(formData);
+    mutate(formData);
   };
 
   return (
@@ -69,16 +67,16 @@ export const SignUpForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           {step === FUNNEL_STEP.TEAM_INFO && (
-            <StepTeamInfo nextStep={nextStep} />
+            <StepTeamInfo nextStep={handleNextStep} />
           )}
           {step === FUNNEL_STEP.PERSONAL_INFO && (
-            <StepPersonalInfo nextStep={nextStep} prevStep={prevStep} />
+            <StepPersonalInfo nextStep={handleNextStep} prevStep={prevStep} />
           )}
           {step === FUNNEL_STEP.SIGN_INFO && (
-            <StepSignInfo nextStep={nextStep} prevStep={prevStep} />
+            <StepSignInfo nextStep={handleNextStep} prevStep={prevStep} />
           )}
           {step === FUNNEL_STEP.CHECK_INFO && (
-            <StepCheckInfo prevStep={prevStep} />
+            <StepCheckInfo prevStep={prevStep} formData={formData} />
           )}
         </form>
       </Form>

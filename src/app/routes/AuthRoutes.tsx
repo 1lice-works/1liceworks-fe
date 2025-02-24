@@ -9,7 +9,7 @@ interface AuthRouteProps extends PropsWithChildren {
 
 export const AuthRoute = ({ isPublic, children }: AuthRouteProps) => {
   // todos : 스토어에서 엑세스 키 가져오기
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   if (!isPublic && !isAuthenticated) {
     return <Navigate to={ROUTES.AUTH.SIGN_IN} replace />;

@@ -7,7 +7,7 @@ import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';
 
 interface StepPersonalInfoProps {
-  nextStep: () => void;
+  nextStep: (data: any) => void; // 수정: 데이터를 받을 수 있도록 함
   prevStep: () => void;
 }
 
@@ -15,7 +15,25 @@ export const StepPersonalInfo = ({
   nextStep,
   prevStep,
 }: StepPersonalInfoProps) => {
-  const { getValues } = useFormContext(); // 폼 데이터 가져오기
+  const { getValues, formState } = useFormContext(); // 폼 데이터 가져오기
+
+  // 해당 스텝에서 유효성을 검사할 필드 목록
+  const stepFields = ['username', 'privateEmail'];
+
+  // 해당 스텝의 필드만 검사
+  const isCurrentStepValid = stepFields.every(
+    (field) => !formState.errors[field]
+  );
+
+  const handleNext = () => {
+    if (!isCurrentStepValid) {
+      console.log('현재 단계의 필수 입력값이 누락되었습니다.');
+      return;
+    }
+
+    const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
+    nextStep(formData); // 다음 스텝으로 이동할 때 데이터 전달
+  };
 
   const handleSendMail = () => {
     const email = getValues('email'); // email 필드 값 가져오기
@@ -37,7 +55,7 @@ export const StepPersonalInfo = ({
         <div className={AUTH_FORM_STYLES.inputLayer}>
           <RHFInput
             label='이름'
-            name='name'
+            name='username'
             type='text'
             placeholder='이름을 입력해주세요.'
           />
@@ -45,7 +63,7 @@ export const StepPersonalInfo = ({
             <div className={AUTH_FORM_STYLES.inputAndButton}>
               <RHFInput
                 label='개인 이메일 주소'
-                name='email'
+                name='privateEmail'
                 placeholder='이메일을 입력해주세요.'
               />
               <Button onClick={handleSendMail}>인증</Button>
@@ -80,7 +98,11 @@ export const StepPersonalInfo = ({
           <Button className='w-[50%]' variant='outline' onClick={prevStep}>
             이전
           </Button>
-          <Button className='w-full' onClick={nextStep}>
+          <Button
+            className='w-full'
+            onClick={handleNext}
+            disabled={!isCurrentStepValid}
+          >
             다음
           </Button>
         </div>
