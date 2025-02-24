@@ -30,6 +30,10 @@ export const authService = {
 
     return response.data;
   },
+  signOut: async (): Promise<void> => {
+    await apiClient.post<void>({ url: '/auth/logout' });
+    localStorage.clear();
+  },
 
   postVerifyEmail: async (email: { email: string }) => {
     await apiClient.post({

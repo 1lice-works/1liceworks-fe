@@ -23,7 +23,6 @@ export interface SignInDTO {
 }
 export interface SignInResponseDTO {
   accessToken: string;
-  isSuccess: boolean;
 }
 
 export interface PostCheckVerifyDTO {
