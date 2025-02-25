@@ -32,7 +32,7 @@ export class TokenExpiredHandler {
     try {
       const accessToken = '';
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/api/login/refresh`,
+        `${import.meta.env.VITE_BASE_URL}/auth/refresh-token`,
         null,
         {
           headers: { Authorization: `Bearer ${accessToken}` },

@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ApiResponse } from '../types/apiResponse';
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'add to baseURL', // base URL
+  baseURL: import.meta.env.VITE_API_BASE_URL, // base URL
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
@@ -18,7 +18,13 @@ export const apiClient = {
   post: <T>(config: AxiosRequestConfig) =>
     axiosInstance
       .post<ApiResponse<T>>(config.url!, config.data, config)
-      .then((res) => res.data),
+      .then((res) => {
+        if (!res.data.isSuccess) {
+          throw new Error(res.data.message);
+        }
+
+        return res.data;
+      }),
 
   put: <T>(config: AxiosRequestConfig) =>
     axiosInstance

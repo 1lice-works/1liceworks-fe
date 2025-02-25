@@ -26,7 +26,7 @@ export function RHFInput({
   label,
   placeholder,
   description,
-  // rightElement,
+  rightElement,
   type,
   error = true,
 }: RHFInputProps) {
@@ -37,20 +37,22 @@ export function RHFInput({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className='w-full'>
+        <FormItem className='w-full gap-0'>
           {label && (
-            <div className='flex w-full items-center'>
+            <div className='mb-2 flex w-full items-center'>
               <Label className='font-semibold'>{label}</Label>
             </div>
           )}
           <FormControl>
-            <Input
-              className={`mb-0 flex`}
-              placeholder={placeholder}
-              {...field}
-              type={type}
-            />
-            {/* {children && children} */}
+            <div className='flex w-full gap-2'>
+              <Input
+                className='flex-1'
+                placeholder={placeholder}
+                {...field}
+                type={type}
+              />
+              {rightElement && <> {rightElement}</>}
+            </div>
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           {error && <FormMessage />}

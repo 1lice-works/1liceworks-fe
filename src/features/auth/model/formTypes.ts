@@ -12,14 +12,17 @@ export interface SignUpFormTypes {
   companyName: string;
   teamName: string;
   industry: string;
-  size: string;
+  scale: string;
+  hasPrivateDomain: boolean;
+  domainName: string;
   // 개인정보 입력단계
-  name: string;
-  email: string;
-  verificatedNumber: number;
+  username: string;
+  privateEmail: string;
+  verificatedNumber: string;
   // 로그인 정보 입력단계
-  userId: string;
+  accountId: string;
   password: string;
+  confirmPassword: string;
 }
 
 export interface FPWStep1Form {

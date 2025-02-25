@@ -1,8 +1,8 @@
 export interface ApiResponse<T> {
-  success: boolean;
-  message: string | null;
-  status: number;
-  data: T;
+  isSuccess: boolean;
+  code: number;
+  message?: string;
+  data?: T;
 }
 
 export interface ApiErrorResponse {

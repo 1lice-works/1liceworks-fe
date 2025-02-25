@@ -1,11 +1,15 @@
 // import { useFunnel } from '@use-funnel/react-router-dom';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
+import { ROUTES } from '@/shared/constants/routes';
 import { Form } from '@/shared/ui/shadcn/Form';
 
+import { authQueries } from '../api/queries';
 import { FUNNEL_STEP } from '../model/constants';
 import { SignUpFormTypes } from '../model/formTypes';
 import { signUpSchema } from '../model/schema';
@@ -23,41 +27,77 @@ const steps = [
   '정보 확인',
 ];
 export const SignUpForm = () => {
+  const navigate = useNavigate();
   const { step, currentStepIndex, nextStep, prevStep } = useFunnel({ steps });
   const form = useForm<SignUpFormTypes>({
     mode: 'onChange',
     resolver: zodResolver(signUpSchema),
   });
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignUpFormTypes>({
     companyName: '',
     teamName: '',
     industry: '',
-    size: 0,
-    name: '',
-    email: '',
-    verificatedNumber: 0,
-    useId: '',
+    scale: '',
+    hasPrivateDomain: false,
+    domainName: '',
+    username: '',
+    privateEmail: '',
+    verificatedNumber: '',
+    accountId: '',
     password: '',
+    confirmPassword: '',
   });
 
-  // const handleChange = (e) => {
-  //   e.preventDefault();
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  //   console.log(formData);
-  // };
+  const handleNextStep = (data: Partial<typeof formData>) => {
+    setFormData((prev) => ({ ...prev, ...data })); // 기존 데이터 유지하면서 업데이트
+    nextStep(); // 다음 스텝 이동
+  };
+  const { mutate, isPending } = useMutation({
+    ...authQueries.signUp,
+    onSuccess: () => {
+      // setFormData({
+      //   companyName: '',
+      //   teamName: '',
+      //   industry: '',
+      //   scale: '',
+      //   hasPrivateDomain: false,
+      //   domainName: '',
+      //   username: '',
+      //   privateEmail: '',
+      //   verificatedNumber: '',
+      //   accountId: '',
+      //   password: '',
+      //   confirmPassword: '',
+      // });
+      navigate(ROUTES.AUTH.SIGN_IN);
+    },
+  });
+
+  useEffect(() => {
+    console.log('Updated FormData:', formData);
+  }, [formData]);
+
   const onSubmit = () => {
-    setFormData({
-      companyName: '',
-      teamName: '',
-      industry: '',
-      size: 0,
-      name: '',
-      email: '',
-      verificatedNumber: 0,
-      useId: '',
-      password: '',
-    });
-    console.log(formData);
+    const requestData = {
+      data: {
+        teamInfo: {
+          companyName: formData.companyName,
+          teamName: formData.teamName,
+          industry: formData.industry,
+          scale: formData.scale,
+          hasPrivateDomain: formData.hasPrivateDomain,
+          domainName: formData.hasPrivateDomain ? formData.domainName : '', // 미보유 시 빈 문자열
+        },
+        userInfo: {
+          username: formData.username,
+          privateEmail: formData.privateEmail,
+          accountId: formData.accountId,
+          password: formData.password,
+        },
+      },
+    };
+
+    mutate(requestData);
   };
 
   return (
@@ -69,16 +109,20 @@ export const SignUpForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           {step === FUNNEL_STEP.TEAM_INFO && (
-            <StepTeamInfo nextStep={nextStep} />
+            <StepTeamInfo nextStep={handleNextStep} />
           )}
           {step === FUNNEL_STEP.PERSONAL_INFO && (
-            <StepPersonalInfo nextStep={nextStep} prevStep={prevStep} />
+            <StepPersonalInfo nextStep={handleNextStep} prevStep={prevStep} />
           )}
           {step === FUNNEL_STEP.SIGN_INFO && (
-            <StepSignInfo nextStep={nextStep} prevStep={prevStep} />
+            <StepSignInfo nextStep={handleNextStep} prevStep={prevStep} />
           )}
           {step === FUNNEL_STEP.CHECK_INFO && (
-            <StepCheckInfo prevStep={prevStep} />
+            <StepCheckInfo
+              prevStep={prevStep}
+              formData={formData}
+              isPending={isPending}
+            />
           )}
         </form>
       </Form>

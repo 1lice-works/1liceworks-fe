@@ -1,13 +1,16 @@
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/shadcn/Button';
 import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 
+import { authQueries } from '../api/queries';
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';
 
 interface StepPersonalInfoProps {
-  nextStep: () => void;
+  nextStep: (data: any) => void; // 수정: 데이터를 받을 수 있도록 함
   prevStep: () => void;
 }
 
@@ -15,15 +18,78 @@ export const StepPersonalInfo = ({
   nextStep,
   prevStep,
 }: StepPersonalInfoProps) => {
-  const { getValues } = useFormContext(); // 폼 데이터 가져오기
+  const { getValues, formState, setError, clearErrors } = useFormContext(); // 폼 데이터 가져오기
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
 
+  // 해당 스텝에서 유효성을 검사할 필드 목록
+  const stepFields = ['username', 'privateEmail', 'verificatedNumber'];
+
+  // 해당 스텝의 필드만 검사
+  const isCurrentStepValid = stepFields.every(
+    (field) => !formState.errors[field]
+  );
+
+  // 이메일 인증
+  const { mutate: verifyEmail } = useMutation({
+    ...authQueries.verifyEmail,
+    onSuccess: () => {
+      setIsEmailSent(true);
+      console.log('인증번호가 이메일로 발송되었습니다.');
+    },
+    onError: (error: Error) => {
+      setIsEmailSent(false);
+      setError('privateEmail', {
+        type: 'manual',
+        message: error.message, // 서버에서 온 메시지 표시
+      });
+      console.error('이메일 인증 요청 실패:', error);
+    },
+  });
+
+  // 인증번호 확인
+  const { mutate: checkVerify } = useMutation({
+    ...authQueries.checkVerify,
+    onSuccess: () => {
+      setEmailVerified(true);
+      clearErrors('verificatedNumber'); // 인증번호 오류 초기화
+      console.log('이메일 인증 성공!');
+    },
+    onError: () => {
+      setEmailVerified(false);
+      setError('verificatedNumber', {
+        type: 'manual',
+        message: '인증번호가 올바르지 않습니다.',
+      });
+    },
+  });
+
+  // 이메일 인증코드 요청
   const handleSendMail = () => {
-    const email = getValues('email'); // email 필드 값 가져오기
-    console.log('인증 요청 이메일:', email);
+    const email = getValues('privateEmail');
+    if (!email) {
+      setError('privateEmail', {
+        type: 'manual',
+        message: '이메일을 입력하세요.',
+      });
+      return;
+    }
+    verifyEmail({ email: email });
   };
   const handleVerifyNum = () => {
-    const verificatedNumber = getValues('verificatedNumber'); // email 필드 값 가져오기
-    console.log('인증번호:', verificatedNumber);
+    const email = getValues('privateEmail'); // 이메일 가져오기
+    const verificatedNumber = getValues('verificatedNumber'); // 인증번호 가져오기
+    checkVerify({ email, verificationCode: verificatedNumber }); // 이메일과 인증번호 함께 전달
+  };
+
+  // 다음 step
+  const handleNext = () => {
+    if (!isCurrentStepValid) {
+      console.log('현재 단계의 필수 입력값이 누락되었습니다.');
+      return;
+    }
+    const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
+    nextStep(formData); // 다음 스텝으로 이동할 때 데이터 전달
   };
 
   return (
@@ -37,7 +103,7 @@ export const StepPersonalInfo = ({
         <div className={AUTH_FORM_STYLES.inputLayer}>
           <RHFInput
             label='이름'
-            name='name'
+            name='username'
             type='text'
             placeholder='이름을 입력해주세요.'
           />
@@ -45,17 +111,25 @@ export const StepPersonalInfo = ({
             <div className={AUTH_FORM_STYLES.inputAndButton}>
               <RHFInput
                 label='개인 이메일 주소'
-                name='email'
+                name='privateEmail'
                 placeholder='이메일을 입력해주세요.'
+                rightElement={
+                  <Button onClick={handleSendMail}>
+                    {isEmailSent ? '전송됨' : '전송'}
+                  </Button>
+                }
               />
-              <Button onClick={handleSendMail}>인증</Button>
             </div>
             <div className={AUTH_FORM_STYLES.inputAndButton}>
               <RHFInput
                 name='verificatedNumber'
                 placeholder='인증번호를 입력해주세요.'
+                rightElement={
+                  <Button type='button' onClick={handleVerifyNum}>
+                    {emailVerified ? '확인됨' : '확인'}
+                  </Button>
+                }
               />
-              <Button onClick={handleVerifyNum}>확인</Button>
             </div>
           </div>
 
@@ -77,10 +151,20 @@ export const StepPersonalInfo = ({
           </div>
         </div>
         <div className='flex w-full gap-2'>
-          <Button className='w-[50%]' variant='outline' onClick={prevStep}>
+          <Button
+            type='button'
+            className='w-[50%]'
+            variant='outline'
+            onClick={prevStep}
+          >
             이전
           </Button>
-          <Button className='w-full' onClick={nextStep}>
+          <Button
+            className='w-full'
+            type='button'
+            onClick={handleNext}
+            disabled={!isCurrentStepValid}
+          >
             다음
           </Button>
         </div>

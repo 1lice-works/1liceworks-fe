@@ -1,18 +1,49 @@
+import { useMutation } from '@tanstack/react-query';
+import { useFormContext } from 'react-hook-form';
+
 import { Button } from '@/shared/ui/shadcn/Button';
 
+import { authQueries } from '../api/queries';
 import { AUTH_FORM_STYLES } from '../model/constants';
 import { RHFInput } from './RHFInput';
 
 interface StepSignInfoProps {
-  nextStep: () => void;
+  nextStep: (data: any) => void; // 수정: 데이터를 받을 수 있도록 함
   prevStep: () => void;
 }
 
 export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
-  const handleCheckMail = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
+  const { getValues, formState, register } = useFormContext();
+  // const { isValid, setIsValid } = useState<boolean>(false);
+
+  // 해당 스텝에서 유효성을 검사할 필드 목록
+  const stepFields = ['accountId', 'password', 'confirmPassword'];
+
+  // 해당 스텝의 필드만 검사
+  const isCurrentStepValid = stepFields.every(
+    (field) => !formState.errors[field]
+  );
+  const { mutate } = useMutation({
+    ...authQueries.validEmail,
+    onSuccess: () => {
+      // setIsValid(true);
+      console.log('중복 검사 확인!');
+    },
+  });
+
+  const handleCheckMail = () => {
+    const accountId = getValues('accountId');
+    mutate({ accountId });
+  };
+
+  const handleNext = () => {
+    if (!isCurrentStepValid) {
+      console.log('현재 단계의 필수 입력값이 누락되었습니다.');
+      return;
+    }
+
+    const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
+    nextStep(formData); // 다음 스텝으로 이동할 때 데이터 전달
   };
 
   return (
@@ -25,12 +56,17 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
           <div>
             <div className={AUTH_FORM_STYLES.inputAndButton}>
               <RHFInput
-                name='userId'
+                name='accountId'
                 type='email'
                 label='아이디'
                 placeholder='ID@mydomain.1lice-work.com'
+                rightElement={
+                  <Button type='button' onClick={handleCheckMail}>
+                    {/* {isValid ? '사용가능' : '중복 확인'} */}
+                    중복 확인
+                  </Button>
+                }
               />
-              <Button onClick={(e) => handleCheckMail(e)}>중복 확인</Button>
             </div>
             <p className='text-muted-foreground pt-1 text-xs'>
               ID는 'ID@mydomain.ilice-works.com' 형식으로, 로그인 시 사용됩니다.
@@ -45,9 +81,13 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
               placeholder='비밀번호를 입력해주세요.'
             />
             <RHFInput
-              name='confirmPassword'
               type='password'
-              placeholder='비밀번호를 다시한번 입력해주세요.'
+              placeholder='비밀번호를 다시 한번 입력해주세요.'
+              {...register('confirmPassword', {
+                validate: (value) =>
+                  value === getValues('password') ||
+                  '비밀번호가 일치하지 않습니다.',
+              })}
             />
             <div className='px-2'>
               <ul className='text-muted-foreground list-disc text-xs'>
@@ -64,10 +104,20 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
           </div>
         </div>
         <div className='flex w-full gap-2'>
-          <Button className='w-[50%]' variant='outline' onClick={prevStep}>
+          <Button
+            type='button'
+            className='w-[50%]'
+            variant='outline'
+            onClick={prevStep}
+          >
             이전
           </Button>
-          <Button className='w-full' onClick={nextStep}>
+          <Button
+            type='button'
+            className='w-full'
+            onClick={handleNext}
+            disabled={!isCurrentStepValid}
+          >
             다음
           </Button>
         </div>
