@@ -22,6 +22,7 @@ export interface SignUpFormTypes {
   // 로그인 정보 입력단계
   accountId: string;
   password: string;
+  confirmPassword?: string;
 }
 
 export interface FPWStep1Form {

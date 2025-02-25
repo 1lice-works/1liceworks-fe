@@ -48,6 +48,8 @@ export const CalendarPage = () => {
     };
   }, []);
 
+  // localStorage.clear();
+
   return (
     <div className='h-full'>
       <div className='flex gap-4 pb-4'>

@@ -2,8 +2,8 @@ import { apiClient } from '@/shared/api/apiClient';
 import { useAuthStore } from '@/shared/model/authStore';
 
 import {
-  checkVerifyResponseDTO,
   PostCheckVerifyDTO,
+  PostResponseDTO,
   postValidateEmailDTO,
   SignInDTO,
   SignInResponseDTO,
@@ -15,7 +15,7 @@ export const authService = {
     await apiClient.post({ url: '/auth/signup', data });
   },
 
-  signIn: async ({ accountId, password }: SignInDTO) => {
+  signIn: async ({ accountId, password }: SignInDTO): Promise<void> => {
     const response = await apiClient.post<SignInResponseDTO>({
       url: 'auth/login',
       data: {
@@ -24,11 +24,15 @@ export const authService = {
       },
     });
 
-    const token = response.data.accessToken;
-    useAuthStore.getState().setAccessToken(token);
-    useAuthStore.getState().setAuth();
+    console.log(response);
+    const token = response.data?.accessToken;
 
-    return response.data;
+    if (token) {
+      useAuthStore.getState().setAccessToken(token); // 토큰을 상태에 저장
+      useAuthStore.getState().setAuth(); // 인증 상태를 true로 설정
+    } else {
+      throw new Error('로그인 실패: 토큰을 받지 못했습니다.');
+    }
   },
   signOut: async (): Promise<void> => {
     await apiClient.post<void>({ url: '/auth/logout' });
@@ -36,10 +40,11 @@ export const authService = {
   },
 
   postVerifyEmail: async (email: { email: string }) => {
-    await apiClient.post({
+    const response = await apiClient.post<PostResponseDTO>({
       url: 'auth/verify-email',
       data: email,
     });
+    return response.data;
   },
 
   postCheckVerify: async ({ email, verificationCode }: PostCheckVerifyDTO) => {
@@ -53,7 +58,7 @@ export const authService = {
   },
 
   postValidateEmail: async ({ accountId }: postValidateEmailDTO) => {
-    const response = await apiClient.post<checkVerifyResponseDTO>({
+    const response = await apiClient.post<PostResponseDTO>({
       url: 'auth/validate-email',
       data: {
         accountId,

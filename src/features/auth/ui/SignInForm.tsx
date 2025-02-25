@@ -32,7 +32,6 @@ export const SignInForm = () => {
   });
 
   const onSubmit = (data: SignInFormData) => {
-    console.log('로그인 요청 데이터:', data);
     mutate({ accountId: data.email, password: data.password });
   };
 

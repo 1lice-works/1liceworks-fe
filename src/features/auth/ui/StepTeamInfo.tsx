@@ -5,11 +5,11 @@ import { ROUTES } from '@/shared/constants/routes';
 import { RHFSelect } from '@/shared/ui/custom/RHFSelect';
 import { Button } from '@/shared/ui/shadcn/Button';
 
-import { AUTH_FORM_STYLES } from '../model/constants';
+import { AUTH_FORM_STYLES, INDUSTRY, SCALE } from '../model/constants';
 import { RHFInput } from './RHFInput';
 
 interface StepTeamInfoProps {
-  nextStep: (data: any) => void; // 수정: 데이터를 받을 수 있도록 함
+  nextStep: (data: any) => void; // 데이터를 받을 수 있도록 함
 }
 // {/* <RHFInput label='' name='' type='' placeholder='' /> */}
 
@@ -66,19 +66,13 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
             name='industry'
             label='업종'
             placeholder='업종'
-            items={[
-              { value: 'IT', item: 'IT' },
-              { value: 'CONSTRUCTION', item: '건설' },
-            ]}
+            items={INDUSTRY}
           />
           <RHFSelect
             label='규모'
             name='scale'
             placeholder='규모'
-            items={[
-              { value: 'ONE', item: '스타트업' },
-              { value: 'TWO', item: '중소기업' },
-            ]}
+            items={SCALE}
           />
           <label>
             <p className={AUTH_FORM_STYLES.label}>도메인</p>

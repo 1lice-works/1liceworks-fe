@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/shadcn/Button';
@@ -14,11 +13,11 @@ interface StepSignInfoProps {
 }
 
 export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
-  const { getValues, formState } = useFormContext();
-  const { isValid, setIsValid } = useState<boolean>(false);
+  const { getValues, formState, register } = useFormContext();
+  // const { isValid, setIsValid } = useState<boolean>(false);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
-  const stepFields = ['accountId', 'password'];
+  const stepFields = ['accountId', 'password', 'confirmPassword'];
 
   // 해당 스텝의 필드만 검사
   const isCurrentStepValid = stepFields.every(
@@ -27,7 +26,7 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
   const { mutate } = useMutation({
     ...authQueries.validEmail,
     onSuccess: () => {
-      setIsValid(true);
+      // setIsValid(true);
       console.log('중복 검사 확인!');
     },
   });
@@ -61,10 +60,13 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
                 type='email'
                 label='아이디'
                 placeholder='ID@mydomain.1lice-work.com'
+                rightElement={
+                  <Button type='button' onClick={handleCheckMail}>
+                    {/* {isValid ? '사용가능' : '중복 확인'} */}
+                    중복 확인
+                  </Button>
+                }
               />
-              <Button type='button' onClick={handleCheckMail}>
-                {isValid ? '사용가능' : '중복 확인'}
-              </Button>
             </div>
             <p className='text-muted-foreground pt-1 text-xs'>
               ID는 'ID@mydomain.ilice-works.com' 형식으로, 로그인 시 사용됩니다.
@@ -79,9 +81,13 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
               placeholder='비밀번호를 입력해주세요.'
             />
             <RHFInput
-              name='confirmPassword'
               type='password'
-              placeholder='비밀번호를 다시한번 입력해주세요.'
+              placeholder='비밀번호를 다시 한번 입력해주세요.'
+              {...register('confirmPassword', {
+                validate: (value) =>
+                  value === getValues('password') ||
+                  '비밀번호가 일치하지 않습니다.',
+              })}
             />
             <div className='px-2'>
               <ul className='text-muted-foreground list-disc text-xs'>

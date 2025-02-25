@@ -29,10 +29,13 @@ export interface PostCheckVerifyDTO {
   email: string;
   verificationCode: string;
 }
-export interface checkVerifyResponseDTO {
+
+export interface PostResponseDTO {
   isuccess: boolean;
   code: number;
   message: string;
+}
+export interface checkVerifyResponseDTO extends PostResponseDTO {
   result: boolean;
 }
 

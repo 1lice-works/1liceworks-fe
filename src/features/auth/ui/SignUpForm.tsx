@@ -4,7 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
+import { ROUTES } from '@/shared/constants/routes';
 import { Form } from '@/shared/ui/shadcn/Form';
 
 import { authQueries } from '../api/queries';
@@ -25,6 +27,7 @@ const steps = [
   '정보 확인',
 ];
 export const SignUpForm = () => {
+  const navigate = useNavigate();
   const { step, currentStepIndex, nextStep, prevStep } = useFunnel({ steps });
   const form = useForm<SignUpFormTypes>({
     mode: 'onChange',
@@ -42,6 +45,7 @@ export const SignUpForm = () => {
     verificatedNumber: '',
     accountId: '',
     password: '',
+    confirmPassword: '',
   });
 
   const handleNextStep = (data: Partial<typeof formData>) => {
@@ -50,7 +54,23 @@ export const SignUpForm = () => {
   };
   const { mutate, isPending } = useMutation({
     ...authQueries.signUp,
-    onSuccess: () => {},
+    onSuccess: () => {
+      // setFormData({
+      //   companyName: '',
+      //   teamName: '',
+      //   industry: '',
+      //   scale: '',
+      //   hasPrivateDomain: false,
+      //   domainName: '',
+      //   username: '',
+      //   privateEmail: '',
+      //   verificatedNumber: '',
+      //   accountId: '',
+      //   password: '',
+      //   confirmPassword: '',
+      // });
+      navigate(ROUTES.AUTH.SIGN_IN);
+    },
   });
 
   useEffect(() => {

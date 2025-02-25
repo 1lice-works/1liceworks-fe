@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+// `signUpSchema`의 타입 자동 생성
+export type SignUpSchemaType = z.infer<typeof signUpSchema>;
+
 // 로그인 폼 유효성 검사
 export const signInSchema = z.object({
   email: z.string().email({ message: '이메일을 올바르게 입력해 주세요.' }),
@@ -22,8 +25,8 @@ export const signUpSchema = z.object({
     .regex(/^\S/, { message: '팀 이름의 첫 글자는 공백일 수 없습니다.' }),
   industry: z.string(),
   scale: z.string(),
-  // hasPrivateDomain: z.boolean(),
-  // domainName: z.string(),
+  hasPrivateDomain: z.boolean(),
+  domainName: z.string(),
   username: z
     .string()
     .min(1, { message: '이름을 입력해주세요.' })
@@ -31,7 +34,7 @@ export const signUpSchema = z.object({
   privateEmail: z
     .string()
     .email({ message: '이메일을 올바르게 입력해 주세요.' }),
-  // verificatedNumber: z.number().min(1, { message: '인증번호를 입력해주세요.' }),
+  verificatedNumber: z.string().min(1, { message: '인증번호를 입력해주세요.' }),
 
   accountId: z.string().email({ message: '이메일을 올바르게 입력해 주세요.' }),
   password: z
@@ -65,6 +68,7 @@ export const signUpSchema = z.object({
         message: '비밀번호에 연속된 문자를 3번 이상 사용할 수 없습니다.',
       }
     ),
+  confirmPassword: z.string(),
 });
 
 // 비밀번호 찾기 유효성 검사
