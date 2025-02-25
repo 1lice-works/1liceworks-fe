@@ -135,16 +135,16 @@ export const StepPersonalInfo = ({
 
           <div>
             <label className='flex items-center gap-4 rounded-md border-1 border-[#F1F5F9] bg-[#F8FAFC] p-2'>
-              <Checkbox checked={isAllAgreed} />
+              <Checkbox />
               모든 항목에 동의 합니다.
             </label>
             <div className='flex flex-col gap-1 p-2 text-xs'>
               <label className={AUTH_FORM_STYLES.checkBox}>
-                <Checkbox checked={isAgreePrivacy} />
+                <Checkbox />
                 [필수] 개인정보 수집 및 이용 안내
               </label>
               <label className={AUTH_FORM_STYLES.checkBox}>
-                <Checkbox checked={isAgreeProcessing} />
+                <Checkbox />
                 [필수] 개인정보 보호법 개인정보 처리자의 의무 확인
               </label>
             </div>
