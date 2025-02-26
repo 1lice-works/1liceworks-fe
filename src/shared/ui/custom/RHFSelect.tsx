@@ -65,7 +65,7 @@ export const RHFSelect = ({
               <SelectTrigger>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className='max-h-[150px]'>
                 <SelectGroup>
                   {items.map((item) => (
                     <SelectItem value={item.value}>{item.item}</SelectItem>

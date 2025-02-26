@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { Button } from '@/shared/ui/shadcn/Button';
@@ -13,21 +14,21 @@ interface StepSignInfoProps {
 }
 
 export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
-  const { getValues, formState, register } = useFormContext();
-  // const { isValid, setIsValid } = useState<boolean>(false);
+  const { getValues, formState, setError, register } = useFormContext();
+  const [isValidId, setIsValidId] = useState(false);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = ['accountId', 'password', 'confirmPassword'];
 
   // 해당 스텝의 필드만 검사
   const isCurrentStepValid = stepFields.every(
-    (field) => !formState.errors[field]
+    (field) => !formState.errors[field] && isValidId
   );
   const { mutate } = useMutation({
     ...authQueries.validEmail,
     onSuccess: () => {
-      // setIsValid(true);
-      console.log('중복 검사 확인!');
+      setIsValidId(true);
+      // console.log('중복 검사 확인!');
     },
   });
 
@@ -39,6 +40,18 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
   const handleNext = () => {
     if (!isCurrentStepValid) {
       console.log('현재 단계의 필수 입력값이 누락되었습니다.');
+      return;
+    }
+
+    // 비밀번호 일치 여부 다시 한번 확인
+    const password = getValues('password');
+    const confirmPassword = getValues('confirmPassword');
+
+    if (password !== confirmPassword) {
+      setError('confirmPassword', {
+        type: 'manual',
+        message: '비밀번호가 일치하지 않습니다.',
+      });
       return;
     }
 
@@ -62,8 +75,7 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
                 placeholder='ID@mydomain.1lice-work.com'
                 rightElement={
                   <Button type='button' onClick={handleCheckMail}>
-                    {/* {isValid ? '사용가능' : '중복 확인'} */}
-                    중복 확인
+                    {isValidId ? '사용가능' : '중복 확인'}
                   </Button>
                 }
               />
@@ -76,19 +88,19 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
           <div className='flex flex-col gap-2'>
             <RHFInput
               label='비밀번호'
-              name='password'
+              // name='password'
               type='password'
               placeholder='비밀번호를 입력해주세요.'
+              {...register('password')}
             />
             <RHFInput
+              label='비밀번호 확인'
+              // name='confirmPassword'
+              {...register('confirmPassword')}
               type='password'
               placeholder='비밀번호를 다시 한번 입력해주세요.'
-              {...register('confirmPassword', {
-                validate: (value) =>
-                  value === getValues('password') ||
-                  '비밀번호가 일치하지 않습니다.',
-              })}
             />
+
             <div className='px-2'>
               <ul className='text-muted-foreground list-disc text-xs'>
                 <li className='ml-[12px]'>

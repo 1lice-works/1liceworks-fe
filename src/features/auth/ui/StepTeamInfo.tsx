@@ -15,9 +15,11 @@ interface StepTeamInfoProps {
 
 export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
   const { getValues, formState, setValue, watch } = useFormContext();
+  // const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
 
   // 현재 'hasPrivateDomain' 값 가져오기
   const hasPrivateDomain = watch('hasPrivateDomain', false);
+
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = [
     'companyName',
@@ -40,6 +42,7 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
     }
 
     const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
+    // console.log(formData);
     nextStep(formData); // 다음 스텝으로 이동할 때 데이터 전달
   };
 
@@ -98,8 +101,8 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
             </div>
             {hasPrivateDomain && (
               <RHFInput
-                type='text'
                 name='domainName'
+                type='text'
                 placeholder='ex.mydomain'
               />
             )}
