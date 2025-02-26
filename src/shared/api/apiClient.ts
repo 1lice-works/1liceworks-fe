@@ -19,15 +19,14 @@ export const apiClient = {
     axiosInstance.post<ApiResponse<T>>(config.url!, config.data, config),
 
   post: <T>(config: AxiosRequestConfig) =>
-    axiosInstance
-      .post<ApiResponse<T>>(config.url!, config.data, config)
-      .then((res) => {
-        if (!res.data.isSuccess) {
-          throw new Error(res.data.message);
-        }
+    axiosInstance.post<ApiResponse<T>>(config.url!, config.data, config),
+  // .then((res) => {
+  //   if (!res.data.isSuccess) {
+  //     throw new Error(res.data.message);
+  //   }
 
-        return res.data;
-      }),
+  //   return res.data;
+  // }),
 
   put: <T>(config: AxiosRequestConfig) =>
     axiosInstance

@@ -6,6 +6,7 @@ import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 
 import { mockCalendars } from '@/features/calendar/model/mockData';
 import { CustomEvents } from '@/features/calendar/ui/CustomEvents';
+import { CustomToolbar } from '@/features/calendar/ui/CustomToolbar';
 
 const localizer = dayjsLocalizer(dayjs);
 
@@ -38,17 +39,12 @@ export const CalendarPage = () => {
     [filteredCalendars]
   );
 
-  const eventPropGetter = useCallback((event: { calendarId: number }) => {
-    // const backgroundColor = calendarColors[event.calendarId];
+  const eventPropGetter = () => {
     const backgroundColor = 'transparent';
-    console.log(backgroundColor);
-    console.log(event);
     return {
       style: { backgroundColor },
     };
-  }, []);
-
-  // localStorage.clear();
+  };
 
   return (
     <div className='h-full'>
@@ -73,6 +69,7 @@ export const CalendarPage = () => {
         eventPropGetter={eventPropGetter}
         onSelectEvent={(e) => console.log(e)}
         components={{
+          toolbar: (props) => <CustomToolbar {...props} />,
           event: (props) => <CustomEvents {...props} />,
         }}
       />
