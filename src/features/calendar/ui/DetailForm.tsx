@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 
+import { formatTime, InputFormYMD } from '@/shared/lib/dayjs';
 import { RHFInput } from '@/shared/ui/custom/RHFInput';
 import { RHFSelect } from '@/shared/ui/custom/RHFSelect';
 import { RHFTextArea } from '@/shared/ui/custom/RHFTextArea';
@@ -40,7 +41,12 @@ export const DetailForm = ({ event, setIsEdit }: DetailFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className='flex gap-2'>
-          <RHFInput name='title' placeholder={event.title} type='text' />
+          <RHFInput
+            name='title'
+            placeholder={event.title}
+            type='text'
+            value={event.title}
+          />
           <Button type='submit'>저장</Button>
           <Button
             type='button'
@@ -52,13 +58,35 @@ export const DetailForm = ({ event, setIsEdit }: DetailFormProps) => {
         </div>
         <div className='flex gap-2'>
           <div className='flex items-end gap-1'>
-            <RHFInput label='시작일' name='start' type='date' placeholder='' />
-            <RHFInput name='startTime' type='time' placeholder='' />
+            <RHFInput
+              label='시작일'
+              name='start'
+              type='date'
+              placeholder=''
+              value={InputFormYMD(event.start)}
+            />
+            <RHFInput
+              name='startTime'
+              type='time'
+              placeholder=''
+              value={formatTime(event.start)}
+            />
           </div>
           <div className='bg-accent-foreground h-[2px] w-1 self-center' />
           <div className='flex items-end gap-1'>
-            <RHFInput label='종료일' name='start' type='date' placeholder='' />
-            <RHFInput name='endTime' type='time' placeholder='' />
+            <RHFInput
+              label='종료일'
+              name='start'
+              type='date'
+              placeholder=''
+              value={InputFormYMD(event.end)}
+            />
+            <RHFInput
+              name='endTime'
+              type='time'
+              placeholder=''
+              value={formatTime(event.end)}
+            />
           </div>
           <Label className='flex items-center gap-2'>
             <Checkbox />
@@ -74,6 +102,7 @@ export const DetailForm = ({ event, setIsEdit }: DetailFormProps) => {
               { value: 'teamCalendar', item: '팀 캘린더' },
               { value: 'myCalendar', item: '내 캘린더' },
             ]}
+            defaultValue={event.calendarId}
           />
           <div className='flex items-end gap-2'>
             <RHFSelect

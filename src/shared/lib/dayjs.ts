@@ -25,3 +25,7 @@ export function formatAll(time: string | Date, format = 'YYYY-MM-DD A h:mm') {
 export function formatTime(time: string | Date, format = 'HH:mm') {
   return dayjs(time).format(format);
 }
+
+export function InputFormYMD(time: string | Date, format = 'YYYY-MM-DD') {
+  return dayjs(time).format(format);
+}

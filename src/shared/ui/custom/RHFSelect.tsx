@@ -33,6 +33,7 @@ interface RHFInputProps {
     value: string;
     item: string;
   }[];
+  defaultValue?: any;
 }
 
 export const RHFSelect = ({
@@ -43,6 +44,7 @@ export const RHFSelect = ({
   error = false,
   items,
   wrapperClassName,
+  defaultValue,
 }: RHFInputProps) => {
   const { control } = useFormContext();
 
@@ -59,6 +61,7 @@ export const RHFSelect = ({
           )}
           <FormControl>
             <Select
+              defaultValue={defaultValue}
               value={field.value} // 선택된 값을 react-hook-form과 연결
               onValueChange={field.onChange} // 변경된 값을 react-hook-form 상태에 반영
             >

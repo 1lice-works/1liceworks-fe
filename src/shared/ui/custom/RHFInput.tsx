@@ -19,6 +19,7 @@ interface RHFInputProps {
   type?: HTMLInputTypeAttribute;
   rightElement?: ReactNode | null;
   error?: boolean;
+  value?: string | Date;
 }
 
 export function RHFInput({
@@ -27,6 +28,7 @@ export function RHFInput({
   placeholder,
   description,
   type,
+  value,
   error = false,
 }: RHFInputProps) {
   const { control } = useFormContext();
@@ -44,6 +46,7 @@ export function RHFInput({
           )}
           <FormControl>
             <Input
+              defaultValue={value}
               className={`mb-0 w-full`}
               placeholder={placeholder}
               {...field}
