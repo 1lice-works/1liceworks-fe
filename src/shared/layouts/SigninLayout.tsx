@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import CalendarIcon from '@/widgets/gnb/ui/calendar.svg?react';
+import CalendarIcon from '@/widgets/gnb/ui/assets/calendar.svg?react';
 
 interface SigninLayoutProps {
   children: ReactNode;
