@@ -125,7 +125,7 @@ export const StepPersonalInfo = ({
                 name='privateEmail'
                 placeholder='이메일을 입력해주세요.'
                 rightElement={
-                  <Button onClick={handleSendMail}>
+                  <Button type='button' onClick={handleSendMail}>
                     {isPending ? '전송중' : isEmailSent ? '전송됨' : '전송'}
                   </Button>
                 }
