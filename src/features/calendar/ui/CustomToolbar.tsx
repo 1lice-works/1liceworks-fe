@@ -49,6 +49,10 @@ export function CustomToolbar({
   // 현재 년도와 월을 'YYYY년 MM월' 형식으로 표시
   const formattedDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
 
+  // views 객체에서 keys를 가져와 확인
+  const viewsKeys = Object.values(views);
+  console.log(viewsKeys, typeof viewsKeys);
+
   return (
     <div className='mb-2 flex w-full items-center justify-between gap-2'>
       <div className='flex items-center gap-2'>
@@ -75,11 +79,15 @@ export function CustomToolbar({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {views.includes('month') && (
+            {viewsKeys.includes('month') && (
               <SelectItem value='month'>월</SelectItem>
             )}
-            {views.includes('week') && <SelectItem value='week'>주</SelectItem>}
-            {views.includes('day') && <SelectItem value='day'>일</SelectItem>}
+            {viewsKeys.includes('week') && (
+              <SelectItem value='week'>주</SelectItem>
+            )}
+            {viewsKeys.includes('day') && (
+              <SelectItem value='day'>일</SelectItem>
+            )}
           </SelectGroup>
         </SelectContent>
       </Select>

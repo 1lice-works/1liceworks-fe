@@ -10,6 +10,7 @@ export interface ToolbarTypes {
     { calendarId: number; id: number; title: string; start: Date; end: Date },
     object
   >;
+  // views: Record<string, boolean>;
 }
 
 export interface EventTypes {

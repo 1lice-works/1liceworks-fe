@@ -39,16 +39,12 @@ export const CalendarPage = () => {
     [filteredCalendars]
   );
 
-  const eventPropGetter = useCallback((event: { calendarId: number }) => {
-    // const backgroundColor = calendarColors[event.calendarId];
+  const eventPropGetter = () => {
     const backgroundColor = 'transparent';
-    // console.log(event);
     return {
       style: { backgroundColor },
     };
-  }, []);
-
-  // localStorage.clear();
+  };
 
   return (
     <div className='h-full'>
