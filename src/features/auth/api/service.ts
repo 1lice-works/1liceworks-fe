@@ -16,16 +16,17 @@ export const authService = {
   },
 
   signIn: async ({ accountId, password }: SignInDTO): Promise<void> => {
-    const response = await apiClient.post<SignInResponseDTO>({
+    const response = await apiClient.signPost<SignInResponseDTO>({
       url: 'auth/login',
       data: {
         accountId,
         password,
       },
     });
+    // if(response.data)
 
     console.log(response);
-    const token = response.data?.accessToken;
+    const token = response.data;
 
     if (token) {
       useAuthStore.getState().setAccessToken(token); // 토큰을 상태에 저장

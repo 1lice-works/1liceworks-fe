@@ -27,7 +27,14 @@ export const SignInForm = () => {
   const { mutate } = useMutation({
     ...authQueries.signIn,
     onSuccess: () => {
-      navigate(ROUTES.ROOT);
+      // navigate(ROUTES.ROOT);
+    },
+    onError: (error) => {
+      console.log(error);
+      form.setError('email', {
+        type: 'manual',
+        message: '로그인 정보가 일치하지 않습니다.',
+      });
     },
   });
 

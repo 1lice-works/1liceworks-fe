@@ -15,6 +15,9 @@ export const apiClient = {
       .get<ApiResponse<T>>(config.url!, config)
       .then((res) => res.data),
 
+  signPost: <T>(config: AxiosRequestConfig) =>
+    axiosInstance.post<ApiResponse<T>>(config.url!, config.data, config),
+
   post: <T>(config: AxiosRequestConfig) =>
     axiosInstance
       .post<ApiResponse<T>>(config.url!, config.data, config)
