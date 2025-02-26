@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom';
 
+import { Gnb } from '@/widgets/gnb/ui/Gnb';
 import { ModalManager } from '@/widgets/modal/ui/ModalManager';
 
 export const MainLayout = () => {
   return (
     <div className='flex h-screen w-full flex-col'>
-      {/* GNB 위치 (아래 코드는 수정 예정) */}
-      <div className='bg-background-dark w-full px-10 py-4 text-white'>GNB</div>
+      <Gnb />
 
       <div className='flex flex-1'>
         {/* LNB 위치 (아래 코드는 수정 예정) */}
