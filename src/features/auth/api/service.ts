@@ -17,7 +17,7 @@ export const authService = {
 
   signIn: async ({ accountId, password }: SignInDTO): Promise<void> => {
     const response = await apiClient.signPost<SignInResponseDTO>({
-      url: 'auth/login',
+      url: '/auth/login',
       data: {
         accountId,
         password,
@@ -43,7 +43,7 @@ export const authService = {
 
   postVerifyEmail: async (email: { email: string }) => {
     const response = await apiClient.post<PostResponseDTO>({
-      url: 'auth/verify-email',
+      url: '/auth/verify-email',
       data: email,
     });
     return response.data;
@@ -51,7 +51,7 @@ export const authService = {
 
   postCheckVerify: async ({ email, verificationCode }: PostCheckVerifyDTO) => {
     await apiClient.post({
-      url: 'auth/verify',
+      url: '/auth/verify',
       data: {
         email,
         verificationCode,
@@ -61,11 +61,11 @@ export const authService = {
 
   postValidateEmail: async ({ accountId }: postValidateEmailDTO) => {
     const response = await apiClient.post<PostResponseDTO>({
-      url: 'auth/validate-email',
+      url: '/auth/validate-email',
       data: {
         accountId,
       },
     });
-    return response.data;
+    return response;
   },
 };

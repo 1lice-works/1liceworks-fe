@@ -32,6 +32,10 @@ export const SignUpForm = () => {
   const form = useForm<SignUpFormTypes>({
     mode: 'onChange',
     resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      hasPrivateDomain: false,
+      domainName: '',
+    },
   });
   const [formData, setFormData] = useState<SignUpFormTypes>({
     companyName: '',
@@ -77,7 +81,9 @@ export const SignUpForm = () => {
           industry: formData.industry,
           scale: formData.scale,
           hasPrivateDomain: formData.hasPrivateDomain,
-          domainName: formData.hasPrivateDomain ? formData.domainName : '', // 미보유 시 빈 문자열
+          domainName: formData.hasPrivateDomain
+            ? formData.domainName
+            : '1lice-works', // 미보유 시 빈 문자열
         },
         userInfo: {
           username: formData.username,
@@ -87,6 +93,7 @@ export const SignUpForm = () => {
         },
       },
     };
+    console.log(requestData);
     mutate(requestData);
   };
 
@@ -96,7 +103,9 @@ export const SignUpForm = () => {
       <Form {...form}>
         <form
           className='flex flex-col items-center'
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={(e) => {
+            form.handleSubmit(onSubmit)(e);
+          }}
         >
           {step === FUNNEL_STEP.TEAM_INFO && (
             <StepTeamInfo nextStep={handleNextStep} />
