@@ -3,9 +3,10 @@ import { User } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/shadcn/Avatar';
 import NotificationIcon from '@/widgets/gnb/ui/assets/bell.svg?react';
-import CalendarIcon from '@/widgets/gnb/ui/assets/calendar.svg?react';
 import TeamIcon from '@/widgets/gnb/ui/assets/document.svg?react';
 import SearchIcon from '@/widgets/gnb/ui/assets/search.svg?react';
+
+import { Logo } from './components/Logo';
 
 const url = '';
 
@@ -14,10 +15,7 @@ export const CalendarGnb = () => {
 
   return (
     <nav className='flex w-full items-center justify-between gap-x-20 border-b px-8 py-4'>
-      <div className='flex items-center gap-x-4'>
-        <CalendarIcon className='h-8 w-8' />
-        <p className='text-xl'>Calendar</p>
-      </div>
+      <Logo type='calendar' />
 
       <div className='bg-background-light flex flex-1 items-center gap-x-2 rounded-4xl border px-4 py-2'>
         <SearchIcon className='h-5 w-5' />
