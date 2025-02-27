@@ -9,8 +9,8 @@ export const ROUTES = {
   CALENDAR: {
     root: '/calendar',
     DETAIL: {
-      ROOT: '/:eventId',
-      EVENT: (eventId: string) => `/${eventId}`,
+      ROOT: '/calendar/:eventId',
+      EVENT: (eventId: string) => `/calendar/${eventId}`,
     },
   },
   TEAM: {
