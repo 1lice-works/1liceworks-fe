@@ -24,17 +24,22 @@ export const FindPasswordForm = () => {
     accountId: '',
     private_email: '',
     verificate: '',
-    // newPassword: '',
+    password: '',
   });
   console.log(formData);
   console.log(currentStepIndex);
+
+  const handleNextStep = (data: Partial<typeof formData>) => {
+    setFormData((prev) => ({ ...prev, ...data })); // 기존 데이터 유지하면서 업데이트
+    nextStep(); // 다음 스텝 이동
+  };
 
   return (
     <div>
       <Form {...form}>
         <form className='flex flex-col items-center'>
           {step === FIND_PW.PERSONAL_INFO && (
-            <StepFPWInfo nextStep={nextStep} setFormData={setFormData} />
+            <StepFPWInfo nextStep={handleNextStep} />
           )}
           {step === FIND_PW.RESET_PW && <StepNewPW prevStep={prevStep} />}
         </form>

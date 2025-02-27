@@ -19,7 +19,7 @@ interface RHFInputProps {
   type?: HTMLInputTypeAttribute;
   rightElement?: ReactNode | null;
   error?: boolean;
-  value?: string | Date;
+  value?: any;
 }
 
 export function RHFInput({

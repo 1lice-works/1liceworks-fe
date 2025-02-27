@@ -38,5 +38,5 @@ export interface FindPWFormTypes {
   accountId: string;
   private_email: string;
   verificate: string;
-  // newPassword: string;
+  password: string;
 }

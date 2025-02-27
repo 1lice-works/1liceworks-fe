@@ -18,7 +18,7 @@ export const StepNewPW = ({ prevStep }: StepNewPWProps) => {
           <div className={AUTH_FORM_STYLES.inputAndButton}>
             <RHFInput
               label='변경할 비밀번호'
-              name='newPassword'
+              name='password'
               type='password'
               placeholder='비밀번호를 입력해주세요.'
             />
@@ -50,7 +50,9 @@ export const StepNewPW = ({ prevStep }: StepNewPWProps) => {
         >
           이전
         </Button>
-        <Button className='w-full'>완료</Button>
+        <Button type='submit' className='w-full'>
+          완료
+        </Button>
       </div>
     </div>
   );
