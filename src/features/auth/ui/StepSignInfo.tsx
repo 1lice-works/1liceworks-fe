@@ -14,7 +14,8 @@ interface StepSignInfoProps {
 }
 
 export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
-  const { getValues, formState, setError, register } = useFormContext();
+  const { getValues, formState, setError, register, clearErrors } =
+    useFormContext();
   const [isValidId, setIsValidId] = useState(false);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
@@ -26,9 +27,23 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
   );
   const { mutate } = useMutation({
     ...authQueries.validEmail,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      if (res?.result) {
+        setError('accountId', {
+          message: '중복된 ID입니다.',
+        });
+        setIsValidId(false);
+        return;
+      }
+      clearErrors('accountId'); // 성공하면 기존 에러 제거
       setIsValidId(true);
       // console.log('중복 검사 확인!');
+    },
+    onError: (error) => {
+      setError('accountId', {
+        type: 'manual',
+        message: error.message,
+      });
     },
   });
 

@@ -155,8 +155,8 @@ export const StepPersonalInfo = ({
             이전
           </Button>
           <Button
-            className='w-full'
             type='button'
+            className='w-full'
             onClick={handleNext}
             disabled={!isCurrentStepValid}
           >

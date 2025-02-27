@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
@@ -15,14 +16,17 @@ interface StepTeamInfoProps {
 
 export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
   const { getValues, formState, setValue, watch } = useFormContext();
-  // const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
 
   // 현재 'hasPrivateDomain' 값 가져오기
-  const hasPrivateDomain = watch('hasPrivateDomain', false);
-  if (!hasPrivateDomain) setValue('domainName', '');
-  // if (!hasPrivateDomain) {
-  //   setValue('domainName', '');
-  // }
+  const hasPrivateDomain = watch('hasPrivateDomain', true);
+
+  useEffect(() => {
+    if (!hasPrivateDomain || hasPrivateDomain === undefined) {
+      setValue('domainName', '');
+    }
+    // console.log('formState', formState);
+    // console.log('hasPrivateDomain', hasPrivateDomain);
+  }, [hasPrivateDomain, setValue, formState]);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = [
@@ -34,17 +38,14 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
     'domainName',
   ];
 
-  // // 해당 스텝의 필드만 검사
-  // const isCurrentStepValid = stepFields.every(
-  //   (field) => !formState.errors[field]
-  // );
-
   const isCurrentStepValid = stepFields.every((field) => {
     const value = getValues(field);
-    return value !== undefined && value !== null && !formState.errors[field];
+    // const value =
+    //   getValues(field) ?? (field === 'hasPrivateDomain' ? false : '');
+    // console.log(`${field} ${typeof value}`, value);
+    return value !== null && value !== undefined && !formState.errors[field];
   });
 
-  console.log(isCurrentStepValid);
   const handleNext = () => {
     if (!isCurrentStepValid) {
       console.log('현재 단계의 필수 입력값이 누락되었습니다.');
@@ -92,6 +93,7 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
               <Button
                 type='button'
                 name='hasPrivateDomain'
+                variant={hasPrivateDomain ? 'default' : 'outline'}
                 className='w-full'
                 disabled={hasPrivateDomain}
                 onClick={() => setValue('hasPrivateDomain', true)}
@@ -101,6 +103,7 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
               <Button
                 type='button'
                 name='hasPrivateDomain'
+                variant={hasPrivateDomain ? 'outline' : 'default'}
                 className='w-full'
                 disabled={!hasPrivateDomain}
                 onClick={() => setValue('hasPrivateDomain', false)}
@@ -108,12 +111,14 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
                 미보유
               </Button>
             </div>
-            {hasPrivateDomain && (
+            {hasPrivateDomain ? (
               <RHFInput
                 name='domainName'
                 type='text'
                 placeholder='ex.mydomain'
               />
+            ) : (
+              <></>
             )}
           </label>
         </div>

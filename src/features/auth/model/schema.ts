@@ -29,7 +29,9 @@ export const signUpSchema = z
     industry: z.string(),
     scale: z.string(),
     hasPrivateDomain: z.boolean(),
-    domainName: z.string(),
+    domainName: z
+      .string()
+      .min(3, { message: '도메인은 3글자 이상 입력해주세요.' }),
     username: z
       .string()
       .min(1, { message: '이름을 입력해주세요.' })
@@ -44,6 +46,7 @@ export const signUpSchema = z
 
     accountId: z
       .string()
+      // .min(1, { message: '한글자 이상 입력해주세요.' }),
       .email({ message: '이메일을 올바르게 입력해 주세요.' }),
     password: z
       .string()
@@ -55,6 +58,16 @@ export const signUpSchema = z
         message:
           '비밀번호는 8~16자의 영문, 숫자, 특수문자를 조합해 만들어주세요.',
       })
+      .refine(
+        (value) =>
+          /[A-Za-z]/.test(value) && // 최소 1개 이상의 영문자 포함
+          /\d/.test(value) && // 최소 1개 이상의 숫자 포함
+          /[!@#$%^&*()_+\-={};:'",.<>?/\\|]/.test(value), // 최소 1개 이상의 특수문자 포함
+        {
+          message:
+            '비밀번호는 영문, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.',
+        }
+      )
       .refine(
         (value) => {
           for (let i = 0; i < value.length - 2; i++) {
