@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { RHFCheckBox } from '@/shared/ui/custom/RHFCheckBox';
 import { Button } from '@/shared/ui/shadcn/Button';
-import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 
 import { authQueries } from '../api/queries';
 import { AUTH_FORM_STYLES } from '../model/constants';
@@ -23,18 +23,20 @@ export const StepPersonalInfo = ({
   const [emailVerified, setEmailVerified] = useState(false);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
-  const stepFields = ['username', 'privateEmail', 'verificatedNumber'];
-
-  // 해당 스텝의 필드만 검사
-  const isCurrentStepValid = stepFields.every(
-    (field) => !formState.errors[field]
-  );
+  const stepFields = [
+    'username',
+    'privateEmail',
+    'verificatedNumber',
+    'isAgree',
+  ];
+  const isAgreeAll = getValues('isAgree');
 
   // 이메일 인증
-  const { mutate: verifyEmail } = useMutation({
+  const { mutate: verifyEmail, isPending } = useMutation({
     ...authQueries.verifyEmail,
     onSuccess: () => {
       setIsEmailSent(true);
+
       console.log('인증번호가 이메일로 발송되었습니다.');
     },
     onError: (error: Error) => {
@@ -43,7 +45,6 @@ export const StepPersonalInfo = ({
         type: 'manual',
         message: error.message, // 서버에서 온 메시지 표시
       });
-      console.error('이메일 인증 요청 실패:', error);
     },
   });
 
@@ -53,13 +54,13 @@ export const StepPersonalInfo = ({
     onSuccess: () => {
       setEmailVerified(true);
       clearErrors('verificatedNumber'); // 인증번호 오류 초기화
-      console.log('이메일 인증 성공!');
+      // console.log('이메일 인증 성공!');
     },
-    onError: () => {
+    onError: (error) => {
       setEmailVerified(false);
       setError('verificatedNumber', {
         type: 'manual',
-        message: '인증번호가 올바르지 않습니다.',
+        message: error.message,
       });
     },
   });
@@ -82,15 +83,25 @@ export const StepPersonalInfo = ({
     checkVerify({ email, verificationCode: verificatedNumber }); // 이메일과 인증번호 함께 전달
   };
 
+  // 해당 스텝의 필드만 검사
+  const isCurrentStepValid = stepFields.every(
+    (field) => !formState.errors[field] && isAgreeAll
+  );
+
   // 다음 step
   const handleNext = () => {
     if (!isCurrentStepValid) {
       console.log('현재 단계의 필수 입력값이 누락되었습니다.');
       return;
     }
+
     const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
     nextStep(formData); // 다음 스텝으로 이동할 때 데이터 전달
   };
+
+  useEffect(() => {
+    console.log(isAgreeAll);
+  }, [isAgreeAll]);
 
   return (
     <>
@@ -114,8 +125,8 @@ export const StepPersonalInfo = ({
                 name='privateEmail'
                 placeholder='이메일을 입력해주세요.'
                 rightElement={
-                  <Button onClick={handleSendMail}>
-                    {isEmailSent ? '전송됨' : '전송'}
+                  <Button type='button' onClick={handleSendMail}>
+                    {isPending ? '전송중' : isEmailSent ? '전송됨' : '전송'}
                   </Button>
                 }
               />
@@ -132,23 +143,7 @@ export const StepPersonalInfo = ({
               />
             </div>
           </div>
-
-          <div>
-            <label className='flex items-center gap-4 rounded-md border-1 border-[#F1F5F9] bg-[#F8FAFC] p-2'>
-              <Checkbox />
-              모든 항목에 동의 합니다.
-            </label>
-            <div className='flex flex-col gap-1 p-2 text-xs'>
-              <label className={AUTH_FORM_STYLES.checkBox}>
-                <Checkbox />
-                [필수] 개인정보 수집 및 이용 안내
-              </label>
-              <label className={AUTH_FORM_STYLES.checkBox}>
-                <Checkbox />
-                [필수] 개인정보 보호법 개인정보 처리자의 의무 확인
-              </label>
-            </div>
-          </div>
+          <RHFCheckBox name='isAgree' label='전체 동의' />
         </div>
         <div className='flex w-full gap-2'>
           <Button

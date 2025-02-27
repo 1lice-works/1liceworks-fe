@@ -19,6 +19,7 @@ export interface SignUpFormTypes {
   username: string;
   privateEmail: string;
   verificatedNumber: string;
+  isAgree: boolean;
   // 로그인 정보 입력단계
   accountId: string;
   password: string;

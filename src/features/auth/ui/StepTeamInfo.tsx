@@ -15,9 +15,15 @@ interface StepTeamInfoProps {
 
 export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
   const { getValues, formState, setValue, watch } = useFormContext();
+  // const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
 
   // 현재 'hasPrivateDomain' 값 가져오기
   const hasPrivateDomain = watch('hasPrivateDomain', false);
+  if (!hasPrivateDomain) setValue('domainName', '');
+  // if (!hasPrivateDomain) {
+  //   setValue('domainName', '');
+  // }
+
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = [
     'companyName',
@@ -28,11 +34,17 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
     'domainName',
   ];
 
-  // 해당 스텝의 필드만 검사
-  const isCurrentStepValid = stepFields.every(
-    (field) => !formState.errors[field]
-  );
+  // // 해당 스텝의 필드만 검사
+  // const isCurrentStepValid = stepFields.every(
+  //   (field) => !formState.errors[field]
+  // );
 
+  const isCurrentStepValid = stepFields.every((field) => {
+    const value = getValues(field);
+    return value !== undefined && value !== null && !formState.errors[field];
+  });
+
+  console.log(isCurrentStepValid);
   const handleNext = () => {
     if (!isCurrentStepValid) {
       console.log('현재 단계의 필수 입력값이 누락되었습니다.');
@@ -98,8 +110,8 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
             </div>
             {hasPrivateDomain && (
               <RHFInput
-                type='text'
                 name='domainName'
+                type='text'
                 placeholder='ex.mydomain'
               />
             )}

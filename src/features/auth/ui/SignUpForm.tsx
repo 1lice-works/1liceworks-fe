@@ -43,6 +43,7 @@ export const SignUpForm = () => {
     username: '',
     privateEmail: '',
     verificatedNumber: '',
+    isAgree: false,
     accountId: '',
     password: '',
     confirmPassword: '',
@@ -55,21 +56,11 @@ export const SignUpForm = () => {
   const { mutate, isPending } = useMutation({
     ...authQueries.signUp,
     onSuccess: () => {
-      // setFormData({
-      //   companyName: '',
-      //   teamName: '',
-      //   industry: '',
-      //   scale: '',
-      //   hasPrivateDomain: false,
-      //   domainName: '',
-      //   username: '',
-      //   privateEmail: '',
-      //   verificatedNumber: '',
-      //   accountId: '',
-      //   password: '',
-      //   confirmPassword: '',
-      // });
       navigate(ROUTES.AUTH.SIGN_IN);
+    },
+    onError: (error) => {
+      alert(error.message);
+      return;
     },
   });
 
@@ -96,7 +87,6 @@ export const SignUpForm = () => {
         },
       },
     };
-
     mutate(requestData);
   };
 
