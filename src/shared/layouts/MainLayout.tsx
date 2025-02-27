@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import { Gnb } from '@/widgets/gnb/ui/Gnb';
+import { Lnb } from '@/widgets/lnb/ui/Lnb';
 import { ModalManager } from '@/widgets/modal/ui/ModalManager';
 
 export const MainLayout = () => {
@@ -9,8 +10,7 @@ export const MainLayout = () => {
       <Gnb />
 
       <div className='flex flex-1'>
-        {/* LNB 위치 (아래 코드는 수정 예정) */}
-        <div className='bg-background-light h-full p-4'>LNB</div>
+        <Lnb />
 
         <main className='h-full flex-1 p-4'>
           <Outlet />
