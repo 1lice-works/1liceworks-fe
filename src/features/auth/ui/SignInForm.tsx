@@ -27,7 +27,7 @@ export const SignInForm = () => {
   const { mutate } = useMutation({
     ...authQueries.signIn,
     onSuccess: () => {
-      // navigate(ROUTES.ROOT);
+      navigate(ROUTES.ROOT);
     },
     onError: (error) => {
       console.log(error);
