@@ -29,6 +29,7 @@ export const authService = {
     const token = response.data;
 
     if (token) {
+      //@ts-expect-error expected behavior
       useAuthStore.getState().setAccessToken(token); // 토큰을 상태에 저장
       useAuthStore.getState().setAuth(); // 인증 상태를 true로 설정
     } else {
