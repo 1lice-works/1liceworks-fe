@@ -8,7 +8,17 @@ import { ApiErrorResponse } from '../types/apiResponse';
 import { NetworkOfflineError, TokenExpiredHandler } from './errorHandler';
 
 export const requestInterceptor = (config: InternalAxiosRequestConfig) => {
-  const accessToken = '';
+  const authStorageStr = localStorage.getItem('auth-storage');
+  let accessToken = null;
+
+  if (authStorageStr) {
+    try {
+      const authStorage = JSON.parse(authStorageStr);
+      accessToken = authStorage.state?.accessToken || null;
+    } catch (e) {
+      console.error('Failed to parse auth-storage from localStorage', e);
+    }
+  }
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
