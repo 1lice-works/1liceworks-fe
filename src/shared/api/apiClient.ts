@@ -1,14 +1,21 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { ApiResponse } from '../types/apiResponse';
+import {
+  rejectInterceptor,
+  requestInterceptor,
+  responseInterceptor,
+} from './interceptors';
 
 export const axiosInstance: AxiosInstance = axios.create({
-  // baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`, // base URL
-  baseURL: '/api', // base URL
+  baseURL: '/api',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
+
+axiosInstance.interceptors.request.use(requestInterceptor);
+axiosInstance.interceptors.response.use(responseInterceptor, rejectInterceptor);
 
 export const apiClient = {
   get: <T>(config: AxiosRequestConfig) =>
