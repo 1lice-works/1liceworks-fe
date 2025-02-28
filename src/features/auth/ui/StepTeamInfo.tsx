@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
@@ -12,20 +12,26 @@ import { RHFInput } from './RHFInput';
 interface StepTeamInfoProps {
   nextStep: (data: any) => void; // 데이터를 받을 수 있도록 함
 }
-// {/* <RHFInput label='' name='' type='' placeholder='' /> */}
 
 export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
   const { getValues, formState, setValue, watch } = useFormContext();
+  const [hasDomainState, setHasDominState] = useState<boolean>(true);
+
+  const [domainName, setDomainName] = useState<string>('');
 
   // 현재 'hasPrivateDomain' 값 가져오기
-  const hasPrivateDomain = watch('hasPrivateDomain', true);
+  const hasPrivateDomain = watch('hasPrivateDomain', hasDomainState);
+
+  useEffect(() => {
+    // console.log('useEffect', getValues());
+    // console.log(domainName);
+  }, [getValues, domainName]);
 
   useEffect(() => {
     if (!hasPrivateDomain || hasPrivateDomain === undefined) {
-      setValue('domainName', '');
+      setValue('domainName', '1lice-works.com');
     }
-    // console.log('formState', formState);
-    // console.log('hasPrivateDomain', hasPrivateDomain);
+    console.log(getValues('domainName'));
   }, [hasPrivateDomain, setValue, formState]);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
@@ -34,15 +40,13 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
     'teamName',
     'industry',
     'scale',
-    'hasPrivateDomain',
+    // 'hasPrivateDomain',
     'domainName',
   ];
 
   const isCurrentStepValid = stepFields.every((field) => {
+    // console.log('isAll valid!', field);
     const value = getValues(field);
-    // const value =
-    //   getValues(field) ?? (field === 'hasPrivateDomain' ? false : '');
-    // console.log(`${field} ${typeof value}`, value);
     return value !== null && value !== undefined && !formState.errors[field];
   });
 
@@ -96,7 +100,10 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
                 variant={hasPrivateDomain ? 'default' : 'outline'}
                 className='w-full'
                 disabled={hasPrivateDomain}
-                onClick={() => setValue('hasPrivateDomain', true)}
+                onClick={() => {
+                  setHasDominState(true);
+                  setValue('hasPrivateDomain', true);
+                }}
               >
                 보유
               </Button>
@@ -106,13 +113,17 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
                 variant={hasPrivateDomain ? 'outline' : 'default'}
                 className='w-full'
                 disabled={!hasPrivateDomain}
-                onClick={() => setValue('hasPrivateDomain', false)}
+                onClick={() => {
+                  setValue('hasPrivateDomain', false);
+                  setHasDominState(false);
+                }}
               >
                 미보유
               </Button>
             </div>
             {hasPrivateDomain ? (
               <RHFInput
+                onChange={(value) => setDomainName(value)}
                 name='domainName'
                 type='text'
                 placeholder='ex.mydomain'

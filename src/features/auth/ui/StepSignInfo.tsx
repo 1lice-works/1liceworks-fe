@@ -14,17 +14,18 @@ interface StepSignInfoProps {
 }
 
 export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
-  const { getValues, formState, setError, register, clearErrors } =
+  const { getValues, formState, setError, clearErrors, register } =
     useFormContext();
   const [isValidId, setIsValidId] = useState(false);
-
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = ['accountId', 'password', 'confirmPassword'];
 
   // 해당 스텝의 필드만 검사
-  const isCurrentStepValid = stepFields.every(
-    (field) => !formState.errors[field] && isValidId
-  );
+  const isCurrentStepValid = stepFields.every((field) => {
+    const value = getValues(field);
+    return value !== null && value !== undefined && !formState.errors[field];
+  });
+
   const { mutate } = useMutation({
     ...authQueries.validEmail,
     onSuccess: (res) => {
@@ -87,7 +88,8 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
                 name='accountId'
                 type='email'
                 label='아이디'
-                placeholder='ID@mydomain.1lice-work.com'
+                placeholder='ID@1lice-work.com'
+                // onChange={handleAccountChange}
                 rightElement={
                   <Button type='button' onClick={handleCheckMail}>
                     {isValidId ? '사용가능' : '중복 확인'}
@@ -103,15 +105,16 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
           <div className='flex flex-col gap-2'>
             <RHFInput
               label='비밀번호'
-              // name='password'
+              name='password'
               type='password'
               placeholder='비밀번호를 입력해주세요.'
-              {...register('password')}
+              // onChange={(value )}
+              // {...register('password')}
             />
             <RHFInput
               label='비밀번호 확인'
-              // name='confirmPassword'
-              {...register('confirmPassword')}
+              name='confirmPassword'
+              // {...register('confirmPassword')}
               type='password'
               placeholder='비밀번호를 다시 한번 입력해주세요.'
             />

@@ -33,7 +33,7 @@ export const SignUpForm = () => {
     mode: 'onChange',
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      hasPrivateDomain: false,
+      hasPrivateDomain: true,
       domainName: '',
     },
   });
@@ -42,7 +42,7 @@ export const SignUpForm = () => {
     teamName: '',
     industry: '',
     scale: '',
-    hasPrivateDomain: false,
+    hasPrivateDomain: true,
     domainName: '',
     username: '',
     privateEmail: '',
@@ -103,9 +103,11 @@ export const SignUpForm = () => {
       <Form {...form}>
         <form
           className='flex flex-col items-center'
-          onSubmit={(e) => {
-            form.handleSubmit(onSubmit)(e);
-          }}
+          onSubmit={
+            // (e) => {
+            form.handleSubmit(onSubmit)
+            // }
+          }
         >
           {step === FUNNEL_STEP.TEAM_INFO && (
             <StepTeamInfo nextStep={handleNextStep} />

@@ -30,14 +30,17 @@ export const StepPersonalInfo = ({
     'isAgree',
   ];
   const isAgreeAll = getValues('isAgree');
+  const getPrivateDomain = getValues('hasPrivateDomain')
+    ? getValues('domainname')
+    : '@1lice-works.com';
+  console.log(getPrivateDomain);
 
   // 이메일 인증
   const { mutate: verifyEmail, isPending } = useMutation({
     ...authQueries.verifyEmail,
     onSuccess: () => {
       setIsEmailSent(true);
-
-      console.log('인증번호가 이메일로 발송되었습니다.');
+      // console.log('인증번호가 이메일로 발송되었습니다.');
     },
     onError: (error: Error) => {
       setIsEmailSent(false);
@@ -84,9 +87,18 @@ export const StepPersonalInfo = ({
   };
 
   // 해당 스텝의 필드만 검사
-  const isCurrentStepValid = stepFields.every(
-    (field) => !formState.errors[field] && isAgreeAll
-  );
+  // const isCurrentStepValid = stepFields.every(
+  //   (field) => !formState.errors[field] && isAgreeAll
+  // );
+
+  const isCurrentStepValid = stepFields.every((field) => {
+    const value = getValues(field);
+    return (
+      isAgreeAll && value !== undefined && !formState.errors[field]
+      //  &&
+      // emailVerified
+    );
+  });
 
   // 다음 step
   const handleNext = () => {
