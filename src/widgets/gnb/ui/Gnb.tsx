@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/utils';
+import { useAuthStore } from '@/shared/model/authStore';
 import { UserAvatar } from '@/shared/ui/custom/UserAvatar';
 import {
   DropdownMenu,
@@ -24,6 +25,7 @@ const ICON_CLASS_NAME =
 export const Gnb = () => {
   const location = useLocation();
   const path = location.pathname;
+  const logout = useAuthStore((state) => state.logout);
 
   // 경로 기반으로 GnbType 결정
   const gnbType: GnbType = path.startsWith('/team') ? 'team' : 'calendar';
@@ -37,8 +39,8 @@ export const Gnb = () => {
   };
 
   const handleLogoutClick = () => {
-    // TODO) 로그아웃 처리
-    console.log('Logout clicked');
+    logout();
+    window.location.href = ROUTES.AUTH.SIGN_IN;
   };
 
   return (
