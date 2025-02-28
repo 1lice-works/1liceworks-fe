@@ -11,14 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/shadcn/DropdownMenu';
+import { GnbType } from '@/widgets/gnb/model/types';
 import NotificationIcon from '@/widgets/gnb/ui/assets/bell.svg?react';
 import CalendarIcon from '@/widgets/gnb/ui/assets/calendar.svg?react';
 import TeamIcon from '@/widgets/gnb/ui/assets/document.svg?react';
-
-import { Logo } from './components/Logo';
-import { SearchBar } from './components/SearchBar';
-
-type GnbType = 'calendar' | 'team';
+import { Logo } from '@/widgets/gnb/ui/components/Logo';
+import { SearchBar } from '@/widgets/gnb/ui/components/SearchBar';
 
 const ICON_CLASS_NAME =
   'h-8 w-8 cursor-pointer transition duration-200 ease-in-out hover:scale-110 focus:scale-110';

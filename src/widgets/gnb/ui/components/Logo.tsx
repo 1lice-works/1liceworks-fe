@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/constants/routes';
+import { GnbType } from '@/widgets/gnb/model/types';
 import CalendarIcon from '@/widgets/gnb/ui/assets/calendar.svg?react';
 import TeamIcon from '@/widgets/gnb/ui/assets/document.svg?react';
 
-type LogoType = 'calendar' | 'team';
-
 interface LogoProps {
-  type: LogoType;
+  type: GnbType;
 }
 
 const LOGO_CONFIG = {
