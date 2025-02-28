@@ -36,9 +36,18 @@ export const authService = {
       throw new Error('로그인 실패: 토큰을 받지 못했습니다.');
     }
   },
+
   signOut: async (): Promise<void> => {
-    await apiClient.post<void>({ url: '/auth/logout' });
-    localStorage.clear();
+    try {
+      await apiClient.post<void>({
+        url: '/auth/logout',
+      });
+    } catch (error) {
+      console.error('로그아웃 API 호출 오류:', error);
+      throw error; // 에러를 다시 throw하여 컴포넌트의 onError에서 처리할 수 있게 함
+    } finally {
+      useAuthStore.getState().signOut();
+    }
   },
 
   postVerifyEmail: async (email: { email: string }) => {

@@ -1,5 +1,6 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
+import { AuthRoute } from '@/app/routes/AuthRoute';
 import { CalendarDetail } from '@/features/calendar/ui/CalendarDetail';
 import { CalendarPage } from '@/pages/calendar';
 import { FindPassword } from '@/pages/findPW';
@@ -10,8 +11,6 @@ import { ROUTES } from '@/shared/constants/routes';
 import { AuthLayout } from '@/shared/layouts/AuthLayout';
 import { MainLayout } from '@/shared/layouts/MainLayout';
 import { SigninLayout } from '@/shared/layouts/SigninLayout';
-
-import { AuthRoute } from './AuthRoutes';
 
 export const router = createBrowserRouter([
   // Public Routes
@@ -50,8 +49,8 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: ROUTES.TEAM.root,
-        element: <TeamPage />,
+        index: true,
+        element: <Navigate to={ROUTES.CALENDAR.root} replace />,
       },
       {
         path: ROUTES.CALENDAR.root,
@@ -60,6 +59,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.CALENDAR.DETAIL.ROOT,
         element: <CalendarDetail />,
+      },
+      {
+        path: ROUTES.TEAM.root,
+        element: <TeamPage />,
       },
     ],
   },

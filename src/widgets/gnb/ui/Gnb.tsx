@@ -1,5 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
 import { Link, useLocation } from 'react-router-dom';
 
+import { authQueries } from '@/features/auth/api/queries';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/utils';
 import { UserAvatar } from '@/shared/ui/custom/UserAvatar';
@@ -28,6 +30,10 @@ export const Gnb = () => {
   // 경로 기반으로 GnbType 결정
   const gnbType: GnbType = path.startsWith('/team') ? 'team' : 'calendar';
 
+  const { mutate: signOut } = useMutation({
+    ...authQueries.signOut,
+  });
+
   // TODO) API 연동 후 role 받아오기
   const isLeader = true;
 
@@ -37,8 +43,7 @@ export const Gnb = () => {
   };
 
   const handleLogoutClick = () => {
-    // TODO) 로그아웃 처리
-    console.log('Logout clicked');
+    signOut();
   };
 
   return (
