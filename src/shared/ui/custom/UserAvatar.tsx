@@ -11,15 +11,9 @@ const avatarVariants = cva('border', {
       md: 'h-8 w-8',
       lg: 'h-10 w-10',
     },
-    effect: {
-      none: '',
-      hover:
-        'cursor-pointer transition duration-200 ease-in-out hover:scale-110 focus:scale-110',
-    },
   },
   defaultVariants: {
     size: 'md',
-    effect: 'none',
   },
 });
 
@@ -31,15 +25,11 @@ interface UserAvatarProps
 export const UserAvatar = ({
   avatarUrl = '',
   size,
-  effect,
   className,
   ...props
 }: UserAvatarProps & VariantProps<typeof avatarVariants>) => {
   return (
-    <Avatar
-      className={cn(avatarVariants({ size, effect }), className)}
-      {...props}
-    >
+    <Avatar className={cn(avatarVariants({ size }), className)} {...props}>
       <AvatarImage
         src={avatarUrl}
         alt={`user's avatar`}
