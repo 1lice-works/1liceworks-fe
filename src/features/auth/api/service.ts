@@ -23,9 +23,7 @@ export const authService = {
         password,
       },
     });
-    // if(response.data)
 
-    console.log(response);
     const token = response.data;
 
     if (token) {
@@ -75,6 +73,15 @@ export const authService = {
         accountId,
       },
     });
+    return response;
+  },
+
+  getMyMinimalProfile: async () => {
+    const response = await apiClient.get({
+      url: '/auth/my-minimal-profile',
+    });
+
+    console.log('getMyMinimalProfile response', response);
     return response;
   },
 };

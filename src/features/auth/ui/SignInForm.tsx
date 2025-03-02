@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { queryClient } from '@/shared/api/queryClient';
 import { ROUTES } from '@/shared/constants/routes';
 import { Button } from '@/shared/ui/shadcn/Button';
 import { Form } from '@/shared/ui/shadcn/Form';
@@ -26,8 +27,14 @@ export const SignInForm = () => {
 
   const { mutate } = useMutation({
     ...authQueries.signIn,
-    onSuccess: () => {
-      navigate(ROUTES.ROOT);
+    onSuccess: async () => {
+      try {
+        await queryClient.prefetchQuery(authQueries.getMyMinimalProfile);
+      } catch (error) {
+        console.error('미니멀 프로필 정보 가져오기 실패', error);
+      } finally {
+        navigate(ROUTES.ROOT);
+      }
     },
     onError: (error) => {
       console.log(error);

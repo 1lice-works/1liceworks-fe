@@ -20,4 +20,9 @@ export const authQueries = {
   validEmail: {
     mutationFn: authService.postValidateEmail,
   },
+
+  getMyMinimalProfile: {
+    queryKey: ['myMinimalProfile'],
+    queryFn: () => authService.getMyMinimalProfile(),
+  },
 };
