@@ -19,6 +19,7 @@ interface RHFInputProps extends PropsWithChildren {
   type?: HTMLInputTypeAttribute;
   rightElement?: ReactNode | null;
   error?: boolean;
+  onChange?: (value: string) => void;
 }
 
 export function RHFInput({
@@ -29,6 +30,7 @@ export function RHFInput({
   rightElement,
   type,
   error = true,
+  onChange,
 }: RHFInputProps) {
   const { control } = useFormContext();
 
@@ -50,6 +52,10 @@ export function RHFInput({
                 placeholder={placeholder}
                 {...field}
                 type={type}
+                onChange={(e) => {
+                  field.onChange(e); // RHF 내부 값 업데이트
+                  onChange?.(e.target.value); // 사용자 정의 onChange 실행
+                }}
               />
               {rightElement && <> {rightElement}</>}
             </div>

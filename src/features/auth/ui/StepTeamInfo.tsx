@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
@@ -11,18 +12,27 @@ import { RHFInput } from './RHFInput';
 interface StepTeamInfoProps {
   nextStep: (data: any) => void; // 데이터를 받을 수 있도록 함
 }
-// {/* <RHFInput label='' name='' type='' placeholder='' /> */}
 
 export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
   const { getValues, formState, setValue, watch } = useFormContext();
-  // const formData = getValues(); // 현재 입력된 폼 데이터를 가져옴
+  const [hasDomainState, setHasDominState] = useState<boolean>(true);
+
+  const [domainName, setDomainName] = useState<string>('');
 
   // 현재 'hasPrivateDomain' 값 가져오기
-  const hasPrivateDomain = watch('hasPrivateDomain', false);
-  if (!hasPrivateDomain) setValue('domainName', '');
-  // if (!hasPrivateDomain) {
-  //   setValue('domainName', '');
-  // }
+  const hasPrivateDomain = watch('hasPrivateDomain', hasDomainState);
+
+  useEffect(() => {
+    // console.log('useEffect', getValues());
+    // console.log(domainName);
+  }, [getValues, domainName]);
+
+  useEffect(() => {
+    if (!hasPrivateDomain || hasPrivateDomain === undefined) {
+      setValue('domainName', '1lice-works.com');
+    }
+    console.log(getValues('domainName'));
+  }, [hasPrivateDomain, setValue, formState]);
 
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = [
@@ -30,21 +40,16 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
     'teamName',
     'industry',
     'scale',
-    'hasPrivateDomain',
+    // 'hasPrivateDomain',
     'domainName',
   ];
 
-  // // 해당 스텝의 필드만 검사
-  // const isCurrentStepValid = stepFields.every(
-  //   (field) => !formState.errors[field]
-  // );
-
   const isCurrentStepValid = stepFields.every((field) => {
+    // console.log('isAll valid!', field);
     const value = getValues(field);
-    return value !== undefined && value !== null && !formState.errors[field];
+    return value !== null && value !== undefined && !formState.errors[field];
   });
 
-  console.log(isCurrentStepValid);
   const handleNext = () => {
     if (!isCurrentStepValid) {
       console.log('현재 단계의 필수 입력값이 누락되었습니다.');
@@ -92,28 +97,39 @@ export const StepTeamInfo = ({ nextStep }: StepTeamInfoProps) => {
               <Button
                 type='button'
                 name='hasPrivateDomain'
+                variant={hasPrivateDomain ? 'default' : 'outline'}
                 className='w-full'
                 disabled={hasPrivateDomain}
-                onClick={() => setValue('hasPrivateDomain', true)}
+                onClick={() => {
+                  setHasDominState(true);
+                  setValue('hasPrivateDomain', true);
+                }}
               >
                 보유
               </Button>
               <Button
                 type='button'
                 name='hasPrivateDomain'
+                variant={hasPrivateDomain ? 'outline' : 'default'}
                 className='w-full'
                 disabled={!hasPrivateDomain}
-                onClick={() => setValue('hasPrivateDomain', false)}
+                onClick={() => {
+                  setValue('hasPrivateDomain', false);
+                  setHasDominState(false);
+                }}
               >
                 미보유
               </Button>
             </div>
-            {hasPrivateDomain && (
+            {hasPrivateDomain ? (
               <RHFInput
+                onChange={(value) => setDomainName(value)}
                 name='domainName'
                 type='text'
                 placeholder='ex.mydomain'
               />
+            ) : (
+              <></>
             )}
           </label>
         </div>

@@ -34,6 +34,7 @@ export interface PostResponseDTO {
   isuccess: boolean;
   code: number;
   message: string;
+  result?: boolean;
 }
 export interface checkVerifyResponseDTO extends PostResponseDTO {
   result: boolean;

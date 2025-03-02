@@ -29,7 +29,9 @@ export const signUpSchema = z
     industry: z.string(),
     scale: z.string(),
     hasPrivateDomain: z.boolean(),
-    domainName: z.string(),
+    domainName: z
+      .string()
+      .min(3, { message: '도메인은 3글자 이상 입력해주세요.' }),
     username: z
       .string()
       .min(1, { message: '이름을 입력해주세요.' })
@@ -45,6 +47,7 @@ export const signUpSchema = z
     accountId: z
       .string()
       .email({ message: '이메일을 올바르게 입력해 주세요.' }),
+
     password: z
       .string()
       .min(8, {
@@ -55,6 +58,16 @@ export const signUpSchema = z
         message:
           '비밀번호는 8~16자의 영문, 숫자, 특수문자를 조합해 만들어주세요.',
       })
+      .refine(
+        (value) =>
+          /[A-Za-z]/.test(value) && // 최소 1개 이상의 영문자 포함
+          /\d/.test(value) && // 최소 1개 이상의 숫자 포함
+          /[!@#$%^&*()_+\-={};:'",.<>?/\\|]/.test(value), // 최소 1개 이상의 특수문자 포함
+        {
+          message:
+            '비밀번호는 영문, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.',
+        }
+      )
       .refine(
         (value) => {
           for (let i = 0; i < value.length - 2; i++) {
@@ -81,7 +94,31 @@ export const signUpSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다',
     path: ['confirmPassword'], // 에러를 표시할 필드 지정
-  });
+  })
+  .refine(
+    (data) => {
+      if (data.hasPrivateDomain) {
+        return data.accountId.endsWith(`@${data.domainName}.com`);
+      }
+      return true; // hasPrivateDomain이 false이면 검사하지 않음
+    },
+    {
+      message: '도메인이 일치해야 합니다.',
+      path: ['accountId'], // 에러를 표시할 필드 지정
+    }
+  )
+  .refine(
+    (data) => {
+      if (!data.hasPrivateDomain) {
+        return data.accountId.endsWith(`@1lice-works.com`);
+      }
+      return true; // hasPrivateDomain이 true 검사하지 않음
+    },
+    {
+      message: '기본도메인인 1lice-works.com을 사용해주세요.',
+      path: ['accountId'], // 에러를 표시할 필드 지정
+    }
+  );
 
 // 비밀번호 찾기 유효성 검사
 export const findPWSchema = z.object({
