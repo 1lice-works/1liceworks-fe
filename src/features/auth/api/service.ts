@@ -81,7 +81,6 @@ export const authService = {
       url: '/auth/my-minimal-profile',
     });
 
-    console.log('getMyMinimalProfile response', response);
     return response;
   },
 };

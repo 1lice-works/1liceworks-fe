@@ -23,6 +23,9 @@ export const authQueries = {
 
   getMyMinimalProfile: {
     queryKey: ['myMinimalProfile'],
-    queryFn: () => authService.getMyMinimalProfile(),
+    queryFn: async () => {
+      const response = await authService.getMyMinimalProfile();
+      return response.result;
+    },
   },
 };
