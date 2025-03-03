@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter, redirect } from 'react-router-dom';
 
 import { AuthRoute } from '@/app/routes/AuthRoute';
 import { CalendarDetail } from '@/features/calendar/ui/CalendarDetail';
@@ -50,7 +50,9 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to={ROUTES.CALENDAR.root} replace />,
+        loader: () => {
+          return redirect(ROUTES.CALENDAR.root);
+        },
       },
       {
         path: ROUTES.CALENDAR.root,
