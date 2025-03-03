@@ -1,7 +1,9 @@
 import { apiClient } from '@/shared/api/apiClient';
 import { useAuthStore } from '@/shared/model/authStore';
+import { ApiResponse } from '@/shared/types/apiResponse';
 
 import {
+  MinimalUserProfileDTO,
   PostCheckVerifyDTO,
   PostResponseDTO,
   postValidateEmailDTO,
@@ -76,8 +78,10 @@ export const authService = {
     return response;
   },
 
-  getMyMinimalProfile: async () => {
-    const response = await apiClient.get({
+  getMyMinimalProfile: async (): Promise<
+    ApiResponse<MinimalUserProfileDTO>
+  > => {
+    const response = await apiClient.get<MinimalUserProfileDTO>({
       url: '/auth/my-minimal-profile',
     });
 

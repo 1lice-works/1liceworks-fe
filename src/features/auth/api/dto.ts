@@ -21,6 +21,7 @@ export interface SignInDTO {
   accountId: string;
   password: string;
 }
+
 export interface SignInResponseDTO {
   accessToken: string;
 }
@@ -36,10 +37,18 @@ export interface PostResponseDTO {
   message: string;
   result?: boolean;
 }
+
 export interface checkVerifyResponseDTO extends PostResponseDTO {
   result: boolean;
 }
 
 export interface postValidateEmailDTO {
   accountId: string;
+}
+
+export interface MinimalUserProfileDTO {
+  userId: number;
+  username: string;
+  role: 'LEADER' | 'MEMBER';
+  profileImage: string | null;
 }
