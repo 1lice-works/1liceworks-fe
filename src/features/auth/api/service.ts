@@ -53,7 +53,7 @@ export const authService = {
       url: '/auth/verify-email',
       data: email,
     });
-    return response.data;
+    return response.result;
   },
 
   postCheckVerify: async ({ email, verificationCode }: PostCheckVerifyDTO) => {
