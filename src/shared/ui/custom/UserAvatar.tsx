@@ -19,11 +19,11 @@ const avatarVariants = cva('border', {
 
 interface UserAvatarProps
   extends React.ComponentPropsWithoutRef<typeof Avatar> {
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 }
 
 export const UserAvatar = ({
-  avatarUrl = '',
+  avatarUrl,
   size,
   className,
   ...props
@@ -31,7 +31,7 @@ export const UserAvatar = ({
   return (
     <Avatar className={cn(avatarVariants({ size }), className)} {...props}>
       <AvatarImage
-        src={avatarUrl}
+        src={avatarUrl ?? undefined}
         alt={`user's avatar`}
         className='h-full w-full object-cover'
       />
