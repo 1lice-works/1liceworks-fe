@@ -1,7 +1,9 @@
 import { apiClient } from '@/shared/api/apiClient';
 import { useAuthStore } from '@/shared/model/authStore';
+import { ApiResponse } from '@/shared/types/apiResponse';
 
 import {
+  MinimalUserProfileDTO,
   PostCheckVerifyDTO,
   PostResponseDTO,
   postValidateEmailDTO,
@@ -23,9 +25,7 @@ export const authService = {
         password,
       },
     });
-    // if(response.data)
 
-    console.log(response);
     const token = response.data;
 
     if (token) {
@@ -55,7 +55,7 @@ export const authService = {
       url: '/auth/verify-email',
       data: email,
     });
-    return response.data;
+    return response.result;
   },
 
   postCheckVerify: async ({ email, verificationCode }: PostCheckVerifyDTO) => {
@@ -75,6 +75,16 @@ export const authService = {
         accountId,
       },
     });
+    return response;
+  },
+
+  getMyMinimalProfile: async (): Promise<
+    ApiResponse<MinimalUserProfileDTO>
+  > => {
+    const response = await apiClient.get<MinimalUserProfileDTO>({
+      url: '/auth/my-minimal-profile',
+    });
+
     return response;
   },
 };

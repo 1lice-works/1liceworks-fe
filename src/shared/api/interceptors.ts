@@ -4,24 +4,34 @@ import type {
   InternalAxiosRequestConfig,
 } from 'axios';
 
-import { ApiErrorResponse } from '../types/apiResponse';
-import { NetworkOfflineError, TokenExpiredHandler } from './errorHandler';
+import {
+  NetworkOfflineError,
+  TokenExpiredHandler,
+} from '@/shared/api/errorHandler';
+import { NON_AUTH_PATHS } from '@/shared/constants/NonAuthPaths';
+import { ApiErrorResponse } from '@/shared/types/apiResponse';
 
 export const requestInterceptor = (config: InternalAxiosRequestConfig) => {
-  const authStorageStr = localStorage.getItem('auth-storage');
-  let accessToken = null;
+  const isNonAuthPath = NON_AUTH_PATHS.some(
+    (path) => config.url && config.url.includes(path)
+  );
 
-  if (authStorageStr) {
-    try {
-      const authStorage = JSON.parse(authStorageStr);
-      accessToken = authStorage.state?.accessToken || null;
-    } catch (e) {
-      console.error('Failed to parse auth-storage from localStorage', e);
+  if (!isNonAuthPath) {
+    const authStorageStr = localStorage.getItem('auth-storage');
+    let accessToken = null;
+
+    if (authStorageStr) {
+      try {
+        const authStorage = JSON.parse(authStorageStr);
+        accessToken = authStorage.state?.accessToken || null;
+      } catch (e) {
+        console.error('Failed to parse auth-storage from localStorage', e);
+      }
     }
-  }
 
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
   }
 
   if (config.headers['Content-Type'] === 'multipart/form-data') {

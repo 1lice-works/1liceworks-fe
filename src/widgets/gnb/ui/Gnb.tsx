@@ -1,6 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useLocation } from 'react-router-dom';
 
+import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
 import { authQueries } from '@/features/auth/api/queries';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/utils';
@@ -24,6 +25,10 @@ const ICON_CLASS_NAME =
   'h-8 w-8 cursor-pointer transition duration-200 ease-in-out hover:scale-110 focus:scale-110';
 
 export const Gnb = () => {
+  const { data: minimalProfile } = useQuery<MinimalUserProfileDTO>(
+    authQueries.getMyMinimalProfile
+  );
+
   const location = useLocation();
   const path = location.pathname;
 
@@ -33,9 +38,6 @@ export const Gnb = () => {
   const { mutate: signOut } = useMutation({
     ...authQueries.signOut,
   });
-
-  // TODO) API 연동 후 role 받아오기
-  const isLeader = true;
 
   const handleProfileClick = () => {
     // TODO) 프로필 모달 열기
@@ -58,7 +60,7 @@ export const Gnb = () => {
       {gnbType === 'calendar' && <SearchBar />}
 
       <div className='flex items-center gap-x-4'>
-        {gnbType === 'calendar' && isLeader && (
+        {gnbType === 'calendar' && minimalProfile?.role === 'LEADER' && (
           <Link to={ROUTES.TEAM.root}>
             <TeamIcon className='h-8 w-8 cursor-pointer transition duration-200 ease-in-out hover:scale-110 focus:scale-110' />
           </Link>
@@ -74,16 +76,16 @@ export const Gnb = () => {
 
         <DropdownMenu>
           <DropdownMenuTrigger className={cn(`focus:outline-0`)}>
-            <UserAvatar className={ICON_CLASS_NAME} />
+            <UserAvatar
+              avatarUrl={minimalProfile?.profileImage}
+              className={ICON_CLASS_NAME}
+            />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel className='flex items-center gap-x-2'>
-              <UserAvatar />
+              <UserAvatar avatarUrl={minimalProfile?.profileImage} />
               <div className='flex flex-col gap-y-1.5'>
-                <p>양혜림</p>
-                <p className='text-muted-foreground text-xs font-normal'>
-                  관리직
-                </p>
+                <p>{minimalProfile?.username}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
