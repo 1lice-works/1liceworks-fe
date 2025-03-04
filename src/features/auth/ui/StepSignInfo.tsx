@@ -14,8 +14,7 @@ interface StepSignInfoProps {
 }
 
 export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
-  const { getValues, formState, setError, clearErrors, register } =
-    useFormContext();
+  const { getValues, formState, setError, clearErrors } = useFormContext();
   const [isValidId, setIsValidId] = useState(false);
   // 해당 스텝에서 유효성을 검사할 필드 목록
   const stepFields = ['accountId', 'password', 'confirmPassword'];
@@ -108,7 +107,7 @@ export const StepSignInfo = ({ nextStep, prevStep }: StepSignInfoProps) => {
               name='password'
               type='password'
               placeholder='비밀번호를 입력해주세요.'
-              // onChange={(value )}
+              // onChange={value}
               // {...register('password')}
             />
             <RHFInput
