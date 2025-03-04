@@ -10,6 +10,8 @@ const avatarVariants = cva('border', {
       sm: 'h-6 w-6',
       md: 'h-8 w-8',
       lg: 'h-10 w-10',
+      xl: 'h-12 w-12',
+      xxl: 'h-16 w-16',
     },
   },
   defaultVariants: {
