@@ -1,9 +1,8 @@
 export interface ApiResponse<T> {
   isSuccess: boolean;
   code: number;
-  message?: string;
-  data?: T;
-  result?: boolean | null | undefined;
+  message: string;
+  result: T;
 }
 
 export interface ApiErrorResponse {
