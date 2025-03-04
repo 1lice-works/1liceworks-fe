@@ -46,8 +46,8 @@ export const signUpSchema = z
 
     accountId: z
       .string()
-      // .min(1, { message: '한글자 이상 입력해주세요.' }),
       .email({ message: '이메일을 올바르게 입력해 주세요.' }),
+
     password: z
       .string()
       .min(8, {
@@ -94,7 +94,31 @@ export const signUpSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: '비밀번호가 일치하지 않습니다',
     path: ['confirmPassword'], // 에러를 표시할 필드 지정
-  });
+  })
+  .refine(
+    (data) => {
+      if (data.hasPrivateDomain) {
+        return data.accountId.endsWith(`@${data.domainName}.com`);
+      }
+      return true; // hasPrivateDomain이 false이면 검사하지 않음
+    },
+    {
+      message: '도메인이 일치해야 합니다.',
+      path: ['accountId'], // 에러를 표시할 필드 지정
+    }
+  )
+  .refine(
+    (data) => {
+      if (!data.hasPrivateDomain) {
+        return data.accountId.endsWith(`@1lice-works.com`);
+      }
+      return true; // hasPrivateDomain이 true 검사하지 않음
+    },
+    {
+      message: '기본도메인인 1lice-works.com을 사용해주세요.',
+      path: ['accountId'], // 에러를 표시할 필드 지정
+    }
+  );
 
 // 비밀번호 찾기 유효성 검사
 export const findPWSchema = z.object({

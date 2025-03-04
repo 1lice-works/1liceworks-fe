@@ -14,6 +14,10 @@ export const StepCheckInfo = ({
   formData,
   isPending,
 }: StepCheckInfoProps) => {
+  // const handleSubmit = () => {
+
+  // }
+
   return (
     <>
       <div className={AUTH_FORM_STYLES.title}>
