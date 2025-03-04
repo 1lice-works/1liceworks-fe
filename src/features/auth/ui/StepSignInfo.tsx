@@ -6,10 +6,11 @@ import { Button } from '@/shared/ui/shadcn/Button';
 
 import { authQueries } from '../api/queries';
 import { AUTH_FORM_STYLES } from '../model/constants';
+import { SignUpFormTypes } from '../model/formTypes';
 import { RHFInput } from './RHFInput';
 
 interface StepSignInfoProps {
-  nextStep: (data: any) => void; // 수정: 데이터를 받을 수 있도록 함
+  nextStep: (data: Partial<SignUpFormTypes>) => void; // 수정: 데이터를 받을 수 있도록 함
   prevStep: () => void;
 }
 
