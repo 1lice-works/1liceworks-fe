@@ -3,6 +3,7 @@ import { CalendarDays } from 'lucide-react';
 
 import { CalendarListDTO } from '@/features/calendar/api/dto';
 import { calendarQueries } from '@/features/calendar/api/queries';
+import { CalendarListItem } from '@/features/calendar/ui/CalendarListItem';
 import { cn } from '@/shared/lib/utils';
 import {
   Accordion,
@@ -33,7 +34,12 @@ export const CalendarList = () => {
             My Calendar
           </div>
         </AccordionTrigger>
-        {/* <AccordionContent>{myCalendar?.name}</AccordionContent> */}
+        {/* <AccordionContent>
+          <CalendarListItem
+            calendarId={myCalendar?.calendarId}
+            calendarName={myCalendar?.name}
+          />
+        </AccordionContent> */}
       </AccordionItem>
 
       <AccordionItem value='item-2'>
@@ -43,7 +49,12 @@ export const CalendarList = () => {
             Team Calendar
           </div>
         </AccordionTrigger>
-        <AccordionContent>{teamCalendar?.name}</AccordionContent>
+        <AccordionContent>
+          <CalendarListItem
+            calendarId={teamCalendar?.calendarId}
+            calendarName={teamCalendar?.name}
+          />
+        </AccordionContent>
       </AccordionItem>
 
       <AccordionItem value='item-3'>
@@ -55,7 +66,10 @@ export const CalendarList = () => {
         </AccordionTrigger>
         {otherCalendars.map((calendar) => (
           <AccordionContent key={calendar.calendarId}>
-            {calendar.name}
+            <CalendarListItem
+              calendarId={calendar.calendarId}
+              calendarName={calendar.name}
+            />
           </AccordionContent>
         ))}
       </AccordionItem>
