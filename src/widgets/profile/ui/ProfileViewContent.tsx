@@ -1,3 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
+
+import { UserProfileDTO } from '@/features/auth/api/dto';
+import { authQueries } from '@/features/auth/api/queries';
 import { UserAvatar } from '@/shared/ui/custom/UserAvatar';
 import {
   Table,
@@ -7,40 +11,45 @@ import {
 } from '@/shared/ui/shadcn/Table';
 
 export const ProfileViewContent = () => {
-  const profileData = [
-    // TODO) value에 API 응답값 넣기
-    { label: '직책', value: '부장' },
-    { label: '직급', value: '관리직' },
-    { label: '사용자 유형', value: '정규직' },
-    { label: '담당 업무', value: '프론트엔드 개발' },
-    { label: '사원번호', value: '4' },
-    { label: '입사일', value: '2025.02.07.' },
-    { label: '개인 이메일', value: 'lovelimi1113@gmail.com' },
-    { label: '휴대폰 번호', value: '' },
+  const { data: Profile } = useQuery<UserProfileDTO>({
+    ...authQueries.getMyProfile,
+  });
+
+  const profileField = [
+    { key: 'position', label: '직책', value: Profile?.position },
+    { key: 'jobTitle', label: '직급', value: Profile?.jobTitle },
+    { key: 'userType', label: '사용자 유형', value: Profile?.userType },
+    {
+      key: 'responsibility',
+      label: '담당 업무',
+      value: Profile?.responsibility,
+    },
+    {
+      key: 'employeeNumber',
+      label: '사원번호',
+      value: Profile?.employeeNumber,
+    },
+    { key: 'hireDate', label: '입사일', value: Profile?.hireDate },
+    { key: 'privateEmail', label: '개인 이메일', value: Profile?.privateEmail },
+    { key: 'phone', label: '휴대폰 번호', value: Profile?.phone },
   ];
 
   return (
-    // TODO) width 조정
-    <div className='flex w-[300px] flex-col gap-y-6'>
+    <div className='flex flex-col gap-y-6'>
       <div className='flex items-center gap-x-4'>
-        {/* TODO) src에 profileImage 넣기 */}
-        <UserAvatar size='xl' />
-        <div className='flex flex-col gap-y-1'>
-          {/* TODO) username 넣기 */}
-          <p className='text-lg font-semibold'>양혜림</p>
-          {/* TODO) privateEmail 넣기 */}
-          <p className='text-muted-foreground text-sm'>
-            hyerim@threadly.ilice-works.com
-          </p>
+        <UserAvatar size='xl' avatarUrl={Profile?.profileImage} />
+        <div className='flex flex-col'>
+          <p className='text-lg font-semibold'>{Profile?.username}</p>
+          <p className='text-muted-foreground text-sm'>{Profile?.accountId}</p>
         </div>
       </div>
 
       <Table className='border-y'>
         <TableBody>
-          {profileData.map(({ label, value }) => [
-            <TableRow key={label}>
+          {profileField.map(({ key, label, value }) => [
+            <TableRow key={key}>
               <TableCell className='font-medium'>{label}</TableCell>
-              <TableCell className='text-left'>{value}</TableCell>
+              <TableCell className='text-left'>{value || '-'}</TableCell>
             </TableRow>,
           ])}
         </TableBody>
