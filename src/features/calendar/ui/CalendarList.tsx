@@ -12,11 +12,17 @@ import {
 } from '@/shared/ui/shadcn/Accordion';
 
 export const CalendarList = () => {
-  const { data } = useQuery<CalendarListDTO>({
+  const { data: calendars } = useQuery<CalendarListDTO>({
     ...calendarQueries.getCalendars,
   });
 
-  console.log('내가 조회 가능한 모든 캘린더', data);
+  const teamCalendar =
+    calendars?.find((calendar) => calendar.calendarType === 'TEAM') || null;
+
+  const otherCalendars =
+    calendars?.filter((calendar) => calendar.calendarType !== 'TEAM') || [];
+
+  // TODO) API 수정되면 myCalendar 추가
 
   return (
     <Accordion type='multiple' className='w-full'>
@@ -27,8 +33,9 @@ export const CalendarList = () => {
             My Calendar
           </div>
         </AccordionTrigger>
-        <AccordionContent>내 캘린더</AccordionContent>
+        {/* <AccordionContent>{myCalendar?.name}</AccordionContent> */}
       </AccordionItem>
+
       <AccordionItem value='item-2'>
         <AccordionTrigger>
           <div className={cn(`flex items-center gap-x-2`)}>
@@ -36,8 +43,9 @@ export const CalendarList = () => {
             Team Calendar
           </div>
         </AccordionTrigger>
-        <AccordionContent>팀 캘린더</AccordionContent>
+        <AccordionContent>{teamCalendar?.name}</AccordionContent>
       </AccordionItem>
+
       <AccordionItem value='item-3'>
         <AccordionTrigger>
           <div className={cn(`flex items-center gap-x-2`)}>
@@ -45,11 +53,11 @@ export const CalendarList = () => {
             Other Calendars
           </div>
         </AccordionTrigger>
-        <AccordionContent>정경준/대리</AccordionContent>
-        <AccordionContent>정태승/주임</AccordionContent>
-        <AccordionContent>명광호/사원</AccordionContent>
-        <AccordionContent>엄수경/사원</AccordionContent>
-        <AccordionContent>대한민국 법정 공휴일</AccordionContent>
+        {otherCalendars.map((calendar) => (
+          <AccordionContent key={calendar.calendarId}>
+            {calendar.name}
+          </AccordionContent>
+        ))}
       </AccordionItem>
     </Accordion>
   );
