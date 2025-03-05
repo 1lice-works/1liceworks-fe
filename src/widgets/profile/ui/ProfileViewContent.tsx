@@ -10,28 +10,25 @@ import {
   TableRow,
 } from '@/shared/ui/shadcn/Table';
 
+type ProfileFieldItem = {
+  key: keyof UserProfileDTO;
+  label: string;
+};
+
 export const ProfileViewContent = () => {
   const { data: Profile } = useQuery<UserProfileDTO>({
     ...authQueries.getMyProfile,
   });
 
-  const profileField = [
-    { key: 'position', label: '직책', value: Profile?.position },
-    { key: 'jobTitle', label: '직급', value: Profile?.jobTitle },
-    { key: 'userType', label: '사용자 유형', value: Profile?.userType },
-    {
-      key: 'responsibility',
-      label: '담당 업무',
-      value: Profile?.responsibility,
-    },
-    {
-      key: 'employeeNumber',
-      label: '사원번호',
-      value: Profile?.employeeNumber,
-    },
-    { key: 'hireDate', label: '입사일', value: Profile?.hireDate },
-    { key: 'privateEmail', label: '개인 이메일', value: Profile?.privateEmail },
-    { key: 'phone', label: '휴대폰 번호', value: Profile?.phone },
+  const profileFields: ProfileFieldItem[] = [
+    { key: 'position', label: '직책' },
+    { key: 'jobTitle', label: '직급' },
+    { key: 'userType', label: '사용자 유형' },
+    { key: 'responsibility', label: '담당 업무' },
+    { key: 'employeeNumber', label: '사원번호' },
+    { key: 'hireDate', label: '입사일' },
+    { key: 'privateEmail', label: '개인 이메일' },
+    { key: 'phone', label: '휴대폰 번호' },
   ];
 
   return (
@@ -46,12 +43,14 @@ export const ProfileViewContent = () => {
 
       <Table className='border-y'>
         <TableBody>
-          {profileField.map(({ key, label, value }) => [
+          {profileFields.map(({ key, label }) => (
             <TableRow key={key}>
               <TableCell className='font-medium'>{label}</TableCell>
-              <TableCell className='text-left'>{value || '-'}</TableCell>
-            </TableRow>,
-          ])}
+              <TableCell className='text-left'>
+                {Profile?.[key] || '-'}
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
