@@ -1,5 +1,8 @@
+import { useQuery } from '@tanstack/react-query';
 import { ArrowUp, CalendarDays, Plus } from 'lucide-react';
 
+import { CalendarListDTO } from '@/features/calendar/api/dto';
+import { calendarQueries } from '@/features/calendar/api/queries';
 import { cn } from '@/shared/lib/utils';
 import { InputWithButton } from '@/shared/ui/custom/InputWithButton';
 import {
@@ -12,6 +15,12 @@ import { Button } from '@/shared/ui/shadcn/Button';
 import { Calendar } from '@/shared/ui/shadcn/Calendar';
 
 export const CalendarLnb = () => {
+  const { data } = useQuery<CalendarListDTO>({
+    ...calendarQueries.getCalendars,
+  });
+
+  console.log('내가 조회 가능한 모든 캘린더', data);
+
   return (
     <div className='flex h-full flex-col gap-y-4 border-r p-4'>
       <Button
