@@ -28,4 +28,11 @@ export const authQueries = {
       return response.result;
     },
   },
+  getMyProfile: {
+    queryKey: ['myProfile'],
+    queryFn: async () => {
+      const response = await authService.getMyProfile();
+      return response.result;
+    },
+  },
 };

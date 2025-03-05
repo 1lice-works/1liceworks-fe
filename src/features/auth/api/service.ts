@@ -10,6 +10,7 @@ import {
   SignInDTO,
   SignInResponseDTO,
   SignUpDTO,
+  UserProfileDTO,
 } from './dto';
 
 export const authService = {
@@ -84,7 +85,13 @@ export const authService = {
     const response = await apiClient.get<MinimalUserProfileDTO>({
       url: '/auth/my-minimal-profile',
     });
+    return response;
+  },
 
+  getMyProfile: async (): Promise<ApiResponse<UserProfileDTO>> => {
+    const response = await apiClient.get<UserProfileDTO>({
+      url: '/auth/my-profile',
+    });
     return response;
   },
 };

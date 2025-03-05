@@ -20,6 +20,8 @@ import CalendarIcon from '@/widgets/gnb/ui/assets/calendar.svg?react';
 import TeamIcon from '@/widgets/gnb/ui/assets/document.svg?react';
 import { Logo } from '@/widgets/gnb/ui/components/Logo';
 import { SearchBar } from '@/widgets/gnb/ui/components/SearchBar';
+import { useModalStore } from '@/widgets/modal/model/useModalStore';
+import { ProfileViewContent } from '@/widgets/profile/ui/ProfileViewContent';
 
 const ICON_CLASS_NAME =
   'h-8 w-8 cursor-pointer transition duration-200 ease-in-out hover:scale-110 focus:scale-110';
@@ -39,9 +41,19 @@ export const Gnb = () => {
     ...authQueries.signOut,
   });
 
+  const openModal = useModalStore((state) => state.openModal);
+
   const handleProfileClick = () => {
-    // TODO) 프로필 모달 열기
-    console.log('Profile clicked');
+    openModal({
+      title: '내 정보',
+      content: <ProfileViewContent />,
+      leftButtonProps: {
+        children: '닫기',
+      },
+      rightButtonProps: {
+        children: '수정',
+      },
+    });
   };
 
   const handleLogoutClick = () => {
