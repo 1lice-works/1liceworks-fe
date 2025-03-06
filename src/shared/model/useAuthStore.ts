@@ -6,6 +6,7 @@ interface AuthState {
   isAuthenticated: boolean;
   setAccessToken: (token: { accessToken: string }) => void;
   setAuth: () => void;
+  reset: () => void;
   signOut: () => void;
 }
 
@@ -23,14 +24,14 @@ export const useAuthStore = create<AuthState>()(
         set({
           isAuthenticated: true,
         }),
-      signOut: () => {
-        // 상태 초기화
+      reset: () => {
         set({
           accessToken: null,
           isAuthenticated: false,
         });
-
-        localStorage.removeItem('auth-storage'); // 로컬 스토리지에서 auth-storage 항목 삭제
+      },
+      signOut: () => {
+        useAuthStore.getState().reset();
       },
     }),
     {
