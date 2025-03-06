@@ -17,13 +17,16 @@ export const CalendarList = () => {
     ...calendarQueries.getCalendars,
   });
 
+  const myCalendar =
+    calendars?.find((calendar) => calendar.isMyCalendar) || null;
+
   const teamCalendar =
     calendars?.find((calendar) => calendar.calendarType === 'TEAM') || null;
 
   const otherCalendars =
-    calendars?.filter((calendar) => calendar.calendarType !== 'TEAM') || [];
-
-  // TODO) API 수정되면 myCalendar 추가
+    calendars?.filter(
+      (calendar) => !calendar.isMyCalendar && calendar.calendarType !== 'TEAM'
+    ) || [];
 
   return (
     <Accordion type='multiple' className='w-full'>
@@ -34,12 +37,12 @@ export const CalendarList = () => {
             My Calendar
           </div>
         </AccordionTrigger>
-        {/* <AccordionContent>
+        <AccordionContent>
           <CalendarListItem
             calendarId={myCalendar?.calendarId}
             calendarName={myCalendar?.name}
           />
-        </AccordionContent> */}
+        </AccordionContent>
       </AccordionItem>
 
       <AccordionItem value='item-2'>

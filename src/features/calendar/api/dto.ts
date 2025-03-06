@@ -5,6 +5,7 @@ export interface CalendarDTO {
   calendarId: number;
   calendarType: CalendarTypeDTO;
   typeId: number;
+  isMyCalendar: boolean;
 }
 
 export type CalendarListDTO = CalendarDTO[];
