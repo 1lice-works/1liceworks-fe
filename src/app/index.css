@@ -17,6 +17,13 @@
   --color-error: #ef4444;
 }
 
+/* react-big-calendar 스타일 오버라이드 */
+@layer utilities {
+  .rbc-row-content {
+    z-index: auto !important;
+  }
+}
+
 /* shadcn/ui 설치 시 기본 제공되는 설정들 */
 @plugin 'tailwindcss-animate';
 
