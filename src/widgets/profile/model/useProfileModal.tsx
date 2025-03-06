@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { useModalStore } from '@/widgets/modal/model/useModalStore';
 import { ProfileEditContent } from '@/widgets/profile/ui/ProfileEditContent';
 import { ProfileViewContent } from '@/widgets/profile/ui/ProfileViewContent';
@@ -7,7 +5,8 @@ import { ProfileViewContent } from '@/widgets/profile/ui/ProfileViewContent';
 export const useProfileModal = () => {
   const openModal = useModalStore((state) => state.openModal);
 
-  const [isEditMode, setIsEditMode] = useState(false);
+  // const [isEditMode, setIsEditMode] = useState(false);
+  const isEditMode = false;
 
   const openProfileModal = () => {
     openModal({
