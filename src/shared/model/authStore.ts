@@ -6,6 +6,7 @@ interface AuthState {
   isAuthenticated: boolean;
   setAccessToken: (token: { accessToken: string }) => void;
   setAuth: () => void;
+  reset: () => void;
   signOut: () => void;
 }
 
@@ -23,12 +24,14 @@ export const useAuthStore = create<AuthState>()(
         set({
           isAuthenticated: true,
         }),
-      signOut: () => {
-        // 상태 초기화
+      reset: () => {
         set({
           accessToken: null,
           isAuthenticated: false,
         });
+      },
+      signOut: () => {
+        useAuthStore.getState().reset();
       },
     }),
     {
