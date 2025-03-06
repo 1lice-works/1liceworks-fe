@@ -22,6 +22,10 @@
   .rbc-row-content {
     z-index: auto !important;
   }
+
+  .rbc-event {
+    background-color: hsl(240 4.8% 95.9%) !important;
+  }
 }
 
 /* shadcn/ui 설치 시 기본 제공되는 설정들 */
