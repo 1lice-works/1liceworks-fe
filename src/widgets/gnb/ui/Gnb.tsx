@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
 import { authQueries } from '@/features/auth/api/queries';
+import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/utils';
 import { UserAvatar } from '@/shared/ui/custom/UserAvatar';
@@ -41,6 +42,8 @@ export const Gnb = () => {
     ...authQueries.signOut,
   });
 
+  const resetCalendar = useCalendarStore((state) => state.reset);
+
   const openModal = useModalStore((state) => state.openModal);
 
   const handleProfileClick = () => {
@@ -58,6 +61,7 @@ export const Gnb = () => {
 
   const handleLogoutClick = () => {
     signOut();
+    resetCalendar();
   };
 
   return (

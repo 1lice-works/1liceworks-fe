@@ -8,6 +8,7 @@ interface CalendarStore {
   toggleCalendar: (calendarId: number | undefined) => void; // 캘린더 체크 상태 토글 함수
   isCalendarChecked: (calendarId: number) => boolean; // 특정 캘린더의 체크여부 확인 함수
   setInitialCalendars: (calendarIds: CalendarDTO[]) => void; // 초기 캘린더 목록 설정 함수
+  reset: () => void;
 }
 
 export const useCalendarStore = create<CalendarStore>()(
@@ -42,6 +43,10 @@ export const useCalendarStore = create<CalendarStore>()(
           const calendarIds = calendars.map((calendar) => calendar.calendarId);
           set({ checkedCalendarIds: calendarIds });
         }
+      },
+
+      reset: () => {
+        set({ checkedCalendarIds: [] });
       },
     }),
     {

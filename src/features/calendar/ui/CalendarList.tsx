@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
+import { useEffect } from 'react';
 
 import { CalendarListDTO } from '@/features/calendar/api/dto';
 import { calendarQueries } from '@/features/calendar/api/queries';
+import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { CalendarListItem } from '@/features/calendar/ui/CalendarListItem';
 import { cn } from '@/shared/lib/utils';
 import {
@@ -16,6 +18,16 @@ export const CalendarList = () => {
   const { data: calendars } = useQuery<CalendarListDTO>({
     ...calendarQueries.getCalendars,
   });
+
+  const setInitialCalendars = useCalendarStore(
+    (state) => state.setInitialCalendars
+  );
+
+  useEffect(() => {
+    if (calendars) {
+      setInitialCalendars(calendars);
+    }
+  }, [calendars, setInitialCalendars]);
 
   const myCalendar =
     calendars?.find((calendar) => calendar.isMyCalendar) || null;
