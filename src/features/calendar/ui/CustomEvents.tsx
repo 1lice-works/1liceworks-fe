@@ -1,3 +1,4 @@
+import { Circle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@/shared/constants/routes';
@@ -13,19 +14,22 @@ interface CustomEventsProps {
 export const CustomEvents = ({ event }: CustomEventsProps) => {
   const navigate = useNavigate();
   const color = calendarColors[event.calendarId];
+
   return (
     <div
-      className='flex w-full items-center gap-1 text-sm text-black'
+      className='text-foreground flex w-full items-center justify-between gap-x-1 text-sm'
       onClick={() =>
         navigate(ROUTES.CALENDAR.DETAIL.EVENT(event.id.toString()))
       }
     >
-      <div
-        className={`h-2 w-2 rounded-[50%]`}
-        style={{ backgroundColor: color }}
-      />
-      <div className='font-semibold text-[#341D76]'>{event.title}</div>
-      <div className='ml-auto'>{formatTime(event.start)}</div>
+      <div className='flex min-w-0 items-center gap-x-1'>
+        <Circle
+          className='size-2 shrink-0 rounded-full'
+          style={{ backgroundColor: color, color: color }}
+        />
+        <p className='truncate font-medium'>{event.title}</p>
+      </div>
+      <p className='text-muted-foreground'>{formatTime(event.start)}</p>
     </div>
   );
 };

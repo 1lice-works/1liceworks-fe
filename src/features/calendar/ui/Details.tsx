@@ -1,8 +1,5 @@
-import { EyeIcon } from 'lucide-react';
+import { AlarmClock, Calendar, CalendarClock, EyeIcon } from 'lucide-react';
 
-import { AlertIcon } from '@/shared/icons/AlertIcon';
-import { ClockIcon } from '@/shared/icons/ClockIcon';
-import { SimpleCalendarIcon } from '@/shared/icons/SimpleCalendarIcon';
 import { formYMDT } from '@/shared/lib/dayjs';
 import { Button } from '@/shared/ui/shadcn/Button';
 
@@ -37,17 +34,17 @@ export const Details = ({ event, setIsEdit }: DetailsProps) => {
         <Button variant='destructive'>삭제</Button>
       </div>
       <div className='flex items-center gap-2'>
-        <ClockIcon />
+        <CalendarClock />
         <span>{formYMDT(event.start)}</span>
         <span>-</span>
         <span>{formYMDT(event.end)}</span>
       </div>
       <div className='flex items-center gap-2'>
-        <AlertIcon />
+        <AlarmClock />
         <p>10분전</p>
       </div>
       <div className='flex items-center gap-2'>
-        <SimpleCalendarIcon />
+        <Calendar />
         <p>{getCalendarName(event.calendarId)}</p>
       </div>
       <div className='flex items-center gap-2'>
