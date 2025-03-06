@@ -13,7 +13,7 @@ export function formYMD(time: string | Date, format = 'YYYY년MM월DD일') {
 }
 export function formYMDT(
   time: string | Date,
-  format = 'YYYY년MM월DD일 A h시mm분'
+  format = 'YYYY년 MM월 DD일 A h시 mm분'
 ) {
   return dayjs(time).format(format);
 }
