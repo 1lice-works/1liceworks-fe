@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
 import { authQueries } from '@/features/auth/api/queries';
 import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
+import { SearchBar } from '@/features/calendar/ui/SearchBar';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/utils';
 import { UserAvatar } from '@/shared/ui/custom/UserAvatar';
@@ -20,7 +21,6 @@ import NotificationIcon from '@/widgets/gnb/ui/assets/bell.svg?react';
 import CalendarIcon from '@/widgets/gnb/ui/assets/calendar.svg?react';
 import TeamIcon from '@/widgets/gnb/ui/assets/document.svg?react';
 import { Logo } from '@/widgets/gnb/ui/components/Logo';
-import { SearchBar } from '@/widgets/gnb/ui/components/SearchBar';
 import { useModalStore } from '@/widgets/modal/model/useModalStore';
 import { ProfileViewContent } from '@/widgets/profile/ui/ProfileViewContent';
 
