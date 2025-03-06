@@ -29,8 +29,6 @@ export const useAuthStore = create<AuthState>()(
           accessToken: null,
           isAuthenticated: false,
         });
-
-        localStorage.removeItem('auth-storage'); // 로컬 스토리지에서 auth-storage 항목 삭제
       },
     }),
     {
