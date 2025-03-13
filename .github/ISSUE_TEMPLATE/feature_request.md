@@ -21,6 +21,4 @@ assignees: hyrmzz1
 
 ## 예상 작업 기간
 
-- [ ] TODO
-- [ ] TODO
-- [ ] TODO
+0월 00일 ~ 0월 00일
