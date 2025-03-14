@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 
+import { EventTypes } from '@/features/calendar/model/types';
 import { RHFInput } from '@/shared/ui/custom/RHFInput';
 import { RHFSelect } from '@/shared/ui/custom/RHFSelect';
 import { RHFTextArea } from '@/shared/ui/custom/RHFTextArea';
@@ -7,8 +8,6 @@ import { Button } from '@/shared/ui/shadcn/Button';
 import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 import { Form } from '@/shared/ui/shadcn/Form';
 import { Label } from '@/shared/ui/shadcn/Label';
-
-import { EventTypes } from '../model/eventTypes';
 
 interface EventFormData {
   // title: string;

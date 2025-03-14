@@ -1,11 +1,10 @@
 import { Circle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import { calendarColors } from '@/features/calendar/model/constants';
+import { EventTypes } from '@/features/calendar/model/types';
 import { ROUTES } from '@/shared/constants/routes';
 import { formatTime } from '@/shared/lib/dayjs';
-
-import { calendarColors } from '../model/constants';
-import { EventTypes } from '../model/eventTypes';
 
 interface CustomEventsProps {
   event: EventTypes;

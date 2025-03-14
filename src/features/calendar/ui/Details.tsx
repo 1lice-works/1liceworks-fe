@@ -1,9 +1,8 @@
 import { AlarmClock, Calendar, CalendarClock, EyeIcon } from 'lucide-react';
 
+import { EventTypes } from '@/features/calendar/model/types';
 import { formYMDT } from '@/shared/lib/dayjs';
 import { Button } from '@/shared/ui/shadcn/Button';
-
-import { EventTypes } from '../model/eventTypes';
 
 interface DetailsProps {
   event: EventTypes;
