@@ -5,13 +5,16 @@ import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 
-import { CalendarListDTO } from '@/features/calendar/api/dto';
+import {
+  CalendarEventsDTO,
+  CalendarListDTO,
+} from '@/features/calendar/api/dto';
 import {
   calendarQueries,
   useCalendarEvents,
 } from '@/features/calendar/api/queries';
-import { mockCalendars } from '@/features/calendar/model/mockData';
 import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
+import { transformEventsForBigCalendar } from '@/features/calendar/model/utils';
 import { CustomEvents } from '@/features/calendar/ui/CustomEvents';
 import { CustomToolbar } from '@/features/calendar/ui/CustomToolbar';
 
@@ -28,35 +31,25 @@ export const CalendarPage = () => {
     ...calendarQueries.getCalendars,
   });
 
-  // useCalendarEvents 커스텀 훅 사용
   const calendarEventsQueries = useCalendarEvents(
     checkedCalendarIds,
     calendars,
     currDate
   );
 
-  const eventsData = calendarEventsQueries.map((query) => query.data);
-  console.log('데이터', eventsData);
+  const eventsData = calendarEventsQueries
+    .map((query) => query.data)
+    .filter(Boolean);
 
-  // TODO) eventsToDisplay를 eventsData로 대체
-  // TODO) filteredCalendars는 제거
-  const filteredCalendars = useMemo(
-    () =>
-      mockCalendars.filter((calendar) =>
-        checkedCalendarIds.includes(calendar.calendarId)
-      ),
-    [checkedCalendarIds]
-  );
+  const eventsToDisplay = useMemo(() => {
+    if (eventsData.length === 0) return [];
 
-  const eventsToDisplay = useMemo(
-    () =>
-      filteredCalendars.flatMap((calendar) =>
-        calendar.events.map((event) => {
-          return { ...event, calendarId: calendar.calendarId };
-        })
-      ),
-    [filteredCalendars]
-  );
+    const transformedEvents = transformEventsForBigCalendar(
+      eventsData as CalendarEventsDTO[]
+    );
+
+    return transformedEvents;
+  }, [eventsData]);
 
   return (
     <div className='h-full'>
