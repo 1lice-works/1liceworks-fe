@@ -4,11 +4,11 @@ import { calendarColors } from '@/features/calendar/model/constants';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 import { formatTime } from '@/shared/lib/dayjs';
 
-interface CustomEventsProps {
+interface CustomEventProps {
   event: CalendarEventItem;
 }
 
-export const CustomEvents = ({ event }: CustomEventsProps) => {
+export const CustomEvent = ({ event }: CustomEventProps) => {
   const color = calendarColors[event.calendarId];
 
   return (
