@@ -1,12 +1,11 @@
 import { AlarmClock, Calendar, CalendarClock, EyeIcon } from 'lucide-react';
 
+import { CalendarEventItem } from '@/features/calendar/model/types';
 import { formYMDT } from '@/shared/lib/dayjs';
 import { Button } from '@/shared/ui/shadcn/Button';
 
-import { EventTypes } from '../model/eventTypes';
-
 interface DetailsProps {
-  event: EventTypes;
+  event: CalendarEventItem;
   setIsEdit: (value: boolean) => void;
 }
 

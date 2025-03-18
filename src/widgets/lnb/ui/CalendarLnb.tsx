@@ -1,4 +1,5 @@
 import { ArrowUp, Plus } from 'lucide-react';
+import { useState } from 'react';
 
 import { CalendarList } from '@/features/calendar/ui/CalendarList';
 import { cn } from '@/shared/lib/utils';
@@ -7,6 +8,15 @@ import { Button } from '@/shared/ui/shadcn/Button';
 import { Calendar } from '@/shared/ui/shadcn/Calendar';
 
 export const CalendarLnb = () => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
+
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
+    // TODO) 이 date를 기준으로 big calendar 표시되게 하는 로직 추가
+  };
+
   return (
     <div className='flex h-full flex-col gap-y-4 border-r p-4'>
       <Button
@@ -18,7 +28,12 @@ export const CalendarLnb = () => {
         <p>만들기</p>
       </Button>
 
-      <Calendar className={cn(`rounded-md border`)} />
+      <Calendar
+        mode='single'
+        selected={selectedDate}
+        onSelect={handleDateSelect}
+        className='rounded-md border'
+      />
 
       <InputWithButton
         inputProps={{

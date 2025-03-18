@@ -1,38 +1,55 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
+import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 
-import { mockCalendars } from '@/features/calendar/model/mockData';
+import {
+  CalendarEventsDTO,
+  CalendarListDTO,
+} from '@/features/calendar/api/dto';
+import {
+  calendarQueries,
+  useCalendarEvents,
+} from '@/features/calendar/api/queries';
 import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
+import { transformEventsForBigCalendar } from '@/features/calendar/model/utils';
 import { CustomEvents } from '@/features/calendar/ui/CustomEvents';
 import { CustomToolbar } from '@/features/calendar/ui/CustomToolbar';
 
 const localizer = dayjsLocalizer(dayjs);
 
 export const CalendarPage = () => {
+  const [currDate, setCurrDate] = useState(new Date());
+
   const checkedCalendarIds = useCalendarStore(
     (state) => state.checkedCalendarIds
   );
 
-  const filteredCalendars = useMemo(
-    () =>
-      mockCalendars.filter((calendar) =>
-        checkedCalendarIds.includes(calendar.calendarId)
-      ),
-    [checkedCalendarIds]
+  const { data: calendars } = useQuery<CalendarListDTO>({
+    ...calendarQueries.getCalendars,
+  });
+
+  const calendarEventsQueries = useCalendarEvents(
+    checkedCalendarIds,
+    calendars,
+    currDate
   );
 
-  const eventsToDisplay = useMemo(
-    () =>
-      filteredCalendars.flatMap((calendar) =>
-        calendar.events.map((event) => {
-          return { ...event, calendarId: calendar.calendarId };
-        })
-      ),
-    [filteredCalendars]
-  );
+  const eventsData = calendarEventsQueries
+    .map((query) => query.data)
+    .filter(Boolean);
+
+  const eventsToDisplay = useMemo(() => {
+    if (eventsData.length === 0) return [];
+
+    const transformedEvents = transformEventsForBigCalendar(
+      eventsData as CalendarEventsDTO[]
+    );
+
+    return transformedEvents;
+  }, [eventsData]);
 
   return (
     <div className='h-full'>
@@ -40,10 +57,12 @@ export const CalendarPage = () => {
         localizer={localizer}
         events={eventsToDisplay}
         onSelectEvent={(e) => console.log(e)}
+        onNavigate={(newDate) => setCurrDate(newDate)}
         components={{
           toolbar: (props) => <CustomToolbar {...props} />,
           event: (props) => <CustomEvents {...props} />,
         }}
+        showAllEvents
       />
     </div>
   );

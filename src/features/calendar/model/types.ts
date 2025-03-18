@@ -7,18 +7,15 @@ export interface ToolbarTypes {
   view: View;
 }
 
-export interface EventTypes {
+export interface CalendarEventItem {
   calendarId: number;
-  id: number;
+  eventId: number;
   title: string;
   start: Date;
   end: Date;
-}
-
-export interface EventFormTypes {
-  calendarId: number;
-  id: number;
-  title: string;
-  start: Date;
-  end: Date;
+  allDay: boolean;
+  // description: string;
+  // location: string;
+  // privacyType: string;
+  // availability: string;
 }

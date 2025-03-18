@@ -28,3 +28,11 @@ export interface CalendarEventsDTO {
   calendarId: number;
   eventDtos: EventDTO[];
 }
+
+export interface CalendarEventsParamsDTO {
+  calendarId: number;
+  calendarType: CalendarTypeDTO;
+  targetUserId?: number;
+  targetMonth: number;
+  targetYear: number;
+}

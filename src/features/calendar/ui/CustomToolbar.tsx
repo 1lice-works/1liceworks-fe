@@ -1,6 +1,7 @@
 import { CalendarSync, ChevronLeft, ChevronRight } from 'lucide-react';
 import { NavigateAction, Views } from 'react-big-calendar';
 
+import { ToolbarTypes } from '@/features/calendar/model/types';
 import { Button } from '@/shared/ui/shadcn/Button';
 import {
   Select,
@@ -10,8 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/shadcn/Select';
-
-import { ToolbarTypes } from '../model/eventTypes';
 
 export const CustomToolbar = ({
   date,

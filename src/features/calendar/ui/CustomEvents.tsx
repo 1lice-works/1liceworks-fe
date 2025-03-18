@@ -1,14 +1,13 @@
 import { Circle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+import { calendarColors } from '@/features/calendar/model/constants';
+import { CalendarEventItem } from '@/features/calendar/model/types';
 import { ROUTES } from '@/shared/constants/routes';
 import { formatTime } from '@/shared/lib/dayjs';
 
-import { calendarColors } from '../model/constants';
-import { EventTypes } from '../model/eventTypes';
-
 interface CustomEventsProps {
-  event: EventTypes;
+  event: CalendarEventItem;
 }
 
 export const CustomEvents = ({ event }: CustomEventsProps) => {
@@ -19,7 +18,7 @@ export const CustomEvents = ({ event }: CustomEventsProps) => {
     <div
       className='text-foreground flex w-full items-center justify-between gap-x-1 text-sm'
       onClick={() =>
-        navigate(ROUTES.CALENDAR.DETAIL.EVENT(event.id.toString()))
+        navigate(ROUTES.CALENDAR.DETAIL.EVENT(event.eventId.toString()))
       }
     >
       <div className='flex min-w-0 items-center gap-x-1'>

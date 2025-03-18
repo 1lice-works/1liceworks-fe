@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 
+import { CalendarEventItem } from '@/features/calendar/model/types';
 import { RHFInput } from '@/shared/ui/custom/RHFInput';
 import { RHFSelect } from '@/shared/ui/custom/RHFSelect';
 import { RHFTextArea } from '@/shared/ui/custom/RHFTextArea';
@@ -8,36 +9,23 @@ import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 import { Form } from '@/shared/ui/shadcn/Form';
 import { Label } from '@/shared/ui/shadcn/Label';
 
-import { EventTypes } from '../model/eventTypes';
-
-interface EventFormData {
-  // title: string;
-  // start: Date;
-  // startTime: Date;
-  // end: Date;
-  // endTime: Date;
-  // description: string;
-}
 interface DetailFormProps {
   setIsEdit: (props: boolean) => void;
-  event: EventTypes;
+  event: CalendarEventItem;
 }
 
 export const DetailForm = ({ event, setIsEdit }: DetailFormProps) => {
-  const form = useForm<EventFormData>({
+  const form = useForm({
     mode: 'onChange',
     // resolver: zodResolver(eventsSchema),
   });
-  const onSubmit = (data: EventFormData) => {
-    console.log('일정 요청 데이터:', data);
-  };
   console.log(event);
 
   return (
     <Form {...form}>
       <form
         className='flex w-full flex-col gap-6'
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((e) => console.log('일정 요청 데이터:', e))}
       >
         <div className='flex gap-2'>
           <RHFInput name='title' placeholder={event.title} type='text' />
