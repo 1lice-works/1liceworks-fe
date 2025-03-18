@@ -14,6 +14,7 @@ import {
   calendarQueries,
   useCalendarEvents,
 } from '@/features/calendar/api/queries';
+import { CalendarEventItem } from '@/features/calendar/model/types';
 import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { transformEventsForBigCalendar } from '@/features/calendar/model/utils';
 import { CustomEvent } from '@/features/calendar/ui/CustomEvent';
@@ -55,14 +56,18 @@ export const CalendarPage = () => {
     return transformedEvents;
   }, [eventsData]);
 
+  const handleSelectEvent = (e: CalendarEventItem) => {
+    navigate(ROUTES.CALENDAR.DETAIL.EVENT(e.eventId.toString()), {
+      state: { selectedEvent: e },
+    });
+  };
+
   return (
     <div className='h-full'>
       <Calendar
         localizer={localizer}
         events={eventsToDisplay}
-        onSelectEvent={(e) =>
-          navigate(ROUTES.CALENDAR.DETAIL.EVENT(e.eventId.toString()))
-        }
+        onSelectEvent={handleSelectEvent}
         onNavigate={(newDate) => setCurrDate(newDate)}
         components={{
           toolbar: (props) => <CustomToolbar {...props} />,
