@@ -2,6 +2,7 @@ import { Circle } from 'lucide-react';
 
 import { calendarColors } from '@/features/calendar/model/constants';
 import { CalendarEventItem } from '@/features/calendar/model/types';
+import { isSameDayEvent } from '@/features/calendar/model/utils';
 import { formatTime } from '@/shared/lib/dayjs';
 
 interface CustomEventProps {
@@ -20,7 +21,9 @@ export const CustomEvent = ({ event }: CustomEventProps) => {
         />
         <p className='truncate font-medium'>{event.title}</p>
       </div>
-      <p className='text-muted-foreground'>{formatTime(event.start)}</p>
+      {isSameDayEvent(event.start, event.end) && !event.allDay && (
+        <p className='text-muted-foreground'>{formatTime(event.start)}</p>
+      )}
     </div>
   );
 };

@@ -41,3 +41,16 @@ export const transformEventsForBigCalendar = (
     }))
   );
 };
+
+/**
+ * 주어진 start와 end가 동일한 날짜에 속하는지 확인하는 함수
+ * @param {Date} start - 일정의 시작 날짜
+ * @param {Date} end - 일정의 종료 날짜
+ * @returns {Boolean} 주어진 날짜들이 같은 날짜에 속하면 true, 그렇지 않으면 false
+ */
+export const isSameDayEvent = (start: Date, end: Date): boolean => {
+  const startDate = new Date(start).setHours(0, 0, 0, 0);
+  const endDate = new Date(end).setHours(0, 0, 0, 0);
+
+  return startDate === endDate;
+};
