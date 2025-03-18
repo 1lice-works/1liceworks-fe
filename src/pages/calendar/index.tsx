@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useMemo, useState } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
+import { useNavigate } from 'react-router-dom';
 
 import {
   CalendarEventsDTO,
@@ -17,10 +18,13 @@ import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { transformEventsForBigCalendar } from '@/features/calendar/model/utils';
 import { CustomEvents } from '@/features/calendar/ui/CustomEvents';
 import { CustomToolbar } from '@/features/calendar/ui/CustomToolbar';
+import { ROUTES } from '@/shared/constants/routes';
 
 const localizer = dayjsLocalizer(dayjs);
 
 export const CalendarPage = () => {
+  const navigate = useNavigate();
+
   const [currDate, setCurrDate] = useState(new Date());
 
   const checkedCalendarIds = useCalendarStore(
@@ -56,7 +60,9 @@ export const CalendarPage = () => {
       <Calendar
         localizer={localizer}
         events={eventsToDisplay}
-        onSelectEvent={(e) => console.log(e)}
+        onSelectEvent={(e) =>
+          navigate(ROUTES.CALENDAR.DETAIL.EVENT(e.eventId.toString()))
+        }
         onNavigate={(newDate) => setCurrDate(newDate)}
         components={{
           toolbar: (props) => <CustomToolbar {...props} />,
