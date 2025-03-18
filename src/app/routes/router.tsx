@@ -1,7 +1,7 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 
 import { AuthRoute } from '@/app/routes/AuthRoute';
-import { CalendarDetail } from '@/features/calendar/ui/CalendarDetail';
+import { EventDetails } from '@/features/calendar/ui/EventDetails';
 import { CalendarPage } from '@/pages/calendar';
 import { FindPassword } from '@/pages/findPW';
 import { SignInPage } from '@/pages/signin';
@@ -60,11 +60,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.CALENDAR.NEW,
-        element: <CalendarDetail />,
+        element: <EventDetails />,
       },
       {
         path: ROUTES.CALENDAR.DETAIL.ROOT,
-        element: <CalendarDetail />,
+        element: <EventDetails />,
       },
       {
         path: ROUTES.TEAM.root,

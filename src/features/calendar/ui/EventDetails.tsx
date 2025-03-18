@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { DetailForm } from '@/features/calendar/ui/DetailForm';
 import { Details } from '@/features/calendar/ui/Details';
 
-export const CalendarDetail = () => {
+export const EventDetails = () => {
   const location = useLocation();
   const selectedEvent = location.state?.selectedEvent;
 
