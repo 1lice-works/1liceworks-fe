@@ -59,6 +59,10 @@ export const router = createBrowserRouter([
         element: <CalendarPage />,
       },
       {
+        path: ROUTES.CALENDAR.NEW,
+        element: <CalendarDetail />,
+      },
+      {
         path: ROUTES.CALENDAR.DETAIL.ROOT,
         element: <CalendarDetail />,
       },
