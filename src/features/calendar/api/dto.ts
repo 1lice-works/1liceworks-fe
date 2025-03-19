@@ -26,6 +26,8 @@ export interface EventDTO {
 
 export interface CalendarEventsDTO {
   calendarId: number;
+  calendarType: CalendarTypeDTO;
+  isMyCalendar: boolean;
   eventDtos: EventDTO[];
 }
 

@@ -29,15 +29,17 @@ export const transformEventsForBigCalendar = (
   return eventsData.flatMap((calendar) =>
     calendar.eventDtos.map((event) => ({
       calendarId: calendar.calendarId,
+      calendarType: calendar.calendarType,
+      isMyCalendar: calendar.isMyCalendar,
       eventId: event.eventId,
       title: event.title,
+      description: event.description,
       start: convertISOToDate(event.dtStartTime),
       end: convertISOToDate(event.dtEndTime),
       allDay: event.isAllDay,
-      //   description: event.description,
-      //   location: event.location,
-      //   privacyType: event.privacyType,
-      //   availability: event.availability,
+      privacyType: event.privacyType,
+      availability: event.availability,
+      location: event.location,
     }))
   );
 };

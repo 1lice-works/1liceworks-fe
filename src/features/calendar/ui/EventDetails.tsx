@@ -18,11 +18,17 @@ export const EventDetails = () => {
   const today = new Date();
   const emptyEvent: CalendarEventItem = {
     calendarId: 0,
+    calendarType: 'MEMBER',
+    isMyCalendar: true,
     eventId: 0,
     title: '',
+    description: '',
     start: today,
     end: today,
     allDay: false,
+    privacyType: 'PUBLIC',
+    availability: 'FREE',
+    location: '',
   };
 
   const eventInfo = isCreate || !selectedEvent ? emptyEvent : selectedEvent;

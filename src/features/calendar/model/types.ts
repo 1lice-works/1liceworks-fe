@@ -1,5 +1,7 @@
 import { NavigateAction, View } from 'react-big-calendar';
 
+import { CalendarTypeDTO } from '@/features/calendar/api/dto';
+
 export interface ToolbarTypes {
   date: Date;
   onNavigate: (navigate: NavigateAction, date?: Date | undefined) => void;
@@ -9,13 +11,15 @@ export interface ToolbarTypes {
 
 export interface CalendarEventItem {
   calendarId: number;
+  calendarType: CalendarTypeDTO;
+  isMyCalendar: boolean;
   eventId: number;
   title: string;
+  description: string;
   start: Date;
   end: Date;
   allDay: boolean;
-  // description: string;
-  // location: string;
-  // privacyType: string;
-  // availability: string;
+  privacyType: string;
+  availability: string;
+  location: string;
 }
