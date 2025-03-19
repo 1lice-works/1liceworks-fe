@@ -4,12 +4,15 @@ import { CalendarEventItem } from '@/features/calendar/model/types';
 import { formYMDT } from '@/shared/lib/dayjs';
 import { Button } from '@/shared/ui/shadcn/Button';
 
-interface DetailsProps {
+interface EventDetailsViewProps {
   event: CalendarEventItem;
   setIsEdit: (value: boolean) => void;
 }
 
-export const Details = ({ event, setIsEdit }: DetailsProps) => {
+export const EventDetailsView = ({
+  event,
+  setIsEdit,
+}: EventDetailsViewProps) => {
   // calendarID === 1 내 캘린더
   // calendarID === 2 내 캘린더
   // calendarID === 3 팀원/직급 캘린더

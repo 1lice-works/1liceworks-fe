@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { DetailForm } from '@/features/calendar/ui/DetailForm';
-import { Details } from '@/features/calendar/ui/Details';
+import { EventDetailsView } from '@/features/calendar/ui/EventDetailsView';
+import { EventEditForm } from '@/features/calendar/ui/EventEditForm';
 
 export const EventDetails = () => {
   const location = useLocation();
@@ -17,9 +17,9 @@ export const EventDetails = () => {
   return (
     <div className='flex h-full w-full flex-col gap-4 lg:flex-row'>
       {isEdit ? (
-        <DetailForm event={selectedEvent} setIsEdit={setIsEdit} />
+        <EventEditForm event={selectedEvent} setIsEdit={setIsEdit} />
       ) : (
-        <Details event={selectedEvent} setIsEdit={setIsEdit} />
+        <EventDetailsView event={selectedEvent} setIsEdit={setIsEdit} />
       )}
     </div>
   );

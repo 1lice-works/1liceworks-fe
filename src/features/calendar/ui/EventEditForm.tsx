@@ -9,12 +9,12 @@ import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 import { Form } from '@/shared/ui/shadcn/Form';
 import { Label } from '@/shared/ui/shadcn/Label';
 
-interface DetailFormProps {
+interface EventEditFormProps {
   setIsEdit: (props: boolean) => void;
   event: CalendarEventItem;
 }
 
-export const DetailForm = ({ event, setIsEdit }: DetailFormProps) => {
+export const EventEditForm = ({ event, setIsEdit }: EventEditFormProps) => {
   const form = useForm({
     mode: 'onChange',
     // resolver: zodResolver(eventsSchema),
@@ -56,7 +56,7 @@ export const DetailForm = ({ event, setIsEdit }: DetailFormProps) => {
         <div className='flex items-end gap-4'>
           <RHFSelect
             name='calendar'
-            label='추가할 캘리더'
+            label='추가할 캘린더'
             placeholder='내 캘린더'
             items={[
               { value: 'teamCalendar', item: '팀 캘린더' },
