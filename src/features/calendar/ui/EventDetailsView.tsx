@@ -1,5 +1,8 @@
+import { useQuery } from '@tanstack/react-query';
 import { AlarmClock, Calendar, CalendarClock, EyeIcon } from 'lucide-react';
 
+import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
+import { authQueries } from '@/features/auth/api/queries';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 import {
   formatDate,
@@ -18,6 +21,13 @@ export const EventDetailsView = ({
   event,
   setIsEdit,
 }: EventDetailsViewProps) => {
+  const { data: minimalProfile } = useQuery<MinimalUserProfileDTO>(
+    authQueries.getMyMinimalProfile
+  );
+
+  // TODO) 삭제 API 호출, 호출 성공시 캘린더 페이지로 이동
+  const handleDelete = () => {};
+
   // calendarID === 1 내 캘린더
   // calendarID === 2 내 캘린더
   // calendarID === 3 팀원/직급 캘린더
@@ -35,10 +45,23 @@ export const EventDetailsView = ({
 
   return (
     <div className='flex w-full flex-col gap-4'>
-      <div className='mb-4 flex items-center gap-2'>
-        <div className='w-full text-xl font-semibold'>{event.title}</div>
-        <Button onClick={() => setIsEdit(true)}>수정</Button>
-        <Button variant='destructive'>삭제</Button>
+      <div className='flex items-center justify-between'>
+        <p className='text-xl font-semibold'>{event.title}</p>
+        <div className='flex gap-x-2'>
+          {/* 내 캘린더 또는 팀 캘린더의 일정만 수정 가능 */}
+          {(event.isMyCalendar || event.calendarType === 'TEAM') && (
+            <Button onClick={() => setIsEdit(true)}>수정</Button>
+          )}
+
+          {/* 내 캘린더 일정 삭제 가능, 팀장만이 팀 캘린더 일정 삭제 가능 */}
+          {(event.isMyCalendar ||
+            (event.calendarType === 'TEAM' &&
+              minimalProfile?.role === 'LEADER')) && (
+            <Button variant='destructive' onClick={handleDelete}>
+              삭제
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* 기간 */}
