@@ -4,6 +4,7 @@ import {
   Calendar,
   CalendarClock,
   EyeIcon,
+  MapPin,
   Text,
   Users,
 } from 'lucide-react';
@@ -101,6 +102,21 @@ export const EventDetailsView = ({
 
       {!isRestrictedEvent && (
         <>
+          {/* 위치 */}
+          <div className='flex items-center gap-2'>
+            <MapPin />
+            <p>{event.location}</p>
+          </div>
+
+          {/* 참여자 */}
+          {event.calendarType === 'TEAM' && (
+            <div className='flex items-center gap-2'>
+              <Users />
+              {/* TODO) event에서 참여자 정보 가져오도록 수정 */}
+              <p className='text-muted-foreground'>추가된 참여자가 없습니다.</p>
+            </div>
+          )}
+
           {/* 설명 */}
           <div className='flex items-center gap-2'>
             <Text />
@@ -123,15 +139,6 @@ export const EventDetailsView = ({
               <EyeIcon />
               <p>{getPrivacyTypeInKorean(event.privacyType)}</p>
               <p>{getAvailabilityInKorean(event.availability)}</p>
-            </div>
-          )}
-
-          {/* 참여자 */}
-          {event.calendarType === 'TEAM' && (
-            <div className='flex items-center gap-2'>
-              <Users />
-              {/* TODO) event에서 참여자 정보 가져오도록 수정 */}
-              <p className='text-muted-foreground'>추가된 참여자가 없습니다.</p>
             </div>
           )}
         </>
