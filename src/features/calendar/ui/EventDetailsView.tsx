@@ -1,7 +1,12 @@
 import { AlarmClock, Calendar, CalendarClock, EyeIcon } from 'lucide-react';
 
 import { CalendarEventItem } from '@/features/calendar/model/types';
-import { formYMDT } from '@/shared/lib/dayjs';
+import {
+  formatDate,
+  formatDateTime,
+  formatTime,
+  isSameDate,
+} from '@/shared/lib/dayjs';
 import { Button } from '@/shared/ui/shadcn/Button';
 
 interface EventDetailsViewProps {
@@ -35,20 +40,36 @@ export const EventDetailsView = ({
         <Button onClick={() => setIsEdit(true)}>수정</Button>
         <Button variant='destructive'>삭제</Button>
       </div>
+
+      {/* 기간 */}
       <div className='flex items-center gap-2'>
         <CalendarClock />
-        <span>{formYMDT(event.start)}</span>
-        <span>-</span>
-        <span>{formYMDT(event.end)}</span>
+        {isSameDate(event.start, event.end) ? (
+          event.allDay ? (
+            <p>{formatDate(event.start)}</p>
+          ) : (
+            <p>{`${formatDateTime(event.start)} - ${formatTime(event.end)}`}</p>
+          )
+        ) : event.allDay ? (
+          <p>{`${formatDate(event.start)} - ${formatDate(event.end)}`}</p>
+        ) : (
+          <p>{`${formatDateTime(event.start)} - ${formatDateTime(event.end)}`}</p>
+        )}
       </div>
+
+      {/* 알림 */}
       <div className='flex items-center gap-2'>
         <AlarmClock />
         <p>10분전</p>
       </div>
+
+      {/* 이 일정이 추가된 캘린더 */}
       <div className='flex items-center gap-2'>
         <Calendar />
         <p>{getCalendarName(event.calendarId)}</p>
       </div>
+
+      {/* 공개 범위 */}
       <div className='flex items-center gap-2'>
         <EyeIcon />
         <span>공개</span>
