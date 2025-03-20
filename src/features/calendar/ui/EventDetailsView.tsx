@@ -8,6 +8,7 @@ import {
   Text,
   Users,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
 import { authQueries } from '@/features/auth/api/queries';
@@ -18,6 +19,7 @@ import {
   getAvailabilityInKorean,
   getPrivacyTypeInKorean,
 } from '@/features/calendar/model/utils';
+import { ROUTES } from '@/shared/constants/routes';
 import {
   formatDate,
   formatDateTime,
@@ -28,12 +30,12 @@ import { Button } from '@/shared/ui/shadcn/Button';
 
 interface EventDetailsViewProps {
   event: CalendarEventItem;
-  setIsEdit: (value: boolean) => void;
+  isRestrictedEvent: boolean;
 }
 
 export const EventDetailsView = ({
   event,
-  setIsEdit,
+  isRestrictedEvent,
 }: EventDetailsViewProps) => {
   const { data: minimalProfile } = useQuery<MinimalUserProfileDTO>(
     authQueries.getMyMinimalProfile
@@ -47,9 +49,13 @@ export const EventDetailsView = ({
     (calendar) => calendar.calendarId === event.calendarId
   )?.name;
 
-  // 팀원의 비공개 일정일 경우 제한된 정보만 표시
-  const isRestrictedEvent =
-    !event.isMyCalendar && event.privacyType === 'PRIVATE';
+  const navigate = useNavigate();
+
+  const handleEditBtnClick = () => {
+    navigate(ROUTES.CALENDAR.DETAIL.EVENT(event.eventId.toString()), {
+      state: { selectedEvent: event },
+    });
+  };
 
   // TODO) 삭제 API 호출, 호출 성공시 캘린더 페이지로 이동
   const handleDelete = () => {};
@@ -69,7 +75,7 @@ export const EventDetailsView = ({
           <div className='flex gap-x-2'>
             {/* 내 캘린더 또는 팀 캘린더의 일정만 수정 가능 */}
             {(event.isMyCalendar || event.calendarType === 'TEAM') && (
-              <Button onClick={() => setIsEdit(true)}>수정</Button>
+              <Button onClick={handleEditBtnClick}>수정</Button>
             )}
 
             {/* 내 캘린더 일정 삭제 가능, 팀장만이 팀 캘린더 일정 삭제 가능 */}
