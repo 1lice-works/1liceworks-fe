@@ -10,6 +10,8 @@ import {
 
 import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
 import { authQueries } from '@/features/auth/api/queries';
+import { CalendarListDTO } from '@/features/calendar/api/dto';
+import { calendarQueries } from '@/features/calendar/api/queries';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 import {
   getAvailabilityInKorean,
@@ -35,6 +37,14 @@ export const EventDetailsView = ({
   const { data: minimalProfile } = useQuery<MinimalUserProfileDTO>(
     authQueries.getMyMinimalProfile
   );
+
+  const { data: calendars } = useQuery<CalendarListDTO>({
+    ...calendarQueries.getCalendars,
+  });
+
+  const calendarName = calendars?.find(
+    (calendar) => calendar.calendarId === event.calendarId
+  )?.name;
 
   // 팀원의 비공개 일정일 경우 제한된 정보만 표시
   const isRestrictedEvent =
@@ -130,8 +140,7 @@ export const EventDetailsView = ({
       {/* 이 일정이 추가된 캘린더 */}
       <div className='flex items-center gap-2'>
         <Calendar />
-        {/* TODO) calendarId 통해 calendarName 가져오기 */}
-        <p>{event.calendarId}</p>
+        <p>{calendarName}</p>
       </div>
     </div>
   );
