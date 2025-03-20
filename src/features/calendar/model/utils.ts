@@ -1,4 +1,8 @@
-import { CalendarEventsDTO } from '@/features/calendar/api/dto';
+import {
+  AvailabilityDTO,
+  CalendarEventsDTO,
+  PrivacyTypeDTO,
+} from '@/features/calendar/api/dto';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 
 /**
@@ -42,4 +46,34 @@ export const transformEventsForBigCalendar = (
       location: event.location,
     }))
   );
+};
+
+/**
+ * 공개 타입(privacyType)을 한글로 변환하는 함수
+ * @param {PrivacyTypeDTO} privacyType - 공개 타입 ('PUBLIC' | 'PRIVATE')
+ * @returns {string} 한글로 변환된 공개 타입
+ */
+export const getPrivacyTypeInKorean = (privacyType: PrivacyTypeDTO): string => {
+  const privacyTypeMap: Record<PrivacyTypeDTO, string> = {
+    PUBLIC: '공개',
+    PRIVATE: '비공개',
+  };
+
+  return privacyTypeMap[privacyType];
+};
+
+/**
+ * 일정 상태(availability)를 한글로 변환하는 함수
+ * @param {AvailabilityDTO} availability - 일정 상태 ('FREE' | 'BUSY')
+ * @returns {string} 한글로 변환된 일정 상태
+ */
+export const getAvailabilityInKorean = (
+  availability: AvailabilityDTO
+): string => {
+  const availabilityMap: Record<AvailabilityDTO, string> = {
+    FREE: '한가함',
+    BUSY: '바쁨',
+  };
+
+  return availabilityMap[availability];
 };
