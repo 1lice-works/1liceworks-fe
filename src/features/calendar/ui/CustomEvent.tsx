@@ -4,12 +4,18 @@ import { calendarColors } from '@/features/calendar/model/constants';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 import { formatTime, isSameDate } from '@/shared/lib/dayjs';
 
+import { getAvailabilityInKorean } from '../model/utils';
+
 interface CustomEventProps {
   event: CalendarEventItem;
 }
 
 export const CustomEvent = ({ event }: CustomEventProps) => {
   const color = calendarColors[event.calendarId];
+
+  // 팀원의 비공개 일정일 경우 제한된 정보만 표시
+  const isRestrictedEvent =
+    !event.isMyCalendar && event.privacyType === 'PRIVATE';
 
   return (
     <div className='text-foreground flex w-full items-center justify-between gap-x-1 text-sm'>
@@ -19,9 +25,14 @@ export const CustomEvent = ({ event }: CustomEventProps) => {
           style={{ backgroundColor: color, color: color }}
         />
         <p className='truncate font-medium'>
-          {event.title ? event.title : '(제목 없음)'}
+          {isRestrictedEvent
+            ? getAvailabilityInKorean(event.availability)
+            : event.title
+              ? event.title
+              : '(제목 없음)'}
         </p>
       </div>
+
       {isSameDate(event.start, event.end) && !event.allDay && (
         <p className='text-muted-foreground'>{formatTime(event.start)}</p>
       )}
