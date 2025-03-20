@@ -2,8 +2,7 @@ import { Circle } from 'lucide-react';
 
 import { calendarColors } from '@/features/calendar/model/constants';
 import { CalendarEventItem } from '@/features/calendar/model/types';
-import { isSameDayEvent } from '@/features/calendar/model/utils';
-import { formatTime } from '@/shared/lib/dayjs';
+import { formatTime, isSameDate } from '@/shared/lib/dayjs';
 
 interface CustomEventProps {
   event: CalendarEventItem;
@@ -19,9 +18,11 @@ export const CustomEvent = ({ event }: CustomEventProps) => {
           className='size-2 shrink-0 rounded-full'
           style={{ backgroundColor: color, color: color }}
         />
-        <p className='truncate font-medium'>{event.title}</p>
+        <p className='truncate font-medium'>
+          {event.title ? event.title : '(제목 없음)'}
+        </p>
       </div>
-      {isSameDayEvent(event.start, event.end) && !event.allDay && (
+      {isSameDate(event.start, event.end) && !event.allDay && (
         <p className='text-muted-foreground'>{formatTime(event.start)}</p>
       )}
     </div>
