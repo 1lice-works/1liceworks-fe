@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 
 import { CalendarEventItem } from '@/features/calendar/model/types';
-import { EventEditForm } from '@/features/calendar/ui/EventEditForm';
+import { EventForm } from '@/features/calendar/ui/EventForm';
 import { ROUTES } from '@/shared/constants/routes';
 
 export const EventFormPage = () => {
@@ -29,9 +29,5 @@ export const EventFormPage = () => {
 
   const eventInfo = isCreate || !selectedEvent ? emptyEvent : selectedEvent;
 
-  return (
-    <div className='flex h-full w-full flex-col gap-4 lg:flex-row'>
-      <EventEditForm event={eventInfo} />
-    </div>
-  );
+  return <EventForm event={eventInfo} />;
 };
