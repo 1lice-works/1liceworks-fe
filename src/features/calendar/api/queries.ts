@@ -35,7 +35,12 @@ export const useCalendarEvents = (
         return {
           queryKey: ['calendarEvents', calendarId, targetYear, targetMonth],
           queryFn: () =>
-            Promise.resolve<CalendarEventsDTO>({ calendarId, eventDtos: [] }),
+            Promise.resolve<CalendarEventsDTO>({
+              calendarId,
+              calendarType: 'MEMBER',
+              isMyCalendar: true,
+              eventDtos: [],
+            }),
           enabled: false,
         };
       }
@@ -54,7 +59,13 @@ export const useCalendarEvents = (
             targetMonth,
           });
 
-          return response.result;
+          const calendarEventsWithInfo: CalendarEventsDTO = {
+            ...response.result,
+            calendarType: calendarInfo.calendarType,
+            isMyCalendar: calendarInfo.isMyCalendar,
+          };
+
+          return calendarEventsWithInfo;
         },
       };
     }),

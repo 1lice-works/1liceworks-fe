@@ -15,7 +15,7 @@ import {
 } from '@/features/calendar/api/queries';
 import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { transformEventsForBigCalendar } from '@/features/calendar/model/utils';
-import { CustomEvents } from '@/features/calendar/ui/CustomEvents';
+import { CustomEvent } from '@/features/calendar/ui/CustomEvent';
 import { CustomToolbar } from '@/features/calendar/ui/CustomToolbar';
 
 const localizer = dayjsLocalizer(dayjs);
@@ -56,11 +56,10 @@ export const CalendarPage = () => {
       <Calendar
         localizer={localizer}
         events={eventsToDisplay}
-        onSelectEvent={(e) => console.log(e)}
         onNavigate={(newDate) => setCurrDate(newDate)}
         components={{
           toolbar: (props) => <CustomToolbar {...props} />,
-          event: (props) => <CustomEvents {...props} />,
+          event: (props) => <CustomEvent {...props} />,
         }}
         showAllEvents
       />

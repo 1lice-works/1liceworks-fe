@@ -25,6 +25,21 @@
 
   .rbc-event {
     background-color: hsl(240 4.8% 95.9%) !important;
+    padding: 0 !important;
+  }
+
+  .rbc-date-cell {
+    display: flex;
+    justify-content: center;
+    padding: 0 3px !important;
+  }
+
+  .rbc-button-link {
+    font-size: small;
+  }
+
+  .rbc-off-range-bg {
+    background-color: hsl(0 0% 98%) !important;
   }
 }
 

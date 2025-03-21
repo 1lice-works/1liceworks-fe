@@ -3,14 +3,14 @@ export const ROUTES = {
   AUTH: {
     SIGN_IN: '/signin',
     SIGN_UP: '/signup',
-    CALLBACK: '/auth/callback',
     FIND_PW: `/findpassword`,
   },
   CALENDAR: {
     root: '/calendar',
+    NEW: '/calendar/new',
     DETAIL: {
-      ROOT: '/:eventId',
-      EVENT: (eventId: string) => `/${eventId}`,
+      ROOT: '/calendar/:eventId',
+      EVENT: (eventId: string) => `/calendar/${eventId}`,
     },
   },
   TEAM: {
