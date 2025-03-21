@@ -50,7 +50,7 @@ export const CustomEvent = ({ event }: CustomEventProps) => {
           )}
         </div>
       </PopoverTrigger>
-      <PopoverContent className='w-80'>
+      <PopoverContent className='max-h-96 w-fit max-w-96 overflow-auto'>
         <EventDetailsView event={event} isRestrictedEvent={isRestrictedEvent} />
       </PopoverContent>
     </Popover>

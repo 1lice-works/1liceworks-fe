@@ -5,7 +5,9 @@ import {
   CalendarClock,
   EyeIcon,
   MapPin,
+  Pencil,
   Text,
+  Trash2,
   Users,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -61,43 +63,46 @@ export const EventDetailsView = ({
   const handleDelete = () => {};
 
   return (
-    <div className='flex w-full flex-col gap-4'>
+    <div className='flex w-full flex-col gap-4 text-sm'>
       {isRestrictedEvent ? (
-        <p className='text-xl font-semibold'>
+        <p className='text-lg font-semibold'>
           {getAvailabilityInKorean(event.availability)}
         </p>
       ) : (
-        <div className='flex items-center justify-between'>
-          <p className='text-xl font-semibold'>
-            {event.title ? event.title : '(제목 없음)'}
-          </p>
-
-          <div className='flex gap-x-2'>
+        <div className='flex flex-col'>
+          <div className='flex w-full justify-end'>
             {/* 내 캘린더 또는 팀 캘린더의 일정만 수정 가능 */}
             {(event.isMyCalendar || event.calendarType === 'TEAM') && (
-              <Button onClick={handleEditBtnClick}>수정</Button>
+              <Button variant='ghost' size='icon' onClick={handleEditBtnClick}>
+                <Pencil />
+              </Button>
             )}
 
             {/* 내 캘린더 일정 삭제 가능, 팀장만이 팀 캘린더 일정 삭제 가능 */}
             {(event.isMyCalendar ||
               (event.calendarType === 'TEAM' &&
                 minimalProfile?.role === 'LEADER')) && (
-              <Button variant='destructive' onClick={handleDelete}>
-                삭제
+              <Button variant='ghost' size='icon' onClick={handleDelete}>
+                <Trash2 />
               </Button>
             )}
           </div>
+
+          {/* 길이 길어지면 대응 */}
+          <p className='text-lg font-semibold'>
+            {event.title ? event.title : '(제목 없음)'}
+          </p>
         </div>
       )}
 
       {/* 기간 */}
       <div className='flex items-center gap-2'>
-        <CalendarClock />
+        <CalendarClock size='1rem' className='shrink-0' />
         {isSameDate(event.start, event.end) ? (
           event.allDay ? (
             <p>{formatDate(event.start)}</p>
           ) : (
-            <p>{`${formatDateTime(event.start)} - ${formatTime(event.end)}`}</p>
+            <p>{`${formatDate(event.start)} ${formatTime(event.start)} - ${formatTime(event.end)}`}</p>
           )
         ) : event.allDay ? (
           <p>{`${formatDate(event.start)} - ${formatDate(event.end)}`}</p>
@@ -109,40 +114,43 @@ export const EventDetailsView = ({
       {!isRestrictedEvent && (
         <>
           {/* 위치 */}
-          <div className='flex items-center gap-2'>
-            <MapPin />
-            <p>{event.location}</p>
-          </div>
+          {event.location && (
+            <div className='flex items-center gap-2'>
+              <MapPin size='1rem' className='shrink-0' />
+              <p>{event.location}</p>
+            </div>
+          )}
 
           {/* 참여자 */}
+          {/* TODO) 참여자 정보 유무도 조건으로 추가 */}
           {event.calendarType === 'TEAM' && (
             <div className='flex items-center gap-2'>
-              <Users />
+              <Users size='1rem' className='shrink-0' />
               {/* TODO) event에서 참여자 정보 가져오도록 수정 */}
               <p className='text-muted-foreground'>추가된 참여자가 없습니다.</p>
             </div>
           )}
 
           {/* 설명 */}
-          <div className='flex items-center gap-2'>
-            <Text />
-            <p className={event.description ? '' : 'text-muted-foreground'}>
-              {event.description || '상세 내용이 없습니다.'}
-            </p>
-          </div>
+          {event.description && (
+            <div className='flex items-center gap-2'>
+              <Text size='1rem' className='shrink-0' />
+              <p>{event.description}</p>
+            </div>
+          )}
 
           {/* 알림 */}
+          {/* TODO) 알림 유무도 조건으로 추가 */}
           <div className='flex items-center gap-2'>
-            <AlarmClock />
+            <AlarmClock size='1rem' className='shrink-0' />
             {/* TODO) 백엔드에서 event에 eventReminders 필드 추가하면 반영 */}
             <p className='text-muted-foreground'>추가된 알림이 없습니다.</p>
           </div>
 
           {/* 공개 범위 */}
-          {/* 팀 캘린더의 일정은 항상 공개이므로 이 필드 렌더링하지 않음 */}
-          {event.calendarType !== 'TEAM' && (
+          {event.isMyCalendar && (
             <div className='flex items-center gap-2'>
-              <EyeIcon />
+              <EyeIcon size='1rem' className='shrink-0' />
               <p>{getPrivacyTypeInKorean(event.privacyType)}</p>
               <p>{getAvailabilityInKorean(event.availability)}</p>
             </div>
@@ -152,7 +160,7 @@ export const EventDetailsView = ({
 
       {/* 이 일정이 추가된 캘린더 */}
       <div className='flex items-center gap-2'>
-        <Calendar />
+        <Calendar size='1rem' className='shrink-0' />
         <p>{calendarName}</p>
       </div>
     </div>
