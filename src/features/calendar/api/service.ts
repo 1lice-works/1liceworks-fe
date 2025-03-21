@@ -39,4 +39,25 @@ export const calendarService = {
 
     return response;
   },
+
+  deleteMyEvent: async (eventId: number): Promise<ApiResponse<{}>> => {
+    const response = await apiClient.delete<{}>({
+      url: 'calendar/my-events',
+      params: { eventId },
+    });
+
+    return response;
+  },
+
+  deleteTeamEvent: async (
+    calendarId: number,
+    eventId: number
+  ): Promise<ApiResponse<{}>> => {
+    const response = await apiClient.delete<{}>({
+      url: 'calendar/team-events',
+      params: { calendarId, eventId },
+    });
+
+    return response;
+  },
 };

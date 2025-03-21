@@ -1,4 +1,5 @@
-import { useQueries } from '@tanstack/react-query';
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import {
   CalendarEventsDTO,
@@ -70,4 +71,56 @@ export const useCalendarEvents = (
       };
     }),
   });
+};
+
+export const EventMutations = {
+  // 내 캘린더 일정 생성
+  useCreateMyEvent: () => {},
+
+  // 팀 캘린더 일정 생성
+  useCreateTeamEvent: () => {},
+
+  // 내 캘린더 일정 수정
+  useUpdateMyEvent: () => {},
+
+  // 팀 캘린더 일정 수정
+  useUpdateTeamEvent: () => {},
+
+  // 내 캘린더 일정 삭제
+  useDeleteMyEvent: () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: (eventId: number) => calendarService.deleteMyEvent(eventId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['calendarEvents'] });
+        toast.success('일정이 삭제되었습니다.');
+      },
+      onError: () => {
+        toast.error('일정 삭제에 실패했습니다. 다시 시도해주세요.');
+      },
+    });
+  },
+
+  // 팀 캘린더 일정 삭제
+  useDeleteTeamEvent: () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: ({
+        calendarId,
+        eventId,
+      }: {
+        calendarId: number;
+        eventId: number;
+      }) => calendarService.deleteTeamEvent(calendarId, eventId),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['calendarEvents'] });
+        toast.success('일정이 삭제되었습니다.');
+      },
+      onError: () => {
+        toast.error('일정 삭제에 실패했습니다. 다시 시도해주세요.');
+      },
+    });
+  },
 };

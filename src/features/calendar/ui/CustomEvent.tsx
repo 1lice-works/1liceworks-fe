@@ -5,7 +5,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/shared/ui/shadcn/popover';
+} from '@/shared/ui/shadcn/Popover';
 
 import { getAvailabilityInKorean } from '../model/utils';
 import { EventDetailsView } from './EventDetailsView';
