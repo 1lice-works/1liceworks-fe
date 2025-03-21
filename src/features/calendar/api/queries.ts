@@ -1,4 +1,5 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 import {
   CalendarEventsDTO,
@@ -93,6 +94,10 @@ export const EventMutations = {
       mutationFn: (eventId: number) => calendarService.deleteMyEvent(eventId),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['calendarEvents'] });
+        toast.success('일정이 삭제되었습니다.');
+      },
+      onError: () => {
+        toast.error('일정 삭제에 실패했습니다. 다시 시도해주세요.');
       },
     });
   },
@@ -111,6 +116,10 @@ export const EventMutations = {
       }) => calendarService.deleteTeamEvent(calendarId, eventId),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['calendarEvents'] });
+        toast.success('일정이 삭제되었습니다.');
+      },
+      onError: () => {
+        toast.error('일정 삭제에 실패했습니다. 다시 시도해주세요.');
       },
     });
   },
