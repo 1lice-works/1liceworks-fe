@@ -15,7 +15,10 @@ import { useNavigate } from 'react-router-dom';
 import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
 import { authQueries } from '@/features/auth/api/queries';
 import { CalendarListDTO } from '@/features/calendar/api/dto';
-import { calendarQueries } from '@/features/calendar/api/queries';
+import {
+  calendarQueries,
+  EventMutations,
+} from '@/features/calendar/api/queries';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 import {
   getAvailabilityInKorean,
@@ -47,6 +50,9 @@ export const EventDetailsView = ({
     ...calendarQueries.getCalendars,
   });
 
+  const { mutate: deleteMyEvent } = EventMutations.useDeleteMyEvent();
+  const { mutate: deleteTeamEvent } = EventMutations.useDeleteTeamEvent();
+
   const calendarName = calendars?.find(
     (calendar) => calendar.calendarId === event.calendarId
   )?.name;
@@ -59,8 +65,13 @@ export const EventDetailsView = ({
     });
   };
 
-  // TODO) 삭제 API 호출, 호출 성공시 캘린더 페이지로 이동
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    if (event.isMyCalendar) {
+      deleteMyEvent(event.eventId);
+    } else {
+      deleteTeamEvent({ calendarId: event.calendarId, eventId: event.eventId });
+    }
+  };
 
   return (
     <div className='flex w-full flex-col gap-4 text-sm'>
