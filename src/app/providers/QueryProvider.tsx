@@ -15,16 +15,16 @@ export const QueryProvider = ({ children }: QueryProviderProps) => {
       {children}
 
       <ToastContainer
-        position='bottom-right'
+        position='top-right'
         autoClose={3000}
         hideProgressBar={false}
-        newestOnTop
+        newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
-        draggable
+        draggable={false}
         pauseOnHover={false}
-        theme='colored'
+        theme='light'
         transition={Bounce}
       />
 
