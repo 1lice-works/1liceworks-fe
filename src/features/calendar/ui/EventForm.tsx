@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 
 import { CalendarEventItem } from '@/features/calendar/model/types';
 import { FindEmptyTime } from '@/features/calendar/ui/FindEmptyTime';
@@ -11,13 +12,14 @@ import { Label } from '@/shared/ui/shadcn/Label';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/shadcn/Select';
 import { Textarea } from '@/shared/ui/shadcn/Textarea';
 
+import { CalendarListDTO } from '../api/dto';
+import { calendarQueries } from '../api/queries';
 import { NotificationTimeSelector } from './NotificationTimeSelector';
 
 interface EventFormProps {
@@ -27,15 +29,6 @@ interface EventFormProps {
 interface Notification {
   id: number;
 }
-
-// TODO) 실제 데이터로 대체
-// TODO) type이 MEMBER인 캘린더 - label: name, value: 해당 calendarId
-const PARTICIPANTS: Option[] = [
-  { label: '혜림/직급1', value: '1' },
-  { label: '태승/직급2', value: '2' },
-  { label: '광호/직급3', value: '3' },
-  { label: '수경/직급4', value: '4' },
-];
 
 // TODO) 폼 default value를 event 필드 값으로 설정하기
 export const EventForm = ({ event }: EventFormProps) => {
@@ -47,21 +40,46 @@ export const EventForm = ({ event }: EventFormProps) => {
   const MAX_NOTIFICATIONS = 5;
 
   const handleAddNotification = () => {
-    console.log('추가 전', notifications.length);
-
     if (notifications.length < MAX_NOTIFICATIONS) {
       setNotifications([...notifications, { id: Date.now() }]);
     }
-
-    console.log('추가 후', notifications.length);
   };
 
   const handleRemoveNotification = (idToRemove: number): void => {
     setNotifications(
       notifications.filter((notification) => notification.id !== idToRemove)
     );
-    console.log('삭제 후', notifications.length);
   };
+
+  const { data: calendars } = useQuery<CalendarListDTO>({
+    ...calendarQueries.getCalendars,
+  });
+
+  // calendars에서 isMyCalendar가 true인 값과, calendarType이 TEAM인 값 넣기
+  const EVENT_CALENDAR_OPTIONS = useMemo(() => {
+    if (!calendars) return [];
+
+    return calendars
+      .filter(
+        (calendar) => calendar.isMyCalendar || calendar.calendarType === 'TEAM'
+      )
+      .map((calendar) => ({
+        id: calendar.calendarId,
+        label: calendar.name,
+        value: calendar.isMyCalendar ? 'myCalendar' : 'teamCalendar',
+      }));
+  }, [calendars]);
+
+  const PARTICIPANTS: Option[] = useMemo(() => {
+    if (!calendars) return [];
+
+    return calendars
+      .filter((calendar) => calendar.calendarType === 'MEMBER')
+      .map((calendar) => ({
+        label: calendar.name,
+        value: calendar.calendarId.toString(),
+      }));
+  }, [calendars]);
 
   return (
     <div className='flex h-full w-full gap-x-4 text-sm'>
@@ -157,13 +175,11 @@ export const EventForm = ({ event }: EventFormProps) => {
               <SelectValue placeholder='추가할 캘린더' />
             </SelectTrigger>
             <SelectContent>
-              <SelectGroup>
-                {/** TODO) 실제 calendar name으로 대체
-                 * SelectItem: isMyCalendar가 true인 캘린더, calendar type이 TEAM인 캘린더
-                 */}
-                <SelectItem value='myCalendar'>내 캘린더</SelectItem>
-                <SelectItem value='teamCalendar'>팀 캘린더</SelectItem>
-              </SelectGroup>
+              {EVENT_CALENDAR_OPTIONS.map((calendar) => (
+                <SelectItem key={calendar.id} value={calendar.value}>
+                  {calendar.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -178,10 +194,8 @@ export const EventForm = ({ event }: EventFormProps) => {
                 <SelectValue placeholder='공개 범위' />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
-                  <SelectItem value='public'>공개</SelectItem>
-                  <SelectItem value='private'>비공개</SelectItem>
-                </SelectGroup>
+                <SelectItem value='public'>공개</SelectItem>
+                <SelectItem value='private'>비공개</SelectItem>
               </SelectContent>
             </Select>
 
@@ -190,10 +204,8 @@ export const EventForm = ({ event }: EventFormProps) => {
                 <SelectValue placeholder='표시될 상태' />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
-                  <SelectItem value='busy'>바쁨</SelectItem>
-                  <SelectItem value='free'>한가함</SelectItem>
-                </SelectGroup>
+                <SelectItem value='busy'>바쁨</SelectItem>
+                <SelectItem value='free'>한가함</SelectItem>
               </SelectContent>
             </Select>
           </div>
