@@ -18,29 +18,50 @@ import {
 } from '@/shared/ui/shadcn/Select';
 import { Textarea } from '@/shared/ui/shadcn/Textarea';
 
+import { NotificationTimeSelector } from './NotificationTimeSelector';
+
 interface EventFormProps {
   event: CalendarEventItem;
+}
+
+interface Notification {
+  id: number;
 }
 
 // TODO) 실제 데이터로 대체
 // TODO) type이 MEMBER인 캘린더 - label: name, value: 해당 calendarId
 const PARTICIPANTS: Option[] = [
-  { label: 'nextjs', value: 'nextjs' },
-  { label: 'React', value: 'react' },
-  { label: 'Remix', value: 'remix' },
-  { label: 'Vite', value: 'vite' },
-  { label: 'Nuxt', value: 'nuxt' },
-  { label: 'Vue', value: 'vue' },
-  { label: 'Svelte', value: 'svelte' },
-  { label: 'Angular', value: 'angular' },
-  { label: 'Ember', value: 'ember', disable: true },
-  { label: 'Gatsby', value: 'gatsby', disable: true },
-  { label: 'Astro', value: 'astro' },
+  { label: '혜림/직급1', value: '1' },
+  { label: '태승/직급2', value: '2' },
+  { label: '광호/직급3', value: '3' },
+  { label: '수경/직급4', value: '4' },
 ];
 
 // TODO) 폼 default value를 event 필드 값으로 설정하기
 export const EventForm = ({ event }: EventFormProps) => {
   const [allDay, setAllDay] = useState<boolean>(true);
+
+  const [notifications, setNotifications] = useState<Notification[]>([
+    { id: 1 },
+  ]);
+  const MAX_NOTIFICATIONS = 5;
+
+  const handleAddNotification = () => {
+    console.log('추가 전', notifications.length);
+
+    if (notifications.length < MAX_NOTIFICATIONS) {
+      setNotifications([...notifications, { id: Date.now() }]);
+    }
+
+    console.log('추가 후', notifications.length);
+  };
+
+  const handleRemoveNotification = (idToRemove: number): void => {
+    setNotifications(
+      notifications.filter((notification) => notification.id !== idToRemove)
+    );
+    console.log('삭제 후', notifications.length);
+  };
 
   return (
     <div className='flex h-full w-full gap-x-4 text-sm'>
@@ -60,17 +81,17 @@ export const EventForm = ({ event }: EventFormProps) => {
         {/* allDay === True일 경우 시작 시간 00:00, 종료 시간 23:59으로 설정해 폼 제출 */}
         <div className='flex gap-x-4'>
           <div className='grid w-fit gap-1.5'>
-            <Label>시작일</Label>
+            <Label htmlFor='startDate'>시작일</Label>
             <div className='flex gap-x-2'>
-              <Input type='date' className='w-fit' />
+              <Input type='date' className='w-fit' id='startDate' />
               {!allDay && <Input type='time' className='w-fit' />}
             </div>
           </div>
 
           <div className='grid w-fit gap-1.5'>
-            <Label>종료일</Label>
+            <Label htmlFor='endDate'>종료일</Label>
             <div className='flex gap-x-2'>
-              <Input type='date' className='w-fit' />
+              <Input type='date' className='w-fit' id='endDate' />
               {!allDay && <Input type='time' className='w-fit' />}
             </div>
           </div>
@@ -106,20 +127,33 @@ export const EventForm = ({ event }: EventFormProps) => {
         {/* 알림 */}
         <div className='grid w-[180px] gap-1.5'>
           <Label htmlFor='alert'>알림</Label>
-          {/* 버튼 누르면 여기에 추가 */}
-          {/* TODO) 알림 Select 컴포넌트로 만들기 */}
-          <Button variant='outline' id='alert' type='button'>
-            알림 추가
-          </Button>
+
+          {notifications.map((notification) => (
+            <NotificationTimeSelector
+              key={notification.id}
+              id={notification.id}
+              onRemove={handleRemoveNotification}
+            />
+          ))}
+
+          {notifications.length < MAX_NOTIFICATIONS && (
+            <Button
+              variant='outline'
+              id='alert'
+              type='button'
+              onClick={handleAddNotification}
+            >
+              알림 추가
+            </Button>
+          )}
         </div>
 
         {/* 추가할 캘린더 */}
         <div className='grid w-full gap-1.5'>
           <Label>추가할 캘린더</Label>
 
-          <Select>
+          <Select defaultValue='myCalendar'>
             <SelectTrigger className='w-[180px]'>
-              {/* TODO) 내 캘린더가 기본적으로 선택되도록 설정 */}
               <SelectValue placeholder='추가할 캘린더' />
             </SelectTrigger>
             <SelectContent>
@@ -135,13 +169,12 @@ export const EventForm = ({ event }: EventFormProps) => {
         </div>
 
         {/* 공개 범위 설정 */}
-        <div className='grid w-full gap-1.5'>
+        <div className='grid w-[180px] gap-1.5'>
           <Label>공개 범위</Label>
 
           <div className='flex gap-x-2'>
-            <Select>
-              <SelectTrigger className='w-[180px]'>
-                {/* TODO) '공개'가 기본적으로 선택되도록 설정 */}
+            <Select defaultValue='public'>
+              <SelectTrigger>
                 <SelectValue placeholder='공개 범위' />
               </SelectTrigger>
               <SelectContent>
@@ -152,9 +185,8 @@ export const EventForm = ({ event }: EventFormProps) => {
               </SelectContent>
             </Select>
 
-            <Select>
-              <SelectTrigger className='w-[180px]'>
-                {/* TODO) '바쁨'이 기본적으로 선택되도록 설정 */}
+            <Select defaultValue='busy'>
+              <SelectTrigger>
                 <SelectValue placeholder='표시될 상태' />
               </SelectTrigger>
               <SelectContent>
