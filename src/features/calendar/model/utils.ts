@@ -1,5 +1,5 @@
 import {
-  AvailabilityDTO,
+  AvailabilityTypeDTO,
   CalendarEventsDTO,
   PrivacyTypeDTO,
 } from '@/features/calendar/api/dto';
@@ -64,13 +64,13 @@ export const getPrivacyTypeInKorean = (privacyType: PrivacyTypeDTO): string => {
 
 /**
  * 일정 상태(availability)를 한글로 변환하는 함수
- * @param {AvailabilityDTO} availability - 일정 상태 ('FREE' | 'BUSY')
+ * @param {AvailabilityTypeDTO} availability - 일정 상태 ('FREE' | 'BUSY')
  * @returns {string} 한글로 변환된 일정 상태
  */
 export const getAvailabilityInKorean = (
-  availability: AvailabilityDTO
+  availability: AvailabilityTypeDTO
 ): string => {
-  const availabilityMap: Record<AvailabilityDTO, string> = {
+  const availabilityMap: Record<AvailabilityTypeDTO, string> = {
     FREE: '한가함',
     BUSY: '바쁨',
   };

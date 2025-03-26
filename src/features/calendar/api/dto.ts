@@ -1,6 +1,6 @@
 export type CalendarTypeDTO = 'TEAM' | 'MEMBER' | 'OTHER';
 export type PrivacyTypeDTO = 'PUBLIC' | 'PRIVATE';
-export type AvailabilityDTO = 'FREE' | 'BUSY';
+export type AvailabilityTypeDTO = 'FREE' | 'BUSY';
 
 export interface CalendarDTO {
   name: string;
@@ -20,7 +20,7 @@ export interface EventDTO {
   dtEndTime: string; // ISO 8601 형식의 타임스탬프 문자열
   isAllDay: boolean;
   privacyType: PrivacyTypeDTO;
-  availability: AvailabilityDTO;
+  availability: AvailabilityTypeDTO;
   location: string;
 }
 
