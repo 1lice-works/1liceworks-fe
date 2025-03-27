@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -36,40 +36,20 @@ interface EventFormProps {
   event: CalendarEventItem;
 }
 
-interface Notification {
-  id: number;
-}
+const MAX_NOTIFICATIONS = 5;
 
 // TODO) 폼 default value를 event 필드 값으로 설정하기
 export const EventForm = ({ event }: EventFormProps) => {
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
-    // defaultValues: {
-    //   title: event.title,
-    //   startDate: event.start.toDateString(),
-    // },
+    defaultValues: {
+      notification: [{ id: 1, time: 10, unit: 'minutes' }],
+    },
   });
 
   const onSubmit = (data: z.infer<typeof eventSchema>) => console.log(data);
 
   const allDay = form.watch('allDay');
-
-  const [notifications, setNotifications] = useState<Notification[]>([
-    { id: 1 },
-  ]);
-  const MAX_NOTIFICATIONS = 5;
-
-  const handleAddNotification = () => {
-    if (notifications.length < MAX_NOTIFICATIONS) {
-      setNotifications([...notifications, { id: Date.now() }]);
-    }
-  };
-
-  const handleRemoveNotification = (idToRemove: number): void => {
-    setNotifications(
-      notifications.filter((notification) => notification.id !== idToRemove)
-    );
-  };
 
   const { data: calendars } = useQuery<CalendarListDTO>({
     ...calendarQueries.getCalendars,
@@ -231,30 +211,80 @@ export const EventForm = ({ event }: EventFormProps) => {
           <FormField
             control={form.control}
             name='notification'
-            render={({ field }) => (
-              <FormItem className='w-[180px]'>
-                <FormLabel>알림</FormLabel>
-                {notifications.map((notification) => (
-                  <FormControl>
-                    <NotificationTimeSelector
-                      key={notification.id}
-                      id={notification.id}
-                      onRemove={handleRemoveNotification}
-                    />
-                  </FormControl>
-                ))}
-                {notifications.length < MAX_NOTIFICATIONS && (
-                  <Button
-                    variant='outline'
-                    id='alert'
-                    type='button'
-                    onClick={handleAddNotification}
-                  >
-                    알림 추가
-                  </Button>
-                )}
-              </FormItem>
-            )}
+            render={({ field }) => {
+              // 알림 추가 핸들러
+              const handleAddNotification = () => {
+                const currentNotifications = field.value || [];
+                if (currentNotifications.length < MAX_NOTIFICATIONS) {
+                  form.setValue('notification', [
+                    ...currentNotifications,
+                    { id: Date.now(), time: 10, unit: 'minutes' },
+                  ]);
+                }
+              };
+
+              // 알림 제거 핸들러
+              const handleRemoveNotification = (idToRemove: number) => {
+                const currentNotifications = field.value || [];
+                form.setValue(
+                  'notification',
+                  currentNotifications.filter(
+                    (notification) => notification.id !== idToRemove
+                  )
+                );
+              };
+
+              // 알림 변경 핸들러
+              const handleNotificationChange = (
+                id: number,
+                value: {
+                  time: number;
+                  unit: 'minutes' | 'hours' | 'days' | 'weeks';
+                }
+              ) => {
+                const currentNotifications = field.value || [];
+                form.setValue(
+                  'notification',
+                  currentNotifications.map((notification) =>
+                    notification.id === id
+                      ? { ...notification, ...value }
+                      : notification
+                  )
+                );
+              };
+
+              // 현재 알림들
+              const notifications = field.value || [];
+
+              return (
+                <FormItem className='w-[180px]'>
+                  <FormLabel>알림</FormLabel>
+                  {notifications.map((notification) => (
+                    <FormControl key={notification.id}>
+                      <NotificationTimeSelector
+                        id={notification.id}
+                        value={{
+                          time: notification.time,
+                          unit: notification.unit,
+                        }}
+                        onChange={handleNotificationChange}
+                        onRemove={handleRemoveNotification}
+                      />
+                    </FormControl>
+                  ))}
+                  {notifications.length < MAX_NOTIFICATIONS && (
+                    <Button
+                      variant='outline'
+                      id='alert'
+                      type='button'
+                      onClick={handleAddNotification}
+                    >
+                      알림 추가
+                    </Button>
+                  )}
+                </FormItem>
+              );
+            }}
           />
 
           {/* 추가할 캘린더 */}

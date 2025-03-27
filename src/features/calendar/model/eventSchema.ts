@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const notificationSchema = z.object({
   id: z.number(),
-  time: z.string().min(0, { message: '알림 시간을 입력해주세요.' }),
+  time: z.number().min(0, { message: '알림 시간을 입력해주세요.' }),
   unit: z.enum(['minutes', 'hours', 'days', 'weeks']),
 });
 
