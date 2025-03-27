@@ -21,7 +21,7 @@ export const eventSchema = z
     allDay: z.boolean().default(true),
     location: z.string().optional(),
     notification: z.array(notificationSchema).optional(),
-    selectedCalendarId: z.number(),
+    selectedCalendarId: z.string(),
     privacyType: z.enum(['PUBLIC', 'PRIVATE'] as const).default('PUBLIC'),
     availability: z.enum(['FREE', 'BUSY'] as const).default('FREE'),
     participants: z.array(participantSchema).optional(), // isTeamEvent일 떄만 나타나는 속성. Option 타입 (label, value)
