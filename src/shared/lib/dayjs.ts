@@ -28,3 +28,8 @@ export const isSameDate = (
 ): boolean => {
   return dayjs(start).isSame(dayjs(end), 'day');
 };
+
+// 상대 시간으로 변환하는 함수 (몇 초 전, 하루 전, 2일 전, 한 달 후)
+export const formatRelativeTime = (time: string | Date): string => {
+  return dayjs(time).fromNow();
+};
