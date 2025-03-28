@@ -5,6 +5,7 @@ import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
 import { authQueries } from '@/features/auth/api/queries';
 import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { SearchBar } from '@/features/calendar/ui/SearchBar';
+import { NotificationList } from '@/features/notification/ui/NotificationList';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/utils';
 import { UserAvatar } from '@/shared/ui/custom/UserAvatar';
@@ -16,6 +17,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/shadcn/DropdownMenu';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/shared/ui/shadcn/Popover';
 import { GnbType } from '@/widgets/gnb/model/types';
 import NotificationIcon from '@/widgets/gnb/ui/assets/bell.svg?react';
 import CalendarIcon from '@/widgets/gnb/ui/assets/calendar.svg?react';
@@ -24,7 +30,7 @@ import { Logo } from '@/widgets/gnb/ui/components/Logo';
 import { useModalStore } from '@/widgets/modal/model/useModalStore';
 import { ProfileViewContent } from '@/widgets/profile/ui/ProfileViewContent';
 
-const ICON_CLASS_NAME =
+const ICON_STYLES =
   'h-8 w-8 cursor-pointer transition duration-200 ease-in-out hover:scale-110 focus:scale-110';
 
 export const Gnb = () => {
@@ -83,18 +89,26 @@ export const Gnb = () => {
         )}
         {gnbType === 'team' && (
           <Link to={ROUTES.CALENDAR.root}>
-            <CalendarIcon className={ICON_CLASS_NAME} />
+            <CalendarIcon className={ICON_STYLES} />
           </Link>
         )}
 
-        {/* TODO) onClick 핸들러 추가 */}
-        <NotificationIcon className={ICON_CLASS_NAME} />
+        <Popover>
+          <PopoverTrigger asChild>
+            <div>
+              <NotificationIcon className={ICON_STYLES} />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent asChild>
+            <NotificationList />
+          </PopoverContent>
+        </Popover>
 
         <DropdownMenu>
           <DropdownMenuTrigger className={cn(`focus:outline-0`)}>
             <UserAvatar
               avatarUrl={minimalProfile?.profileImage}
-              className={ICON_CLASS_NAME}
+              className={ICON_STYLES}
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
