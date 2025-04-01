@@ -35,12 +35,12 @@ export const NotificationTimeSelector = ({
     <div className='flex items-center gap-x-1.5'>
       <Input
         type='number'
-        min={0}
-        value={value.time}
-        defaultValue={10}
         placeholder='시간'
+        value={value.time}
+        min={0}
+        max={1000}
         onChange={(e) =>
-          onChange(id, { ...value, time: Number(e.target.value) })
+          onChange(id, { ...value, time: Number(e.target.value) || 0 })
         }
       />
 

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const notificationSchema = z.object({
   id: z.number(),
-  time: z.number().min(0, { message: '알림 시간을 입력해주세요.' }),
+  time: z.number().min(0).max(1000),
   unit: z.enum(['minutes', 'hours', 'days', 'weeks']),
 });
 
@@ -21,7 +21,7 @@ export const eventSchema = z
     allDay: z.boolean().default(true),
     location: z.string().optional(),
     notification: z.array(notificationSchema).optional(),
-    selectedCalendarId: z.string(),
+    // selectedCalendarId: z.string(),
     privacyType: z.enum(['PUBLIC', 'PRIVATE'] as const).default('PUBLIC'),
     availability: z.enum(['FREE', 'BUSY'] as const).default('FREE'),
     participants: z.array(participantSchema).optional(), // isTeamEvent일 떄만 나타나는 속성. Option 타입 (label, value)
@@ -49,9 +49,3 @@ export const eventSchema = z
       path: ['endTime'],
     }
   );
-
-//**
-// TODO
-// 1. 생성시) 기본 시작일: 오늘, 현재 시간 분단위 반올림 (18:08 -> 18:10)
-// 2. 생성시) 기본 종료일: 시작 시간 1시간 이후
-// 3. allDay === True일 경우 시작 시간 00:00, 종료 시간 23:59으로 설정해 폼 제출 */

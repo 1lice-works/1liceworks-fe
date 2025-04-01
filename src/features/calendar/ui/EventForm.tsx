@@ -1,11 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { CalendarEventItem } from '@/features/calendar/model/types';
-import MultipleSelector, { Option } from '@/shared/ui/custom/MultipleSelector';
 import { Button } from '@/shared/ui/shadcn/Button';
 import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 import {
@@ -26,10 +23,7 @@ import {
 } from '@/shared/ui/shadcn/Select';
 import { Textarea } from '@/shared/ui/shadcn/Textarea';
 
-import { CalendarListDTO } from '../api/dto';
-import { calendarQueries } from '../api/queries';
 import { eventSchema } from '../model/eventSchema';
-import { FindEmptyTime } from './FindEmptyTime';
 import { NotificationTimeSelector } from './NotificationTimeSelector';
 
 interface EventFormProps {
@@ -38,59 +32,36 @@ interface EventFormProps {
 
 const MAX_NOTIFICATIONS = 5;
 
-// TODO) 폼 default value를 event 필드 값으로 설정하기
 export const EventForm = ({ event }: EventFormProps) => {
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
+      title: event.title,
+      startDate: event.start.toISOString().split('T')[0],
+      endDate: event.end.toISOString().split('T')[0],
+      startTime: event.allDay
+        ? '00:00'
+        : event.start.toTimeString().slice(0, 5),
+      endTime: event.allDay ? '23:59' : event.end.toTimeString().slice(0, 5),
+      allDay: event.allDay,
+      location: event.location || '',
+      privacyType: 'PUBLIC',
+      availability: 'FREE',
+      description: event.description || '',
       notification: [{ id: 1, time: 10, unit: 'minutes' }],
     },
   });
 
   const onSubmit = (data: z.infer<typeof eventSchema>) => console.log(data);
+  const onError = (errors: unknown) => console.error('Form errors:', errors);
 
   const allDay = form.watch('allDay');
-
-  const { data: calendars } = useQuery<CalendarListDTO>({
-    ...calendarQueries.getCalendars,
-  });
-
-  const EVENT_CALENDAR_OPTIONS = useMemo(() => {
-    if (!calendars) return [];
-
-    return calendars
-      .filter(
-        (calendar) => calendar.isMyCalendar || calendar.calendarType === 'TEAM'
-      )
-      .map((calendar) => ({
-        id: calendar.calendarId,
-        label: calendar.name,
-        value: calendar.calendarId.toString(),
-        isTeamCalendar: calendar.calendarType === 'TEAM',
-      }));
-  }, [calendars]);
-
-  const selectedCalendarId = form.watch('selectedCalendarId');
-  const isTeamEvent = EVENT_CALENDAR_OPTIONS.some(
-    (cal) => cal.value === selectedCalendarId && cal.isTeamCalendar
-  );
-
-  const PARTICIPANTS: Option[] = useMemo(() => {
-    if (!calendars) return [];
-
-    return calendars
-      .filter((calendar) => calendar.calendarType === 'MEMBER')
-      .map((calendar) => ({
-        label: calendar.name,
-        value: calendar.typeId.toString(), // userId
-      }));
-  }, [calendars]);
 
   return (
     <div className='flex h-full w-full gap-x-4 text-sm'>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit, onError)}
           className='flex grow flex-col gap-y-6'
         >
           {/* 제목, 버튼 */}
@@ -184,7 +155,13 @@ export const EventForm = ({ event }: EventFormProps) => {
                   <FormControl>
                     <Checkbox
                       checked={field.value}
-                      onCheckedChange={field.onChange}
+                      onCheckedChange={(checked) => {
+                        field.onChange(checked);
+                        if (checked) {
+                          form.setValue('startTime', '00:00');
+                          form.setValue('endTime', '23:59');
+                        }
+                      }}
                     />
                   </FormControl>
                   <FormLabel className='leading-none'>종일</FormLabel>
@@ -287,34 +264,6 @@ export const EventForm = ({ event }: EventFormProps) => {
             }}
           />
 
-          {/* 추가할 캘린더 */}
-          <FormField
-            control={form.control}
-            name='selectedCalendarId'
-            render={({ field }) => (
-              <FormItem className='w-[180px]'>
-                <FormLabel>추가할 캘린더</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue='myCalendar'
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder='추가할 캘린더' />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {EVENT_CALENDAR_OPTIONS.map((calendar) => (
-                      <SelectItem key={calendar.id} value={calendar.value}>
-                        {calendar.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-
           {/* 공개 범위 설정 */}
           <div className='flex w-[180px] items-end gap-x-2'>
             <FormField
@@ -323,19 +272,15 @@ export const EventForm = ({ event }: EventFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>공개 범위</FormLabel>
-                  <Select
-                    defaultValue='public'
-                    disabled={isTeamEvent}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
-                      <SelectTrigger disabled={isTeamEvent}>
+                      <SelectTrigger>
                         <SelectValue placeholder='공개 범위' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value='public'>공개</SelectItem>
-                      <SelectItem value='private'>비공개</SelectItem>
+                      <SelectItem value='PUBLIC'>공개</SelectItem>
+                      <SelectItem value='PRIVATE'>비공개</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -347,51 +292,21 @@ export const EventForm = ({ event }: EventFormProps) => {
               name='availability'
               render={({ field }) => (
                 <FormItem>
-                  <Select
-                    defaultValue='busy'
-                    disabled={isTeamEvent}
-                    onValueChange={field.onChange}
-                  >
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
-                      <SelectTrigger disabled={isTeamEvent}>
+                      <SelectTrigger>
                         <SelectValue placeholder='표시될 상태' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value='busy'>바쁨</SelectItem>
-                      <SelectItem value='free'>한가함</SelectItem>
+                      <SelectItem value='BUSY'>바쁨</SelectItem>
+                      <SelectItem value='FREE'>한가함</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
               )}
             />
           </div>
-
-          {/* 참석자 */}
-          {isTeamEvent && (
-            <FormField
-              control={form.control}
-              name='participants'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>참석자</FormLabel>
-                  <FormControl>
-                    <MultipleSelector
-                      onChange={field.onChange}
-                      defaultOptions={PARTICIPANTS}
-                      placeholder='참석자를 선택하세요.'
-                      hidePlaceholderWhenSelected={true}
-                      emptyIndicator={
-                        <p className='text-center leading-10'>
-                          no results found.
-                        </p>
-                      }
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          )}
 
           {/* 설명 */}
           <FormField
@@ -412,8 +327,6 @@ export const EventForm = ({ event }: EventFormProps) => {
           />
         </form>
       </Form>
-
-      {isTeamEvent && <FindEmptyTime />}
     </div>
   );
 };
