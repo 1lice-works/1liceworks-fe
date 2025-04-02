@@ -1,8 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { CalendarEventItem } from '@/features/calendar/model/types';
+import { ROUTES } from '@/shared/constants/routes';
 import { Button } from '@/shared/ui/shadcn/Button';
 import { Checkbox } from '@/shared/ui/shadcn/Checkbox';
 import {
@@ -23,6 +25,7 @@ import {
 } from '@/shared/ui/shadcn/Select';
 import { Textarea } from '@/shared/ui/shadcn/Textarea';
 
+import { EventMutations } from '../api/queries';
 import { eventSchema } from '../model/eventSchema';
 import { NotificationTimeSelector } from './NotificationTimeSelector';
 
@@ -33,6 +36,9 @@ interface EventFormProps {
 const MAX_NOTIFICATIONS = 5;
 
 export const EventForm = ({ event }: EventFormProps) => {
+  const navigate = useNavigate();
+  const { mutate: createMyEvent } = EventMutations.useCreateMyEvent();
+
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
@@ -52,7 +58,13 @@ export const EventForm = ({ event }: EventFormProps) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof eventSchema>) => console.log(data);
+  const onSubmit = (data: z.infer<typeof eventSchema>) => {
+    createMyEvent(data, {
+      onSuccess: () => {
+        navigate(ROUTES.CALENDAR.root);
+      },
+    });
+  };
   const onError = (errors: unknown) => console.error('Form errors:', errors);
 
   const allDay = form.watch('allDay');
