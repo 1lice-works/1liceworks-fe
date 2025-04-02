@@ -1,8 +1,13 @@
+import dayjs from 'dayjs';
+import { z } from 'zod';
+
 import {
   AvailabilityTypeDTO,
   CalendarEventsDTO,
+  EventRequestDTO,
   PrivacyTypeDTO,
 } from '@/features/calendar/api/dto';
+import { eventSchema } from '@/features/calendar/model/eventSchema';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 
 /**
@@ -76,4 +81,64 @@ export const getAvailabilityInKorean = (
   };
 
   return availabilityMap[availability];
+};
+
+/**
+ * 날짜와 시간을 조합하여 UTC 기준의 ISO 8601 형식 문자열로 변환하는 함수
+ * @param {string} dateStr- '2025-04-01' 형식의 날짜 문자열
+ * @param {string} timeStr - '00:00' 형식의 시간 문자열, 로컬 시간 기준
+ * @returns {string} UTC 기준 ISO 8601 날짜-시간 문자열 (예: "2025-04-01T00:00:00.000Z")
+ */
+export const convertLocalDateToISO = (
+  dateStr: string,
+  timeStr: string
+): string => {
+  const dateTimeStr = `${dateStr}T${timeStr}:00`;
+  const date = new Date(dateTimeStr); // 로컬 시간 기준
+  return date.toISOString(); // UTC 기준 ISO 문자열 반환
+};
+
+/**
+ * 주어진 ISO 형식 날짜에서 특정 시간 단위를 빼서 새로운 ISO 타임스탬프 반환
+ */
+export const subtractFromISO = (
+  dtStartTime: string,
+  time: number,
+  unit: 'minutes' | 'hours' | 'days' | 'weeks'
+): string => {
+  return dayjs(dtStartTime).subtract(time, unit).toISOString();
+};
+
+/**
+ * 폼 데이터를 API 요청 형식으로 변환하는 함수
+ * @param formData EventForm에서 제출된 데이터
+ * @returns API 요청에 사용할 수 있는 형식의 데이터
+ */
+export const convertFormDataToApiRequest = (
+  formData: z.infer<typeof eventSchema>
+): EventRequestDTO => {
+  // 날짜와 시간 문자열을 ISO 형식의 타임스탬프로 변환
+  const dtStartTime = convertLocalDateToISO(
+    formData.startDate,
+    formData.startTime
+  );
+  const dtEndTime = convertLocalDateToISO(formData.endDate, formData.endTime);
+
+  // 알림 데이터 변환
+  const eventReminders =
+    formData.notification?.map((elem) => ({
+      notifyTime: subtractFromISO(dtStartTime, elem.time, elem.unit),
+    })) || [];
+
+  return {
+    title: formData.title,
+    description: formData.description || '',
+    dtStartTime,
+    dtEndTime,
+    isAllDay: formData.allDay,
+    privacyType: formData.privacyType,
+    availability: formData.availability,
+    location: formData.location || '',
+    eventReminders,
+  };
 };
