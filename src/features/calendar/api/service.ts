@@ -1,8 +1,12 @@
+import { z } from 'zod';
+
 import {
   CalendarEventsDTO,
   CalendarEventsParamsDTO,
   CalendarListDTO,
 } from '@/features/calendar/api/dto';
+import { eventSchema } from '@/features/calendar/model/eventSchema';
+import { convertFormDataToApiRequest } from '@/features/calendar/model/utils';
 import { apiClient } from '@/shared/api/apiClient';
 import { ApiResponse } from '@/shared/types/apiResponse';
 
@@ -35,6 +39,17 @@ export const calendarService = {
     const response = await apiClient.get<CalendarEventsDTO>({
       url: `calendar/events/${calendarType}`,
       params: params,
+    });
+
+    return response;
+  },
+
+  createMyEvent: async (
+    formData: z.infer<typeof eventSchema>
+  ): Promise<ApiResponse<{}>> => {
+    const response = await apiClient.post<{}>({
+      url: '/calendar/my-events',
+      data: convertFormDataToApiRequest(formData),
     });
 
     return response;

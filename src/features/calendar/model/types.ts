@@ -1,7 +1,7 @@
 import { NavigateAction, View } from 'react-big-calendar';
 
 import {
-  AvailabilityDTO,
+  AvailabilityTypeDTO,
   CalendarTypeDTO,
   PrivacyTypeDTO,
 } from '@/features/calendar/api/dto';
@@ -24,6 +24,6 @@ export interface CalendarEventItem {
   end: Date;
   allDay: boolean;
   privacyType: PrivacyTypeDTO;
-  availability: AvailabilityDTO;
+  availability: AvailabilityTypeDTO;
   location: string;
 }

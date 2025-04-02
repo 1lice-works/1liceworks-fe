@@ -1,11 +1,13 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 import {
   CalendarEventsDTO,
   CalendarListDTO,
 } from '@/features/calendar/api/dto';
 import { calendarService } from '@/features/calendar/api/service';
+import { eventSchema } from '@/features/calendar/model/eventSchema';
 
 export const calendarQueries = {
   getCalendars: {
@@ -75,7 +77,21 @@ export const useCalendarEvents = (
 
 export const EventMutations = {
   // 내 캘린더 일정 생성
-  useCreateMyEvent: () => {},
+  useCreateMyEvent: () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: (formData: z.infer<typeof eventSchema>) =>
+        calendarService.createMyEvent(formData),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['calendarEvents'] });
+        toast.success('일정이 생성되었습니다.');
+      },
+      onError: () => {
+        toast.error('일정 생성에 실패했습니다. 다시 시도해주세요.');
+      },
+    });
+  },
 
   // 팀 캘린더 일정 생성
   useCreateTeamEvent: () => {},
