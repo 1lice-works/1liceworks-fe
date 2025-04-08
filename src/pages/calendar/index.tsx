@@ -2,6 +2,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { useMemo, useState } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 
@@ -17,6 +18,8 @@ import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { transformEventsForBigCalendar } from '@/features/calendar/model/utils';
 import { CustomEvent } from '@/features/calendar/ui/CustomEvent';
 import { CustomToolbar } from '@/features/calendar/ui/CustomToolbar';
+
+dayjs.extend(utc);
 
 const localizer = dayjsLocalizer(dayjs);
 

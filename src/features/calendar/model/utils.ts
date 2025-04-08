@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { z } from 'zod';
 
 import {
@@ -10,20 +12,23 @@ import {
 import { eventSchema } from '@/features/calendar/model/eventSchema';
 import { CalendarEventItem } from '@/features/calendar/model/types';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 /**
  * ISO 형식의 날짜 문자열을 Date 객체로 변환하는 함수
  * @param {string} isoString - '2025-02-24T10:00:00'
  * @returns {Date} - new Date(2025, 2, 24, 10, 0)
  */
-const convertISOToDate = (isoString: string): Date => {
-  const date = new Date(isoString);
+const convertISOToKSTDate = (isoString: string): Date => {
+  const kstDate = dayjs.utc(isoString).tz('Asia/Seoul');
 
   return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes()
+    kstDate.year(),
+    kstDate.month(),
+    kstDate.date(),
+    kstDate.hour(),
+    kstDate.minute()
   );
 };
 
@@ -43,8 +48,8 @@ export const transformEventsForBigCalendar = (
       eventId: event.eventId,
       title: event.title,
       description: event.description,
-      start: convertISOToDate(event.dtStartTime),
-      end: convertISOToDate(event.dtEndTime),
+      start: convertISOToKSTDate(event.dtStartTime),
+      end: convertISOToKSTDate(event.dtEndTime),
       allDay: event.isAllDay,
       privacyType: event.privacyType,
       availability: event.availability,
