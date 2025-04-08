@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import {
-  AlarmClock,
   Calendar,
   CalendarClock,
   EyeIcon,
@@ -37,6 +36,26 @@ interface EventDetailsViewProps {
   event: CalendarEventItem;
   isRestrictedEvent: boolean;
 }
+
+const getEventTimeDisplay = (event: CalendarEventItem) => {
+  const { start, end, allDay } = event;
+
+  const isSameDay = isSameDate(start, end);
+
+  if (isSameDay) {
+    if (allDay) {
+      return formatDate(event.start);
+    } else {
+      return `${formatDate(event.start)} ${formatTime(event.start)} - ${formatTime(event.end)}`;
+    }
+  } else {
+    if (allDay) {
+      return `${formatDate(event.start)} - ${formatDate(event.end)}`;
+    } else {
+      return `${formatDateTime(event.start)} - ${formatDateTime(event.end)}`;
+    }
+  }
+};
 
 export const EventDetailsView = ({
   event,
@@ -109,17 +128,7 @@ export const EventDetailsView = ({
       {/* 기간 */}
       <div className='flex items-center gap-2'>
         <CalendarClock size='1rem' className='shrink-0' />
-        {isSameDate(event.start, event.end) ? (
-          event.allDay ? (
-            <p>{formatDate(event.start)}</p>
-          ) : (
-            <p>{`${formatDate(event.start)} ${formatTime(event.start)} - ${formatTime(event.end)}`}</p>
-          )
-        ) : event.allDay ? (
-          <p>{`${formatDate(event.start)} - ${formatDate(event.end)}`}</p>
-        ) : (
-          <p>{`${formatDateTime(event.start)} - ${formatDateTime(event.end)}`}</p>
-        )}
+        <p>{getEventTimeDisplay(event)}</p>
       </div>
 
       {!isRestrictedEvent && (
@@ -149,14 +158,6 @@ export const EventDetailsView = ({
               <p>{event.description}</p>
             </div>
           )}
-
-          {/* 알림 */}
-          {/* TODO) 알림 유무도 조건으로 추가 */}
-          <div className='flex items-center gap-2'>
-            <AlarmClock size='1rem' className='shrink-0' />
-            {/* TODO) 백엔드에서 event에 eventReminders 필드 추가하면 반영 */}
-            <p className='text-muted-foreground'>추가된 알림이 없습니다.</p>
-          </div>
 
           {/* 공개 범위 */}
           {event.isMyCalendar && (
