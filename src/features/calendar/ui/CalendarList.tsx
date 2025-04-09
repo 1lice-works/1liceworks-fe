@@ -40,54 +40,44 @@ export const CalendarList = () => {
       (calendar) => !calendar.isMyCalendar && calendar.calendarType !== 'TEAM'
     ) || [];
 
+  const calendarSections = [
+    {
+      id: 'item-1',
+      title: 'My Calendar',
+      items: myCalendar ? [myCalendar] : [],
+    },
+    {
+      id: 'item-2',
+      title: 'Team Calendar',
+      items: teamCalendar ? [teamCalendar] : [],
+    },
+    {
+      id: 'item-3',
+      title: 'Other Calendars',
+      items: otherCalendars,
+    },
+  ];
+
   return (
     <Accordion type='multiple' className='w-full'>
-      <AccordionItem value='item-1'>
-        <AccordionTrigger>
-          <div className={cn(`flex items-center gap-x-2`)}>
-            <CalendarDays className='size-4' />
-            My Calendar
-          </div>
-        </AccordionTrigger>
-        <AccordionContent>
-          <CalendarListItem
-            calendarId={myCalendar?.calendarId}
-            calendarName={myCalendar?.name}
-          />
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value='item-2'>
-        <AccordionTrigger>
-          <div className={cn(`flex items-center gap-x-2`)}>
-            <CalendarDays className='size-4' />
-            Team Calendar
-          </div>
-        </AccordionTrigger>
-        <AccordionContent>
-          <CalendarListItem
-            calendarId={teamCalendar?.calendarId}
-            calendarName={teamCalendar?.name}
-          />
-        </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value='item-3'>
-        <AccordionTrigger>
-          <div className={cn(`flex items-center gap-x-2`)}>
-            <CalendarDays className='size-4' />
-            Other Calendars
-          </div>
-        </AccordionTrigger>
-        {otherCalendars.map((calendar) => (
-          <AccordionContent key={calendar.calendarId}>
-            <CalendarListItem
-              calendarId={calendar.calendarId}
-              calendarName={calendar.name}
-            />
-          </AccordionContent>
-        ))}
-      </AccordionItem>
+      {calendarSections.map((section) => (
+        <AccordionItem key={section.id} value={section.id}>
+          <AccordionTrigger>
+            <div className={cn(`flex items-center gap-x-2`)}>
+              <CalendarDays className='size-4' />
+              {section.title}
+            </div>
+          </AccordionTrigger>
+          {section.items.map((calendar) => (
+            <AccordionContent key={calendar.calendarId}>
+              <CalendarListItem
+                calendarId={calendar.calendarId}
+                calendarName={calendar.name}
+              />
+            </AccordionContent>
+          ))}
+        </AccordionItem>
+      ))}
     </Accordion>
   );
 };
