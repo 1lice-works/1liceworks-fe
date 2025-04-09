@@ -68,14 +68,22 @@ export const CalendarList = () => {
               {section.title}
             </div>
           </AccordionTrigger>
-          {section.items.map((calendar) => (
-            <AccordionContent key={calendar.calendarId}>
-              <CalendarListItem
-                calendarId={calendar.calendarId}
-                calendarName={calendar.name}
-              />
+          {section.items.length > 0 ? (
+            section.items.map((calendar) => (
+              <AccordionContent key={calendar.calendarId}>
+                <CalendarListItem
+                  calendarId={calendar.calendarId}
+                  calendarName={calendar.name}
+                />
+              </AccordionContent>
+            ))
+          ) : (
+            <AccordionContent>
+              <p className='text-muted-foreground text-center text-sm leading-none select-none'>
+                표시할 캘린더가 없습니다.
+              </p>
             </AccordionContent>
-          ))}
+          )}
         </AccordionItem>
       ))}
     </Accordion>
