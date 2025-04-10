@@ -1,5 +1,7 @@
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
 import { apiClient } from '@/shared/api/apiClient';
+import { queryClient } from '@/shared/api/queryClient';
 import { ApiResponse } from '@/shared/types/apiResponse';
 
 import {
@@ -48,6 +50,8 @@ export const authService = {
       throw error; // 에러를 다시 throw하여 컴포넌트의 onError에서 처리할 수 있게 함
     } finally {
       useAuthStore.getState().signOut();
+      useCalendarStore.getState().reset();
+      queryClient.clear();
     }
   },
 
