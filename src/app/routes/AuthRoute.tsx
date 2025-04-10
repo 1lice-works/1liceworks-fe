@@ -1,8 +1,8 @@
 import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
 
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { ROUTES } from '@/shared/constants/routes';
-import { useAuthStore } from '@/shared/model/useAuthStore';
 
 interface AuthRouteProps extends PropsWithChildren {
   isPublic?: boolean;

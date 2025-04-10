@@ -1,5 +1,5 @@
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { apiClient } from '@/shared/api/apiClient';
-import { useAuthStore } from '@/shared/model/useAuthStore';
 import { ApiResponse } from '@/shared/types/apiResponse';
 
 import {
