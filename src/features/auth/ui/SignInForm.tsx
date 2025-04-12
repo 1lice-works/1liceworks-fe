@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { userQueries } from '@/entities/user/api/queries';
+import { useUserStore } from '@/entities/user/model/useUserStore';
 import { AUTH_FORM_STYLES } from '@/features/auth//model/constants';
 import { signInSchema } from '@/features/auth//model/schema';
 import { authQueries } from '@/features/auth/api/queries';
@@ -29,7 +30,10 @@ export const SignInForm = () => {
     ...authQueries.signIn,
     onSuccess: async () => {
       try {
-        await queryClient.prefetchQuery(userQueries.getMyMinimalProfile);
+        const response = await queryClient.fetchQuery(
+          userQueries.getMyMinimalProfile
+        );
+        useUserStore.getState().setUserId(response.userId);
       } catch (error) {
         console.error('미니멀 프로필 정보 가져오기 실패', error);
       } finally {

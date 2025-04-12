@@ -1,3 +1,4 @@
+import { useUserStore } from '@/entities/user/model/useUserStore';
 import {
   PostCheckVerifyDTO,
   PostResponseDTO,
@@ -46,6 +47,7 @@ export const authService = {
       throw error; // 에러를 다시 throw하여 컴포넌트의 onError에서 처리할 수 있게 함
     } finally {
       useAuthStore.getState().signOut();
+      useUserStore.getState().resetUserId();
       useCalendarStore.getState().reset();
       queryClient.clear();
     }
