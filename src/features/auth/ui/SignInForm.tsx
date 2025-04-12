@@ -3,15 +3,15 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { userQueries } from '@/entities/user/api/queries';
+import { AUTH_FORM_STYLES } from '@/features/auth//model/constants';
+import { signInSchema } from '@/features/auth//model/schema';
+import { authQueries } from '@/features/auth/api/queries';
+import { RHFInput } from '@/features/auth/ui/RHFInput';
 import { queryClient } from '@/shared/api/queryClient';
 import { ROUTES } from '@/shared/constants/routes';
 import { Button } from '@/shared/ui/shadcn/Button';
 import { Form } from '@/shared/ui/shadcn/Form';
-
-import { authQueries } from '../api/queries';
-import { AUTH_FORM_STYLES } from '../model/constants';
-import { signInSchema } from '../model/schema';
-import { RHFInput } from './RHFInput';
 
 interface SignInFormData {
   email: string;
@@ -29,7 +29,7 @@ export const SignInForm = () => {
     ...authQueries.signIn,
     onSuccess: async () => {
       try {
-        await queryClient.prefetchQuery(authQueries.getMyMinimalProfile);
+        await queryClient.prefetchQuery(userQueries.getMyMinimalProfile);
       } catch (error) {
         console.error('미니멀 프로필 정보 가져오기 실패', error);
       } finally {

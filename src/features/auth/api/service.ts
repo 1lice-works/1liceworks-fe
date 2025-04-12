@@ -1,19 +1,15 @@
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
-import { apiClient } from '@/shared/api/apiClient';
-import { queryClient } from '@/shared/api/queryClient';
-import { ApiResponse } from '@/shared/types/apiResponse';
-
 import {
-  MinimalUserProfileDTO,
   PostCheckVerifyDTO,
   PostResponseDTO,
   postValidateEmailDTO,
   SignInDTO,
   SignInResponseDTO,
   SignUpDTO,
-  UserProfileDTO,
-} from './dto';
+} from '@/features/auth/api/dto';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { useCalendarStore } from '@/features/calendar/model/useCalendarStore';
+import { apiClient } from '@/shared/api/apiClient';
+import { queryClient } from '@/shared/api/queryClient';
 
 export const authService = {
   signUp: async ({ data }: SignUpDTO) => {
@@ -79,22 +75,6 @@ export const authService = {
       data: {
         accountId,
       },
-    });
-    return response;
-  },
-
-  getMyMinimalProfile: async (): Promise<
-    ApiResponse<MinimalUserProfileDTO>
-  > => {
-    const response = await apiClient.get<MinimalUserProfileDTO>({
-      url: '/auth/my-minimal-profile',
-    });
-    return response;
-  },
-
-  getMyProfile: async (): Promise<ApiResponse<UserProfileDTO>> => {
-    const response = await apiClient.get<UserProfileDTO>({
-      url: '/auth/my-profile',
     });
     return response;
   },

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { UserProfileDTO } from '@/features/auth/api/dto';
-import { authQueries } from '@/features/auth/api/queries';
+import { UserProfileDTO } from '@/entities/user/api/dto';
+import { userQueries } from '@/entities/user/api/queries';
 import { UserAvatar } from '@/shared/ui/custom/UserAvatar';
 import {
   Table,
@@ -17,7 +17,7 @@ type ProfileFieldItem = {
 
 export const ProfileViewContent = () => {
   const { data: Profile } = useQuery<UserProfileDTO>({
-    ...authQueries.getMyProfile,
+    ...userQueries.getMyProfile,
   });
 
   const profileFields: ProfileFieldItem[] = [

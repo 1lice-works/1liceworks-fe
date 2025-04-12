@@ -11,8 +11,8 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
-import { authQueries } from '@/features/auth/api/queries';
+import { MinimalUserProfileDTO } from '@/entities/user/api/dto';
+import { userQueries } from '@/entities/user/api/queries';
 import { CalendarListDTO } from '@/features/calendar/api/dto';
 import {
   calendarQueries,
@@ -62,7 +62,7 @@ export const EventDetailsView = ({
   isRestrictedEvent,
 }: EventDetailsViewProps) => {
   const { data: minimalProfile } = useQuery<MinimalUserProfileDTO>(
-    authQueries.getMyMinimalProfile
+    userQueries.getMyMinimalProfile
   );
 
   const { data: calendars } = useQuery<CalendarListDTO>({

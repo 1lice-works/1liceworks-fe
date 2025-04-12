@@ -1,4 +1,4 @@
-import { authService } from './service';
+import { authService } from '@/features/auth/api/service';
 
 export const authQueries = {
   signUp: {
@@ -19,20 +19,5 @@ export const authQueries = {
   },
   validEmail: {
     mutationFn: authService.postValidateEmail,
-  },
-
-  getMyMinimalProfile: {
-    queryKey: ['myMinimalProfile'],
-    queryFn: async () => {
-      const response = await authService.getMyMinimalProfile();
-      return response.result;
-    },
-  },
-  getMyProfile: {
-    queryKey: ['myProfile'],
-    queryFn: async () => {
-      const response = await authService.getMyProfile();
-      return response.result;
-    },
   },
 };

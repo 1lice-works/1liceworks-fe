@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useLocation } from 'react-router-dom';
 
-import { MinimalUserProfileDTO } from '@/features/auth/api/dto';
+import { MinimalUserProfileDTO } from '@/entities/user/api/dto';
+import { userQueries } from '@/entities/user/api/queries';
 import { authQueries } from '@/features/auth/api/queries';
 import { SearchBar } from '@/features/calendar/ui/SearchBar';
 import { ROUTES } from '@/shared/constants/routes';
@@ -28,7 +29,7 @@ const ICON_CLASS_NAME =
 
 export const Gnb = () => {
   const { data: minimalProfile } = useQuery<MinimalUserProfileDTO>(
-    authQueries.getMyMinimalProfile
+    userQueries.getMyMinimalProfile
   );
 
   const location = useLocation();
