@@ -2,16 +2,18 @@ import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
+import { useUserStore } from '@/entities/user/model/useUserStore';
 import {
   CalendarEventsDTO,
   CalendarListDTO,
 } from '@/features/calendar/api/dto';
 import { calendarService } from '@/features/calendar/api/service';
 import { eventSchema } from '@/features/calendar/model/eventSchema';
+import { createQueryKey } from '@/shared/api/queryKeys';
 
 export const calendarQueries = {
   getCalendars: {
-    queryKey: ['calendar-list'],
+    queryKey: () => createQueryKey('calendarList'),
     queryFn: async (): Promise<CalendarListDTO> => {
       const response = await calendarService.getCalendarList();
       return response.result;
@@ -27,6 +29,7 @@ export const useCalendarEvents = (
 ) => {
   const targetYear = date.getFullYear();
   const targetMonth = date.getMonth() + 1;
+  const userId = useUserStore.getState().userId;
 
   return useQueries({
     queries: checkedCalendarIds.map((calendarId) => {
@@ -36,7 +39,13 @@ export const useCalendarEvents = (
 
       if (!calendarInfo) {
         return {
-          queryKey: ['calendarEvents', calendarId, targetYear, targetMonth],
+          queryKey: [
+            userId,
+            'calendarEvents',
+            calendarId,
+            targetYear,
+            targetMonth,
+          ],
           queryFn: () =>
             Promise.resolve<CalendarEventsDTO>({
               calendarId,
@@ -49,7 +58,13 @@ export const useCalendarEvents = (
       }
 
       return {
-        queryKey: ['calendarEvents', calendarId, targetYear, targetMonth],
+        queryKey: [
+          userId,
+          'calendarEvents',
+          calendarId,
+          targetYear,
+          targetMonth,
+        ],
         queryFn: async () => {
           const response = await calendarService.getCalendarEvents({
             calendarId,
